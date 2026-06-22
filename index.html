@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marcus J Ball</title>
+<meta name="description" content="Marcus J Ball — campaigner, speaker and founder.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--ink:#0b0c0f;--gold:#c8a24a;--soft:rgba(255,255,255,.62);
+    /* HERO FACE-FOCUS RULE — Marcus's face is always the focal point of the hero.
+       The background locks onto these coordinates so, no matter what else changes
+       on the site, his face stays consistently and pleasingly placed. If the hero
+       image (mjb-bg.jpg) is ever replaced, update ONLY these three values. */
+    --hero-zoom:124%;  /* how far to zoom in on the face (background-size height) */
+    --hero-x:70%;      /* face horizontal focal position */
+    --hero-y:6%}       /* vertical focal: top of head sits just under the titles (clear gap), only the tops of the audience peek in at the bottom */
+  html,body{height:100%}
+  body{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--ink);color:#fff;-webkit-font-smoothing:antialiased;overflow:hidden}
+  /* HERO with photo on the right (drop your photo in as hero.jpg) */
+  .hero{position:relative;height:100vh;min-height:600px;overflow:hidden}
+  .hero .bg{position:absolute;inset:0;background:#0b0c0f url('mjb-hero.png') no-repeat right bottom;background-size:auto 92%}
+  .hero .grad{position:absolute;inset:0;background:linear-gradient(95deg,#0b0c0f 0%,#0b0c0f 30%,rgba(11,12,15,.9) 50%,rgba(11,12,15,.45) 73%,rgba(11,12,15,0) 100%)}
+  .hero .vig{position:absolute;inset:0;background:radial-gradient(120% 120% at 70% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.45) 100%)}
+  /* rotating hero carousel — JS crossfades the .slide layers every 4s */
+  .hero .herobg{position:absolute;inset:0;background:#0b0c0f url('mjb-bg.jpg') var(--hero-x) var(--hero-y)/auto var(--hero-zoom) no-repeat}
+  @media(max-width:900px){.hero .herobg{background-size:cover;background-position:var(--hero-x) var(--hero-y)}}
+  .hero .svid video{width:100%;height:100%;object-fit:cover;display:block}
+  /* social-proof metrics */
+  .metrics{display:flex;justify-content:center;gap:46px;margin:30px auto 6px;flex-wrap:wrap}
+  .metric{text-align:center;min-width:110px}
+  .metric b{display:block;font-size:29px;font-weight:700;color:#fff;line-height:1}
+  .metric span{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin-top:6px}
+  /* press coverage panel — opens in the left dark section */
+  .presspanel{position:absolute;z-index:9;left:48px;top:50%;transform:translateY(-50%);width:46%;max-width:600px;max-height:84vh;display:none;flex-direction:column}
+  .presspanel.open{display:flex}
+  .pp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .presspanel h2{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--soft);font-weight:500}
+  .pp-back{background:none;border:1px solid rgba(255,255,255,.22);color:#fff;font-family:inherit;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:8px;cursor:pointer;transition:border-color .15s,color .15s}
+  .pp-back:hover{border-color:var(--gold);color:var(--gold)}
+  .pp-list{overflow-y:auto;padding-right:8px}
+  .pp-list::-webkit-scrollbar{width:7px}
+  .pp-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
+  .prow{display:block;padding:16px 4px;border-bottom:1px solid rgba(255,255,255,.08);text-decoration:none;transition:background .15s}
+  .prow:hover{background:rgba(255,255,255,.05)}
+  .pmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;letter-spacing:.06em;color:var(--soft);text-transform:uppercase}
+  .pnum{color:var(--gold);font-weight:700;letter-spacing:.04em}
+  .pdate,.pcountry{white-space:nowrap}
+  .plogo{margin-bottom:8px}
+  .plogo svg{height:18px;width:auto;max-width:100%;display:block}
+  .phead{display:block;font-size:14.5px;color:#fff;line-height:1.5}
+  .prow:hover .phead{color:var(--gold)}
+  @media(max-width:720px){.presspanel{left:22px;right:22px;width:auto;max-width:none}}
+  .photo-note{position:absolute;right:16px;bottom:14px;z-index:5;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  /* header */
+  header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:34px 56px;pointer-events:none}
+  header .brand,header nav a,header nav button{pointer-events:auto}
+  .brand{font-size:23px;font-weight:300;letter-spacing:.34em;color:#fff;text-decoration:none;cursor:pointer}
+  .bio{font-size:16.5px;line-height:1.72;color:rgba(255,255,255,.86);max-width:580px;margin:0 auto 36px}
+  .social-title{margin-top:38px}
+  .socials-left{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;margin-top:20px}
+  .socials-left a{display:inline-flex;color:#fff;opacity:.72;transition:opacity .15s,transform .12s}
+  .socials-left a:hover{opacity:1;transform:translateY(-2px)}
+  .socials-left svg{width:27px;height:27px;display:block;fill:#fff}
+  /* newsletter signup — the site's call to action */
+  .subscribe{margin-top:40px}
+  .sub-note{font-size:13px;color:var(--soft);max-width:430px;margin:14px auto 16px;line-height:1.55}
+  .sub-row{display:flex;gap:9px;max-width:430px;margin:0 auto}
+  .sub-row input[type=email]{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);border-radius:11px;color:#fff;font-family:inherit;font-size:14px;padding:13px 14px;outline:none;transition:border-color .15s}
+  .sub-row input[type=email]:focus{border-color:var(--gold)}
+  .sub-row input[type=email]::placeholder{color:rgba(255,255,255,.4)}
+  .sub-row button{border:none;border-radius:11px;background:var(--gold);color:#15100a;font-weight:700;font-size:14px;letter-spacing:.02em;padding:0 22px;cursor:pointer;font-family:inherit;transition:filter .15s}
+  .sub-row button:hover{filter:brightness(1.06)}
+  .sub-row button:disabled{opacity:.5;cursor:default}
+  #sub-thanks{display:none;color:var(--gold);font-size:14px;margin-top:14px;font-weight:500}
+  @media(max-width:760px){.sub-row{flex-direction:column}.sub-row button{padding:13px}}
+  /* subtle life: a very slow cinematic drift on the photo (never hides content) */
+  .hero .bg{transform-origin:70% 42%;animation:kenburns 44s ease-in-out infinite alternate;will-change:transform}
+  @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09)}}
+  @media(prefers-reduced-motion:reduce){.hero .bg{animation:none}}
+  nav{display:flex;gap:40px}
+  nav a,nav button{background:none;border:none;cursor:pointer;color:#fff;font-family:inherit;font-size:13.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;opacity:.82;text-decoration:none;transition:opacity .15s,color .15s}
+  nav a:hover,nav button:hover{opacity:1;color:var(--gold)}
+  /* left panel: work covered by */
+  .covered{position:absolute;z-index:8;left:48px;top:50%;transform:translateY(-50%);width:52%;max-width:680px;max-height:88vh;overflow-y:auto;text-align:center;padding-right:6px;scrollbar-width:none;-ms-overflow-style:none}
+  .covered::-webkit-scrollbar{display:none}
+  .covered .lab{font-size:13.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--soft);font-weight:500;margin:40px 0 30px}
+  .grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px 24px}
+  .pi{display:inline-flex;align-items:center;justify-content:center;opacity:.62;transition:opacity .18s,transform .12s;cursor:pointer}
+  .pi:hover{opacity:1;transform:translateY(-2px)}
+  .pi img,.pi svg{height:27px;width:auto;object-fit:contain;display:block}
+  @media(max-width:1100px){.covered{width:54%}}
+  @media(max-width:720px){.covered{position:static;transform:none;width:auto;max-width:none;padding:118px 22px 0}.pi img{height:24px}.grid{gap:20px 26px}}
+  /* footer */
+  footer{position:absolute;left:0;right:0;bottom:0;z-index:10;padding:22px 56px;display:flex;align-items:center;justify-content:space-between;gap:16px;pointer-events:none}
+  footer .copy{font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.4)}
+  .socials{display:flex;gap:22px;align-items:center}
+  .socials a{display:inline-flex;color:#fff;opacity:.72;transition:opacity .15s,transform .12s}
+  .socials a:hover{opacity:1;transform:translateY(-2px)}
+  .socials svg{width:20px;height:20px;display:block;fill:#fff}
+  /* gallery */
+  .card.gallery{width:880px;max-width:94%;max-height:88vh;overflow:auto}
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  @media(max-width:680px){.gal{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden}
+  .tile img{width:100%;height:150px;object-fit:cover;display:block}
+  .tile .ph{height:150px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.38);font-size:12px;letter-spacing:.06em;text-align:center;padding:10px}
+  .tile .dl{display:block;text-align:center;padding:11px;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;border-top:1px solid rgba(255,255,255,.1)}
+  .tile .dl:hover{background:rgba(200,162,74,.12)}
+  .tile .dl[aria-disabled=true]{color:rgba(255,255,255,.28);cursor:default}
+  .tile .dl[aria-disabled=true]:hover{background:none}
+  .galnote{margin-top:18px;font-size:12.5px;color:var(--soft)}
+  /* modals */
+  .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(6,7,9,.62);backdrop-filter:blur(4px)}
+  .modal.open{display:flex}
+  .card{width:440px;max-width:92%;background:#15171c;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:34px 32px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .card h2{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px}
+  .card p{color:rgba(255,255,255,.8);line-height:1.65;font-size:15px;margin-bottom:12px}
+  .x{position:absolute;top:16px;right:18px;background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;cursor:pointer}
+  .opt{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+  .opt a,.opt button{display:block;text-align:left;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:#fff;border-radius:12px;padding:15px 17px;font-family:inherit;font-size:14.5px;cursor:pointer;text-decoration:none;transition:border-color .15s,background .15s}
+  .opt a:hover,.opt button:hover{border-color:var(--gold);background:rgba(200,162,74,.1)}
+  .opt .sub{display:block;font-size:12px;color:var(--soft);margin-top:3px}
+  @media(max-width:720px){header{padding:22px 22px}.covered{left:22px;right:22px;max-width:none;top:auto;bottom:120px;transform:none}.brand{font-size:16px;letter-spacing:.24em}nav{gap:18px}nav a,nav button{font-size:10.5px;letter-spacing:.12em}.grid{grid-template-columns:repeat(2,1fr);gap:14px}footer{padding:18px 22px}}
+  .cf-row{display:flex;gap:10px}
+  #m-contact input,#m-contact textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);border-radius:10px;color:#fff;font-family:inherit;font-size:14.5px;padding:12px 13px;margin-top:10px;outline:none}
+  #m-contact input:focus,#m-contact textarea:focus{border-color:var(--gold)}
+  #m-contact textarea{resize:vertical;min-height:96px;line-height:1.5}
+  .cf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+  .cf-send{width:100%;margin-top:14px;border:none;border-radius:11px;background:var(--gold);color:#15100a;font-weight:700;font-size:15px;padding:14px;cursor:pointer;font-family:inherit}
+  .cf-send:hover{filter:brightness(1.06)}.cf-send:disabled{opacity:.5;cursor:default}
+  #cf-thanks{display:none;text-align:center;padding:16px 4px 6px}
+  .cf-tick{width:56px;height:56px;border-radius:50%;background:rgba(200,162,74,.16);color:var(--gold);font-size:27px;display:flex;align-items:center;justify-content:center;margin:4px auto 14px}
+  #cf-thanks h3{font-size:18px;margin:0 0 8px;color:#fff}
+  #cf-thanks p{color:var(--soft);font-size:14px;margin:0}
+  /* generic left scroll panel body (biography / photographs / press) */
+  .pp-body{overflow-y:auto;padding-right:8px}
+  .pp-body::-webkit-scrollbar{width:7px}
+  .pp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
+  .bio-h1{font-size:21px;color:#fff;font-weight:600;margin:2px 0 8px}
+  .bio-h{font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:30px 0 11px}
+  .bio-p{font-size:17px;line-height:1.7;color:rgba(255,255,255,.86);margin:0 0 16px}
+  .pp-note{font-size:12.5px;color:var(--soft);margin:0 0 14px}
+  .pp-gal{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  /* ── MOBILE: turn the fixed desktop poster into a scrolling page ── */
+  @media(max-width:760px){
+    html,body{height:auto;overflow-y:auto;overflow-x:hidden}
+    .hero{height:auto;min-height:auto;overflow:visible}
+    .hero .herobg,.hero .grad,.hero .vig{bottom:auto;height:58vh}
+    .hero .herobg{background-size:cover;background-position:var(--hero-x) var(--hero-y)}
+    .hero .grad{background:linear-gradient(180deg,rgba(11,12,15,.55) 0%,rgba(11,12,15,0) 26%,rgba(11,12,15,.5) 74%,#0b0c0f 100%)}
+    header{padding:15px 18px;flex-wrap:wrap;gap:4px 10px}
+    .brand{font-size:15px;letter-spacing:.22em}
+    nav{gap:3px 12px;flex-wrap:wrap;justify-content:flex-start;width:100%;margin-top:4px}
+    nav a,nav button{font-size:11px;letter-spacing:.08em;padding:4px 0}
+    .covered{position:static;transform:none;width:auto;max-width:none;max-height:none;overflow:visible;padding:calc(58vh + 22px) 22px 44px;text-align:center}
+    .bio{font-size:15.5px;text-align:left}
+    .metrics{gap:34px;margin:24px auto 4px}
+    .lab{margin:34px 0 22px}
+    footer{position:static;padding:26px 22px 32px;justify-content:center}
+    .presspanel{position:fixed;top:0;left:0;right:0;bottom:0;width:auto;max-width:none;max-height:none;transform:none;background:var(--ink);z-index:60;padding:58px 18px 22px}
+    .presspanel.open{display:flex;flex-direction:column}
+    .pp-body{flex:1}
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="herobg"></div>
+  <div class="grad"></div><div class="vig"></div>
+  <header>
+    <a class="brand" href="index.html">MARCUS J BALL</a>
+    <nav>
+      <button onclick="openLeft('bio')">Biography</button>
+      <a href="https://www.execprosec.com" target="_blank" rel="noopener">ExecProsec</a>
+      <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
+      <button onclick="openLeft('photos')">Photographs</button>
+      <button onclick="openLeft('press')">Press</button>
+      <button onclick="openM('contact')">Contact</button>
+    </nav>
+  </header>
+
+  <div class="covered">
+    <p class="bio">Marcus J Ball has been campaigning to criminalise lying in politics since June 2016. He is the private prosecutor who prosecuted Boris Johnson for alleged Misconduct in Public Office, in an attempt to set a precedent that lying in politics was a criminal offence. He is the producer and presenter of an upcoming documentary film about lying in politics and the fight to make it illegal. The UK government is now criminalising lying by the Prime Minister, ministers and nearly all public officials with the new “Misleading the Public” offence in the Public Office (Accountability) Bill. He is campaigning to strengthen it using his experience prosecuting Johnson and extend it to all lawmakers and judges.</p>
+    <div class="metrics">
+      <div class="metric"><b id="m-backers">19,000+</b><span>Financial Backers</span></div>
+      <div class="metric"><b id="m-followers">53,000+</b><span>Followers across platforms</span></div>
+    </div>
+    <div class="lab">Work covered by</div>
+    <div class="grid">
+      <a class="pi" href="https://www.bbc.co.uk/news/uk-politics-48445430" target="_blank" rel="noopener" aria-label="BBC"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTAgNDQiIGhlaWdodD0iMzIiPjxyZWN0IHg9IjAiIHk9IjIiIHdpZHRoPSIzMyIgaGVpZ2h0PSI0MCIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjM4IiB5PSIyIiB3aWR0aD0iMzMiIGhlaWdodD0iNDAiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSI3NiIgeT0iMiIgd2lkdGg9IjMzIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZmZmIi8+PHRleHQgeD0iMTYuNSIgeT0iMjkiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSIyMSIgZmlsbD0iIzA0MTQ0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QjwvdGV4dD48dGV4dCB4PSI1NC41IiB5PSIyOSIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjIxIiBmaWxsPSIjMDQxNDQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5CPC90ZXh0Pjx0ZXh0IHg9IjkyLjUiIHk9IjI5IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMjEiIGZpbGw9IiMwNDE0NDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkM8L3RleHQ+PC9zdmc+" alt="BBC"></a>
+      <a class="pi" href="https://edition.cnn.com/2019/05/29/uk/boris-johnson-faces-misconduct-trial-gbr-intl/index.html" target="_blank" rel="noopener" aria-label="CNN"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MCA0NCIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iNDUiIHk9IjM0IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMzIiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNOTjwvdGV4dD48L3N2Zz4=" alt="CNN"></a>
+      <a class="pi" href="https://www.youtube.com/watch?v=XWs8GxCu3IE" target="_blank" rel="noopener" aria-label="Al Jazeera"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjgwIiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjE4IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMiI+QUwgSkFaRUVSQTwvdGV4dD48L3N2Zz4=" alt="Al Jazeera"></a>
+      <a class="pi" href="https://www.channel4.com/news/campaigner-marcus-ball-we-still-accuse-boris-johnson-of-having-lied-to-the-public" target="_blank" rel="noopener" aria-label="Channel 4"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NCA0NCIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iMjIiIHk9IjM2IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMzgiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPjQ8L3RleHQ+PC9zdmc+" alt="Channel 4"></a>
+      <a class="pi" href="https://www.itv.com/news/2019-05-29/who-is-private-prosecutor-marcus-ball" target="_blank" rel="noopener" aria-label="ITV News"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjgwIiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMiI+SVRWIE5FV1M8L3RleHQ+PC9zdmc+" alt="ITV News"></a>
+      <a class="pi" href="https://www.theguardian.com/politics/2019/may/23/boris-johnson-lied-during-eu-referendum-campaign-court-told" target="_blank" rel="noopener" aria-label="The Guardian"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9Ijk1IiB5PSIzMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPnRoZSBndWFyZGlhbjwvdGV4dD48L3N2Zz4=" alt="The Guardian"></a>
+      <a class="pi" href="https://www.thetimes.com/uk/politics/article/judges-who-threw-out-johnson-case-were-biased-claims-accuser-vwwl0v75n" target="_blank" rel="noopener" aria-label="The Times"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9Ijg1IiB5PSIzMiIgZm9udC1mYW1pbHk9IlRpbWVzIE5ldyBSb21hbixzZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjMiPlRIRSBUSU1FUzwvdGV4dD48L3N2Zz4=" alt="The Times"></a>
+      <a class="pi" href="https://www.wired.com/story/boris-johnson-court-brexit-referendum-vote/" target="_blank" rel="noopener" aria-label="Wired"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjYwIiB5PSIzMyIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjI4IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iNCI+V0lSRUQ8L3RleHQ+PC9zdmc+" alt="Wired"></a>
+      <a class="pi" href="https://www.ft.com/content/a9caa9de-766f-11e9-bbad-7c18c0ea0201" target="_blank" rel="noopener" aria-label="Financial Times"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCA0NCIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iMzAiIHk9IjM0IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIyIj5GVDwvdGV4dD48L3N2Zz4=" alt="Financial Times"></a>
+      <a class="pi" href="https://www.zeit.de/campus/2019-04/marcus-j-ball-brexit-boris-johnson-lies/seite-2" target="_blank" rel="noopener" aria-label="Die Zeit"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNTAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9Ijc1IiB5PSIzMiIgZm9udC1mYW1pbHk9IlRpbWVzIE5ldyBSb21hbixzZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjQiPkRJRSBaRUlUPC90ZXh0Pjwvc3ZnPg==" alt="Die Zeit"></a>
+      <a class="pi" href="https://www.huffingtonpost.co.uk/entry/marcus-ball-boris-johnson-private-prosecution_uk_5cd82960e4b0796a95dd85bd" target="_blank" rel="noopener" aria-label="HuffPost"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNTAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9Ijc1IiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IdWZmUG9zdDwvdGV4dD48L3N2Zz4=" alt="HuffPost"></a>
+      <a class="pi" href="https://elpais.com/internacional/2019/05/29/actualidad/1559125421_543681.html" target="_blank" rel="noopener" aria-label="El Pais"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjU1IiB5PSIzMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVsIFBhw61zPC90ZXh0Pjwvc3ZnPg==" alt="El Pais"></a>
+      <a class="pi" href="https://www.nytimes.com/2019/05/29/world/europe/boris-johnson-brexit.html" target="_blank" rel="noopener" aria-label="The New York Times"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMzAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjExNSIgeT0iMzEiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlRoZSBOZXcgWW9yayBUaW1lczwvdGV4dD48L3N2Zz4=" alt="The New York Times"></a>
+      <a class="pi" href="https://www.france24.com/en/20190529-UK-boris-johnson-court-lied-brexit-campaign-misconduct" target="_blank" rel="noopener" aria-label="France 24"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNTUgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9Ijc3IiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMSI+RlJBTkNFIDI0PC90ZXh0Pjwvc3ZnPg==" alt="France 24"></a>
+      <a class="pi" href="https://www.wsj.com/articles/u-k-s-boris-johnson-to-appear-in-court-over-brexit-claims-11559136361" target="_blank" rel="noopener" aria-label="Wall Street Journal"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA0NCIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iNDAiIHk9IjM0IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMjgiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIyIj5XU0o8L3RleHQ+PC9zdmc+" alt="Wall Street Journal"></a>
+      <a class="pi" href="https://www.foxnews.com/world/boris-johnson-court-misleading-claims-brexit-referendum" target="_blank" rel="noopener" aria-label="Fox News"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjgwIiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjI0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMSI+Rk9YIE5FV1M8L3RleHQ+PC9zdmc+" alt="Fox News"></a>
+      <a class="pi" href="https://www.abc.net.au/news/2019-06-08/high-court-throws-out-brexit-claim-case-against-boris-johnson/11192388" target="_blank" rel="noopener" aria-label="ABC Australia"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MCA0NCIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iNDUiIHk9IjM0IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMjgiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIzIj5BQkM8L3RleHQ+PC9zdmc+" alt="ABC Australia"></a>
+      <a class="pi" href="https://news.sky.com/story/hillsborough-law-will-criminalise-lying-by-senior-ministers-say-campaigners-13509580" target="_blank" rel="noopener" aria-label="Sky News"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDQiIGhlaWdodD0iMzIiPjx0ZXh0IHg9IjgwIiB5PSIzMiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjI0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMSI+U0tZIE5FV1M8L3RleHQ+PC9zdmc+" alt="Sky News"></a>
+      <a class="pi" href="https://www.chinadaily.com.cn/a/201906/05/WS5cf69c3ca310519142701082.html" target="_blank" rel="noopener" aria-label="China Daily"><svg viewBox="0 0 150 44" height="33"><text x="75" y="31" font-family="Arial Black,Arial,sans-serif" font-weight="800" font-size="22" fill="#fff" text-anchor="middle">China Daily</text></svg></a>
+      <a class="pi" href="https://www.independent.ie/world-news/a-world-first-boris-johnson-to-face-private-prosecution-over-brexit-campaign-claims/a/140423587.html" target="_blank" rel="noopener" aria-label="Irish Independent"><svg viewBox="0 0 210 44" height="33"><text x="105" y="31" font-family="Georgia,serif" font-weight="700" font-size="19" fill="#fff" text-anchor="middle">Irish Independent</text></svg></a>
+      <a class="pi" href="https://firstindia.co.in/news/life-style/how-the-uk-is-criminalising-political-deception-for-the-first-time-1776572302" target="_blank" rel="noopener" aria-label="First India News"><svg viewBox="0 0 205 44" height="33"><text x="102" y="31" font-family="Arial Black,Arial,sans-serif" font-weight="800" font-size="19" fill="#fff" text-anchor="middle">First India News</text></svg></a>
+      <a class="pi" href="https://www.youtube.com/watch?v=zH6t6WZ8Yd4" target="_blank" rel="noopener" aria-label="TEDx Talk"><svg viewBox="0 0 120 44" height="33"><text x="2" y="33" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="30" fill="#fff" letter-spacing="1">TED<tspan font-size="18" dy="-11" fill="#e62b1e">x</tspan></text></svg></a>
+      <a class="pi" href="https://www.vanityfair.com/news/2019/05/boris-johnson-could-go-to-jail-for-lying-about-brexit" target="_blank" rel="noopener" aria-label="Vanity Fair"><svg viewBox="0 0 165 44" height="33"><text x="82" y="32" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="23" fill="#fff" text-anchor="middle">Vanity Fair</text></svg></a>
+      <a class="pi" href="https://www.express.co.uk/news/politics/2184124/mps-must-submit-hillsborough-law" target="_blank" rel="noopener" aria-label="Daily Express"><svg viewBox="0 0 180 44" height="33"><text x="90" y="32" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="19" fill="#fff" text-anchor="middle" letter-spacing="1">DAILY EXPRESS</text></svg></a>
+      <a class="pi" href="https://metro.co.uk/author/marcus-j-ball/" target="_blank" rel="noopener" aria-label="Metro"><svg viewBox="0 0 95 44" height="33"><text x="47" y="33" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="27" fill="#fff" text-anchor="middle">Metro</text></svg></a>
+      <a class="pi" href="https://www.edp24.co.uk/news/local-council/20779945.norwich-man-gets-boris-johnson-face-court-lies-eu-referendum-campaign/" target="_blank" rel="noopener" aria-label="Eastern Daily Press"><svg viewBox="0 0 205 44" height="33"><text x="102" y="31" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="18" fill="#fff" text-anchor="middle">Eastern Daily Press</text></svg></a>
+    </div>
+    <div class="lab social-title">Social media profiles</div>
+    <div class="socials-left">
+      <a href="https://www.instagram.com/marcusjball/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" style="fill:none" stroke="#fff" stroke-width="1.9"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="17.6" cy="6.4" r="1.3" style="fill:#fff" stroke="none"/></svg></a>
+      <a href="https://x.com/MarcusJBall" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></a>
+      <a href="https://www.facebook.com/MarcusJBallUK/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="#fff"><path d="M13.5 21v-7H16l.4-3h-2.9V9c0-.85.25-1.4 1.5-1.4H16.5V5c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.45-4 4.1V11H8v3h2.1v7z"/></svg></a>
+      <a href="https://www.youtube.com/@MarcusJBall" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="1.8" y="5.2" width="20.4" height="13.6" rx="4.4" fill="#fff"/><path d="M10 8.8l5.6 3.2-5.6 3.2z" fill="#0b0c0f"/></svg></a>
+      <a href="https://uk.linkedin.com/in/marcus-j-ball-b7110a26" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M4.5 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM3 9h3v12H3zM9 9h2.85v1.7h.04c.4-.75 1.4-1.55 2.9-1.55 3.05 0 3.6 2 3.6 4.6V21h-3v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg></a>
+      <a href="https://www.tiktok.com/@execprosec" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="#fff"><path d="M14 3c.35 2.1 1.7 3.75 3.9 4.05v2.5c-1.3 0-2.6-.42-3.9-1.15V15a5.05 5.05 0 1 1-5.05-5.05c.32 0 .64.03.95.08v2.6a2.45 2.45 0 1 0 1.7 2.34V3z"/></svg></a>
+    </div>
+
+    <div class="subscribe" id="sub-block">
+      <div class="lab social-title">Join the campaign</div>
+      <p class="sub-note">Occasional updates on the fight to criminalise lying in politics — straight to your inbox. No spam, unsubscribe anytime.</p>
+      <div class="sub-row" id="sub-form">
+        <input id="sub-email" type="email" placeholder="Your email address" autocomplete="email">
+        <input id="sub-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button id="sub-btn" onclick="subscribe()">Subscribe</button>
+      </div>
+      <div id="sub-thanks">✓ You're on the list — thank you.</div>
+    </div>
+  </div>
+
+  <div class="presspanel" id="leftpanel">
+    <div class="pp-head">
+      <h2 id="leftTitle">Biography</h2>
+      <button class="pp-back" onclick="closeLeft()">← Back</button>
+    </div>
+    <div class="pp-body" id="leftBody"></div>
+  </div>
+
+  <footer>
+    <span class="copy">© Marcus J Ball</span>
+  </footer>
+</div>
+
+<!-- CONTACT -->
+<div class="modal" id="m-contact">
+  <div class="card">
+    <button class="x" onclick="closeM()">&times;</button>
+    <h2>Get in touch</h2>
+    <div id="cf-form">
+      <p>Send me a message</p>
+      <div class="cf-row">
+        <input id="cf-first" placeholder="First name" autocomplete="given-name">
+        <input id="cf-last" placeholder="Last name" autocomplete="family-name">
+      </div>
+      <input id="cf-email" type="email" placeholder="Email address" autocomplete="email">
+      <input id="cf-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <textarea id="cf-msg" rows="4" placeholder="Your message"></textarea>
+      <button class="cf-send" id="cf-send" onclick="sendContact()">Send message</button>
+    </div>
+    <div id="cf-thanks">
+      <div class="cf-tick">✓</div>
+      <h3>Thank you for your message.</h3>
+      <p>It's been sent — I'll be in touch soon.</p>
+    </div>
+  </div>
+</div>
+
+<script src="bio-data.js"></script>
+<script src="photos-data.js"></script>
+<script src="press-data.js"></script>
+<script>
+function openM(w){if(w==='contact'){var f=document.getElementById('cf-form'),t=document.getElementById('cf-thanks');if(f&&t){f.style.display='';t.style.display='none';}}document.getElementById('m-'+w).classList.add('open');}
+function sendContact(){
+  var g=function(id){return (document.getElementById(id).value||'').trim();};
+  var msg=g('cf-msg'); if(!msg){document.getElementById('cf-msg').focus();return;}
+  var btn=document.getElementById('cf-send'); btn.disabled=true; btn.textContent='Sending…';
+  var body=new URLSearchParams({first:g('cf-first'),last:g('cf-last'),email:g('cf-email'),message:msg,website:g('cf-website')});
+  fetch('https://web-production-f8552.up.railway.app/api/contact',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+    .then(function(r){return r.json();}).then(function(){
+      document.getElementById('cf-form').style.display='none';
+      document.getElementById('cf-thanks').style.display='block';
+    }).catch(function(){btn.disabled=false;btn.textContent='Send message';alert('Could not send right now — please try again in a moment.');});
+}
+function subscribe(){
+  var emEl=document.getElementById('sub-email'), email=(emEl.value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){emEl.focus();emEl.style.borderColor='#e0564f';return;}
+  var btn=document.getElementById('sub-btn'); btn.disabled=true; btn.textContent='…';
+  var body=new URLSearchParams({email:email,website:(document.getElementById('sub-website').value||'')});
+  fetch('https://web-production-f8552.up.railway.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+    .then(function(r){return r.json();}).then(function(){
+      document.getElementById('sub-form').style.display='none';
+      document.getElementById('sub-thanks').style.display='block';
+    }).catch(function(){btn.disabled=false;btn.textContent='Subscribe';alert('Could not subscribe right now — please try again in a moment.');});
+}
+function closeM(){document.querySelectorAll('.modal').forEach(function(m){m.classList.remove('open');});}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* one left-hand scroll panel hosts Biography, Photographs and Press */
+var LEFT={
+  bio:{title:'Biography', render:renderBio},
+  photos:{title:'Photographs', render:renderPhotos},
+  press:{title:'Press coverage', render:renderPress}
+};
+function openLeft(kind){
+  var cfg=LEFT[kind]; if(!cfg) return;
+  var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
+  document.getElementById('leftTitle').textContent=cfg.title;
+  body.innerHTML=''; body.scrollTop=0;
+  cfg.render(body);
+  cov.style.display='none'; panel.classList.add('open');
+}
+function closeLeft(){
+  document.getElementById('leftpanel').classList.remove('open');
+  document.querySelector('.covered').style.display='';
+}
+document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeM();});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeM();closeLeft();}});
+
+function renderBio(box){
+  if(!window.BIO){box.innerHTML='<p class="bio-p">Biography unavailable.</p>';return;}
+  window.BIO.forEach(function(o){
+    if(o.t==='h1') return;            /* name already shown in the site header */
+    var el=document.createElement(o.t==='p'?'p':'h4');
+    el.className=o.t==='p'?'bio-p':'bio-h';
+    el.textContent=o.x; box.appendChild(el);
+  });
+}
+function renderPhotos(box){
+  var note=document.createElement('p'); note.className='pp-note'; note.textContent='Photographs available for use by the press.'; box.appendChild(note);
+  var g=document.createElement('div'); g.className='pp-gal';
+  (window.PHOTOS||[]).forEach(function(p){
+    var d=document.createElement('div'); d.className='tile';
+    d.innerHTML='<img loading="lazy" src="'+p.f+'" alt="'+esc(p.a||'Marcus J Ball')+'"><a class="dl" href="'+p.f+'" download>Download</a>';
+    g.appendChild(d);
+  });
+  box.appendChild(g);
+}
+function renderPress(box){
+  if(!window.PRESS){box.innerHTML='<p class="pp-note">Coverage unavailable.</p>';return;}
+  var SERIF=/guardian|times|independent|financial|new york|washington post|corriere|zeit|vanity|european|straits|peninsula|qatar|news international|standard|telegraph|observer|sabah/i;
+  var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmt(d){if(!d) return '';var p=d.split('-');return (p[2]?parseInt(p[2],10)+' ':'')+(p[1]?M[parseInt(p[1],10)-1]+' ':'')+p[0];}
+  function logo(o){
+    var font=SERIF.test(o)?"Georgia,'Times New Roman',serif":"Arial,Helvetica,sans-serif";
+    var w=Math.round(o.length*12)+14;
+    return '<svg viewBox="0 0 '+w+' 24" preserveAspectRatio="xMinYMid meet"><text x="0" y="18" font-family="'+font+'" font-weight="700" font-size="18" fill="#fff">'+esc(o)+'</text></svg>';
+  }
+  var rows=window.PRESS.slice().sort(function(a,b){return (parseInt((b.d||'').replace(/-/g,''),10)||0)-(parseInt((a.d||'').replace(/-/g,''),10)||0);});
+  var total=rows.length, years=rows.map(function(r){return (r.d||'').slice(0,4);}).filter(Boolean);
+  if(years.length) document.getElementById('leftTitle').textContent='Press coverage · '+total+' articles · '+years[years.length-1]+'–'+years[0];
+  rows.forEach(function(x,i){
+    var a=document.createElement('a'); a.href=x.u; a.target='_blank'; a.rel='noopener'; a.className='prow';
+    var num=String(total-i).padStart(3,'0');
+    a.innerHTML='<span class="pmeta"><span class="pnum">'+num+'</span><span class="pdate">'+fmt(x.d)+'</span>'+(x.c?'<span class="pcountry">'+esc(x.c)+'</span>':'')+'</span><span class="plogo">'+logo(x.o)+'</span><span class="phead">'+esc(x.h)+'</span>';
+    box.appendChild(a);
+  });
+}
+
+</script>
+</body>
+</html>

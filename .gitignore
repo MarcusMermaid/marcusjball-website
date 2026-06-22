@@ -1,0 +1,8 @@
+# deploy mirror (Cloudflare serves the repo root)
+_deploy/
+# heavy source originals not used by the live site
+Marcus J Ball Personal Website Background Image.png
+mjb-hero2.jpg
+mjb-speaking.jpg
+# press article scans not referenced by the site
+press/

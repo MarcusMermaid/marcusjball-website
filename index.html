@@ -65,11 +65,11 @@
   /* newsletter signup — the site's call to action */
   .subscribe{position:absolute;z-index:9;right:46px;bottom:54px;width:330px;max-width:34vw;background:rgba(8,10,14,.55);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 20px 20px;text-align:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
   .sub-note{font-size:13px;color:var(--soft);max-width:430px;margin:14px auto 16px;line-height:1.55}
-  .sub-row{display:flex;gap:9px;max-width:430px;margin:0 auto}
-  .sub-row input[type=email]{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);border-radius:11px;color:#fff;font-family:inherit;font-size:14px;padding:13px 14px;outline:none;transition:border-color .15s}
-  .sub-row input[type=email]:focus{border-color:var(--gold)}
-  .sub-row input[type=email]::placeholder{color:rgba(255,255,255,.4)}
-  .sub-row button{border:none;border-radius:11px;background:var(--gold);color:#15100a;font-weight:700;font-size:14px;letter-spacing:.02em;padding:0 22px;cursor:pointer;font-family:inherit;transition:filter .15s}
+  .sub-row{display:flex;flex-direction:column;gap:9px;max-width:430px;margin:0 auto}
+  .sub-row input:not(.cf-hp){width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);border-radius:11px;color:#fff;font-family:inherit;font-size:14px;padding:13px 14px;outline:none;transition:border-color .15s}
+  .sub-row input:not(.cf-hp):focus{border-color:var(--gold)}
+  .sub-row input:not(.cf-hp)::placeholder{color:rgba(255,255,255,.4)}
+  .sub-row button{border:none;border-radius:11px;background:var(--gold);color:#15100a;font-weight:700;font-size:14px;letter-spacing:.02em;padding:13px;cursor:pointer;font-family:inherit;transition:filter .15s}
   .sub-row button:hover{filter:brightness(1.06)}
   .sub-row button:disabled{opacity:.5;cursor:default}
   #sub-thanks{display:none;color:var(--gold);font-size:14px;margin-top:14px;font-weight:500}
@@ -230,13 +230,14 @@
 
   <div class="subscribe" id="sub-block">
     <div class="lab social-title">Sign up to Marcus's personal newsletter</div>
-    <p class="sub-note">Occasional personal updates from Marcus on his campaigns, the documentary, and the fight to criminalise lying in politics. No spam, unsubscribe anytime.</p>
     <div class="sub-row" id="sub-form">
-      <input id="sub-email" type="email" placeholder="Your email address" autocomplete="email">
+      <input id="sub-fname" type="text" placeholder="First name" autocomplete="given-name">
+      <input id="sub-lname" type="text" placeholder="Last name" autocomplete="family-name">
+      <input id="sub-email" type="email" placeholder="Email address" autocomplete="email">
       <input id="sub-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button id="sub-btn" onclick="subscribe()">Subscribe</button>
     </div>
-    <div id="sub-thanks">✓ You're on the list — thank you.</div>
+    <div id="sub-thanks">Thank you for subscribing.</div>
   </div>
 
   <div class="presspanel" id="leftpanel">
@@ -295,8 +296,10 @@ function sendContact(){
 function subscribe(){
   var emEl=document.getElementById('sub-email'), email=(emEl.value||'').trim();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){emEl.focus();emEl.style.borderColor='#e0564f';return;}
+  var fname=(document.getElementById('sub-fname').value||'').trim();
+  var lname=(document.getElementById('sub-lname').value||'').trim();
   var btn=document.getElementById('sub-btn'); btn.disabled=true; btn.textContent='…';
-  var body=new URLSearchParams({email:email,website:(document.getElementById('sub-website').value||'')});
+  var body=new URLSearchParams({email:email,first_name:fname,last_name:lname,website:(document.getElementById('sub-website').value||'')});
   fetch('https://web-production-f8552.up.railway.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
     .then(function(r){return r.json();}).then(function(){
       document.getElementById('sub-form').style.display='none';

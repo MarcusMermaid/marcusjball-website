@@ -320,7 +320,23 @@ var LEFT={
   contact:{title:'Contact', render:renderContact}
 };
 function renderContact(box){
-  box.innerHTML='<p class="bio-p" style="font-size:19px"><a href="mailto:MJB@ExecProsec.com" style="color:var(--gold);text-decoration:none">MJB@ExecProsec.com</a></p>';
+  box.innerHTML='<p class="bio-p" style="font-size:19px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
+    +'<span style="color:var(--gold)">MJB@ExecProsec.com</span>'
+    +'<button type="button" id="copy-email" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:13px;cursor:pointer">Copy</button>'
+    +'</p>';
+  var b=document.getElementById('copy-email');
+  if(b){b.addEventListener('click',function(){
+    var done=function(){b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy';},1600);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText('MJB@ExecProsec.com').then(done).catch(function(){fallbackCopy('MJB@ExecProsec.com');done();});
+    } else { fallbackCopy('MJB@ExecProsec.com'); done(); }
+  });}
+}
+function fallbackCopy(text){
+  var t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';
+  document.body.appendChild(t);t.focus();t.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(t);
 }
 function openLeft(kind){
   var cfg=LEFT[kind]; if(!cfg) return;

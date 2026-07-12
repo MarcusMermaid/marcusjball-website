@@ -180,7 +180,7 @@
       <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
       <button onclick="openLeft('photos')">Photographs</button>
       <button onclick="openLeft('press')">Press</button>
-      <button onclick="openM('contact')">Contact</button>
+      <button onclick="openLeft('contact')">Contact</button>
     </nav>
   </header>
 
@@ -303,7 +303,7 @@ function subscribe(){
   var lname=(document.getElementById('sub-lname').value||'').trim();
   var btn=document.getElementById('sub-btn'); btn.disabled=true; btn.textContent='…';
   var body=new URLSearchParams({email:email,first_name:fname,last_name:lname,website:(document.getElementById('sub-website').value||'')});
-  fetch('https://web-production-f8552.up.railway.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+  fetch('https://central-2-mcp-production.up.railway.app/public/subscribe',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
     .then(function(r){return r.json();}).then(function(){
       document.getElementById('sub-form').style.display='none';
       document.getElementById('sub-thanks').style.display='block';
@@ -316,8 +316,12 @@ function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 var LEFT={
   bio:{title:'Biography', render:renderBio},
   photos:{title:'Photographs', render:renderPhotos},
-  press:{title:'Press coverage', render:renderPress}
+  press:{title:'Press coverage', render:renderPress},
+  contact:{title:'Contact', render:renderContact}
 };
+function renderContact(box){
+  box.innerHTML='<p class="bio-p" style="font-size:19px"><a href="mailto:MJB@ExecProsec.com" style="color:var(--gold);text-decoration:none">MJB@ExecProsec.com</a></p>';
+}
 function openLeft(kind){
   var cfg=LEFT[kind]; if(!cfg) return;
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');

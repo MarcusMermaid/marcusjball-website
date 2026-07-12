@@ -338,6 +338,13 @@ function fallbackCopy(text){
   try{document.execCommand('copy');}catch(e){}
   document.body.removeChild(t);
 }
+/* live supporter count from Central (refreshes daily at 05:00 UK) */
+(function(){
+  fetch('https://central-2-mcp-production.up.railway.app/public/backers')
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d && typeof d.backers==='number' && d.backers>0){ var el=document.getElementById('m-backers'); if(el) el.textContent=d.backers.toLocaleString('en-GB')+'+'; } })
+    .catch(function(){});
+})();
 function openLeft(kind){
   var cfg=LEFT[kind]; if(!cfg) return;
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');

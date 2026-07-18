@@ -37,6 +37,7 @@
   .presspanel.open{display:flex}
   .pp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
   .presspanel h2{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--soft);font-weight:500}
+  .poped{display:block;margin-top:5px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:#e0b24a}
   .pp-back{background:none;border:1px solid rgba(255,255,255,.22);color:#fff;font-family:inherit;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:8px;cursor:pointer;transition:border-color .15s,color .15s}
   .pp-back:hover{border-color:var(--gold);color:var(--gold)}
   .pp-list{overflow-y:auto;padding-right:8px}
@@ -406,7 +407,7 @@ function renderPress(box){
   rows.forEach(function(x,i){
     var a=document.createElement('a'); a.href=x.u; a.target='_blank'; a.rel='noopener'; a.className='prow';
     var num=String(total-i).padStart(3,'0');
-    a.innerHTML='<span class="pmeta"><span class="pnum">'+num+'</span><span class="pdate">'+fmt(x.d)+'</span>'+(x.c?'<span class="pcountry">'+esc(x.c)+'</span>':'')+'</span><span class="plogo">'+logo(x.o)+'</span><span class="phead">'+esc(x.h)+'</span>';
+    a.innerHTML='<span class="pmeta"><span class="pnum">'+num+'</span><span class="pdate">'+fmt(x.d)+'</span>'+(x.c?'<span class="pcountry">'+esc(x.c)+'</span>':'')+'</span><span class="plogo">'+logo(x.o)+'</span><span class="phead">'+esc(x.h)+'</span>'+(x.op?'<span class="poped">Opinion piece by Marcus J. Ball</span>':'');
     box.appendChild(a);
   });
 }

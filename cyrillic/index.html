@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cyrillic. Four Days.</title>
+<meta name="description" content="Learn to read the Russian Cyrillic alphabet in four days: history, letter-by-letter comparisons with English, audio and quizzes.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cyrillic">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-family=%22Georgia,serif%22 fill=%22%23b31b32%22>Я</text></svg>">
+<style>
+:root{
+  --bg:#ffffff;
+  --surface:#f7f5f6;
+  --ink:#191619;
+  --ink2:#6f6569;
+  --line:#e8e2e4;
+  --accent:#b31b32;
+  --accent-deep:#951227;
+  --on-accent:#ffffff;
+  --good:#1f7a55;
+  --good-soft:#e7f3ed;
+  --bad-soft:#faeaed;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#151216;
+    --surface:#1e1a1d;
+    --ink:#f3eff1;
+    --ink2:#a59da2;
+    --line:#2d282c;
+    --accent:#f0556c;
+    --accent-deep:#f4778a;
+    --on-accent:#2a0b12;
+    --good:#52b98a;
+    --good-soft:#1c2f26;
+    --bad-soft:#361b20;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151216; --surface:#1e1a1d; --ink:#f3eff1; --ink2:#a59da2; --line:#2d282c;
+  --accent:#f0556c; --accent-deep:#f4778a; --on-accent:#2a0b12;
+  --good:#52b98a; --good-soft:#1c2f26; --bad-soft:#361b20;
+}
+:root[data-theme="light"]{
+  --bg:#ffffff; --surface:#f7f5f6; --ink:#191619; --ink2:#6f6569; --line:#e8e2e4;
+  --accent:#b31b32; --accent-deep:#951227; --on-accent:#ffffff;
+  --good:#1f7a55; --good-soft:#e7f3ed; --bad-soft:#faeaed;
+}
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:-apple-system,"SF Pro Text","Segoe UI",system-ui,Roboto,sans-serif;
+  font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;}
+button{font:inherit; color:inherit; background:none; border:none; padding:0; cursor:pointer;}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px;}
+
+#topbar{
+  position:sticky; top:0; z-index:10; background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+.tb-in{
+  max-width:560px; margin:0 auto; padding:12px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.tb-back{
+  width:34px; height:34px; margin-left:-8px; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%; color:var(--ink);
+}
+.tb-back:active{background:var(--surface);}
+.tb-mark{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:17px; letter-spacing:.01em;
+}
+.tb-pct{
+  margin-left:auto; font-size:13px; color:var(--ink2);
+  font-variant-numeric:tabular-nums;
+}
+#pbar{height:3px; background:var(--bg);}
+#pbar > i{display:block; height:100%; background:var(--accent); width:0%; transition:width .4s ease;}
+
+#app{max-width:560px; margin:0 auto; padding:20px 16px 64px;}
+
+.eyebrow{
+  font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink2);
+}
+.eyebrow.red{color:var(--accent);}
+h1{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:31px; line-height:1.15; font-weight:400; margin:6px 0 10px; text-wrap:balance;
+}
+h2{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:23px; line-height:1.2; font-weight:400; margin:0 0 6px; text-wrap:balance;
+}
+.lead{font-size:16.5px; color:var(--ink2); margin:0 0 8px;}
+.small{font-size:13.5px; color:var(--ink2);}
+
+.stack{display:flex; flex-direction:column; gap:14px;}
+.card{
+  border:1px solid var(--line); border-radius:14px; background:var(--bg);
+  padding:18px;
+}
+.card.soft{background:var(--surface); border-color:transparent;}
+.tap{width:100%; text-align:left; transition:transform .06s ease;}
+.tap:active{transform:scale(.985);}
+
+.daychips{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:19px; letter-spacing:.28em; color:var(--ink2); margin-top:6px; word-break:break-all;
+}
+.status{font-size:13px; margin-top:8px; color:var(--ink2);}
+.status b{color:var(--good); font-weight:600;}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--accent); color:var(--on-accent);
+  border-radius:12px; padding:13px 20px; font-weight:600; font-size:15.5px;
+  width:100%; transition:background .15s ease, transform .06s ease;
+}
+.btn:active{background:var(--accent-deep); transform:scale(.985);}
+.btn.ghost{
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+}
+.btn.ghost:active{background:var(--surface);}
+.btnrow{display:flex; gap:10px; margin-top:14px;}
+.btnrow .btn{flex:1;}
+
+.tag{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; padding:4px 9px; border-radius:99px;
+  border:1px solid var(--line); color:var(--ink2);
+}
+.tag.false{background:var(--accent); border-color:var(--accent); color:var(--on-accent);}
+
+.lcard{border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
+.lcard .top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.glyph{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:68px; line-height:1.05; margin:10px 0 2px;
+}
+.lname{font-size:13px; color:var(--ink2); margin-bottom:10px;}
+.lname b{color:var(--ink); font-weight:600;}
+.row2{
+  display:grid; grid-template-columns:74px 1fr; gap:4px 12px;
+  font-size:14.5px; padding:10px 0; border-top:1px solid var(--line);
+}
+.row2 .k{color:var(--ink2); font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding-top:2px;}
+.hook{font-size:14.5px; padding:10px 0; border-top:1px solid var(--line);}
+.exw{
+  display:flex; align-items:center; gap:12px; padding:12px 0 2px; border-top:1px solid var(--line);
+}
+.exw .cy{font-family:Georgia,"Iowan Old Style","Times New Roman",serif; font-size:23px;}
+.exw .tr{font-size:13.5px; color:var(--ink2);}
+.hist{font-size:13.5px; color:var(--ink2); margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
+
+.spk{
+  flex:0 0 auto; width:34px; height:34px; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--line); color:var(--ink2);
+}
+.spk:active{background:var(--surface);}
+.spk svg{width:16px; height:16px;}
+html.no-audio .spk{display:none;}
+
+.wordrow{
+  width:100%; display:flex; align-items:center; gap:12px;
+  padding:13px 2px; border-bottom:1px solid var(--line); text-align:left;
+}
+.wordrow:last-child{border-bottom:none;}
+.wordrow .cy{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:21px; letter-spacing:.04em; flex:1 1 auto;
+}
+.wordrow .ans{font-size:13.5px; color:var(--ink2); text-align:right; min-width:0;}
+.wordrow .ans .hidden-hint{color:var(--ink2);}
+.wordrow .ans b{color:var(--ink); font-weight:600;}
+
+.mtable{width:100%; border-collapse:collapse; font-size:14.5px; margin:8px 0 4px;}
+.mtable td{padding:7px 8px 7px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+.mtable tr:last-child td{border-bottom:none;}
+.mtable .c1{font-family:Georgia,"Iowan Old Style","Times New Roman",serif; font-size:19px; white-space:nowrap;}
+.mtable .c1 span{color:var(--ink2); font-size:14px;}
+.mtable .c2{color:var(--ink2); font-size:13.5px;}
+
+.tl{display:flex; flex-direction:column; gap:0;}
+.tl-item{display:grid; grid-template-columns:64px 1fr; gap:14px; padding:13px 0; border-bottom:1px solid var(--line);}
+.tl-item:last-child{border-bottom:none;}
+.tl-y{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:17px; color:var(--accent); font-variant-numeric:tabular-nums; line-height:1.35;
+}
+.tl-t{font-weight:600; font-size:15px;}
+.tl-d{font-size:14px; color:var(--ink2); margin-top:2px;}
+
+.q-meta{display:flex; justify-content:space-between; font-size:13px; color:var(--ink2); margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.q-prompt{font-size:18px; margin:2px 0 6px;}
+.q-glyph{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:58px; line-height:1.1; margin:6px 0 10px;
+}
+.opts{display:flex; flex-direction:column; gap:10px; margin-top:12px;}
+.opt{
+  border:1px solid var(--line); border-radius:12px; padding:13px 15px;
+  font-size:15.5px; text-align:left; width:100%; background:var(--bg);
+}
+.opt .og{font-family:Georgia,"Iowan Old Style","Times New Roman",serif; font-size:22px;}
+.opt:active{background:var(--surface);}
+.opt.correct{border-color:var(--good); background:var(--good-soft);}
+.opt.wrong{border-color:var(--accent); background:var(--bad-soft);}
+.opt.dim{opacity:.45;}
+.q-why{font-size:14px; color:var(--ink2); margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);}
+.scorebig{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:52px; line-height:1.1; margin:4px 0 2px;
+}
+
+.refrow{
+  display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:center;
+  padding:10px 2px; border-bottom:1px solid var(--line); font-size:13.5px;
+}
+.refrow:last-child{border-bottom:none;}
+.refrow .g{font-family:Georgia,"Iowan Old Style","Times New Roman",serif; font-size:25px;}
+.refrow .s{color:var(--ink2);}
+.refhead{margin:18px 0 4px;}
+
+.foot{margin-top:28px; text-align:center;}
+.foot button{font-size:12.5px; color:var(--ink2); text-decoration:underline; text-underline-offset:3px;}
+
+.fade{animation:fade .25s ease;}
+@keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important; animation:none !important;}
+}
+</style>
+</head>
+<body>
+
+
+<header id="topbar">
+  <div class="tb-in">
+    <button class="tb-back" id="backbtn" aria-label="Back" onclick="goBack()" style="display:none">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <span class="tb-mark">Cyrillic.</span>
+    <span class="tb-pct" id="tbpct"></span>
+  </div>
+  <div id="pbar"><i id="pfill"></i></div>
+</header>
+<main id="app"></main>
+
+<script>
+"use strict";
+
+/* ---------------- data ---------------- */
+
+var L = [
+/* Day 1: same */
+{id:"A", ch:"Ð", lo:"Ð°", nm:"a", say:"Ð°", grp:"same", day:1,
+ snd:"ah, as in father",
+ like:"Latin A. Same letter, same job.",
+ hook:"One of six letters you already own. Stressed, it is a full ah.",
+ w:{c:"Ð°Ñ‚Ð¾Ð¼", t:"atom", e:"atom"},
+ hist:"From Greek alpha, the same ancestor as the Latin A."},
+{id:"E", ch:"Ð•", lo:"Ðµ", nm:"ye", say:"Ðµ", grp:"same", day:1,
+ snd:"ye, as in yes",
+ like:"Latin E, wearing a hidden y.",
+ hook:"Looks like E, says YE. That is why Ð½ÐµÑ‚ sounds like nyet.",
+ w:{c:"Ð¼ÐµÑ‚Ñ€Ð¾", t:"metro", e:"metro, the underground"},
+ hist:"From Greek epsilon. The built-in y-sound is Russia's own twist."},
+{id:"K", ch:"Ðš", lo:"Ðº", nm:"ka", say:"ÐºÐ°", grp:"same", day:1,
+ snd:"k, as in kiosk",
+ like:"Latin K.",
+ hook:"Exactly the K you know.",
+ w:{c:"ÐºÐ°ÑÑÐ°", t:"kassa", e:"ticket desk, till"},
+ hist:"From Greek kappa, the same source as Latin K."},
+{id:"M", ch:"Ðœ", lo:"Ð¼", nm:"em", say:"ÑÐ¼", grp:"same", day:1,
+ snd:"m, as in metro",
+ like:"Latin M.",
+ hook:"The big red Ðœ above every Moscow Metro entrance.",
+ w:{c:"ÐœÐ¾ÑÐºÐ²Ð°", t:"moskva", e:"Moscow"},
+ hist:"From Greek mu. Probably Russia's most photographed single letter."},
+{id:"O", ch:"Ðž", lo:"Ð¾", nm:"o", say:"Ð¾", grp:"same", day:1,
+ snd:"o when stressed; relaxes to a when not",
+ like:"Latin O.",
+ hook:"Same O, but lazy off-stress: ÐœÐ¾ÑÐºÐ²Ð° comes out mask-VA.",
+ w:{c:"ÐºÐ¾Ñ‚", t:"kot", e:"cat"},
+ hist:"From Greek omicron."},
+{id:"T", ch:"Ð¢", lo:"Ñ‚", nm:"te", say:"Ñ‚Ñ", grp:"same", day:1,
+ snd:"t, as in taxi",
+ like:"Latin T.",
+ hook:"Same T. In italics it can dress up as m; that trap comes on Day 4.",
+ w:{c:"Ñ‚Ð¾ÑÑ‚", t:"tost", e:"toast"},
+ hist:"From Greek tau."},
+/* Day 1: false friends */
+{id:"V", ch:"Ð’", lo:"Ð²", nm:"ve", say:"Ð²Ñ", grp:"false", day:1,
+ snd:"v, as in visa",
+ like:"B shape, V sound.",
+ hook:"Not B. By the time Russia borrowed Greek beta, Greeks said it vita, with a V.",
+ w:{c:"ÐºÐ²Ð°Ñ", t:"kvas", e:"kvass, the rye bread drink"},
+ hist:"From Greek beta in its later vita pronunciation. Russia then bent this letter into a new one, Ð‘, to get the b-sound back."},
+{id:"N", ch:"Ð", lo:"Ð½", nm:"en", say:"ÑÐ½", grp:"false", day:1,
+ snd:"n, as in no",
+ like:"H shape, N sound.",
+ hook:"An H that says N. ÐÐµÑ‚ = nyet.",
+ w:{c:"Ð½ÐµÑ‚", t:"net", e:"no"},
+ hist:"From Greek nu, written N. Its diagonal bar slowly levelled out until N became Ð."},
+{id:"R", ch:"Ð ", lo:"Ñ€", nm:"er", say:"ÑÑ€", grp:"false", day:1,
+ snd:"rolled r, tip of the tongue",
+ like:"P shape, R sound.",
+ hook:"Ð Ð•Ð¡Ð¢ÐžÐ ÐÐ reads restoran, not pectopah. The most famous trap in Cyrillic.",
+ w:{c:"Ñ€ÐµÑÑ‚Ð¾Ñ€Ð°Ð½", t:"restoran", e:"restaurant"},
+ hist:"From Greek rho, which always looked like P and always said R."},
+{id:"S", ch:"Ð¡", lo:"Ñ", nm:"es", say:"ÑÑ", grp:"false", day:1,
+ snd:"s, as in sun",
+ like:"C shape, S sound.",
+ hook:"A C that always hisses. Ð¡Ð¾Ðº = juice, ÐºÐ¾ÑÐ¼Ð¾Ñ = cosmos.",
+ w:{c:"ÑÐ¾Ðº", t:"sok", e:"juice"},
+ hist:"From the curved, moon-shaped form of Greek sigma."},
+{id:"U", ch:"Ð£", lo:"Ñƒ", nm:"oo", say:"Ñƒ", grp:"false", day:1,
+ snd:"oo, as in boot",
+ like:"y shape, oo sound.",
+ hook:"The y-shape says oo. Ð£Ñ€Ð°Ð» = the Urals.",
+ w:{c:"ÑƒÑ‚Ñ€Ð¾", t:"utro", e:"morning"},
+ hist:"Began as the Greek two-letter pair ÐžÐ£. The Ðž fell away; the hook stayed."},
+{id:"H", ch:"Ð¥", lo:"Ñ…", nm:"kha", say:"Ñ…Ð°", grp:"false", day:1,
+ snd:"kh, as in Scottish loch",
+ like:"X shape, kh sound.",
+ hook:"Not x. Breathe it, like loch or Bach.",
+ w:{c:"Ñ…Ð°Ð¾Ñ", t:"khaos", e:"chaos"},
+ hist:"From Greek chi. This sound is why English writes kh in Khrushchev."},
+/* Day 2 */
+{id:"B", ch:"Ð‘", lo:"Ð±", nm:"be", say:"Ð±Ñ", grp:"new", day:2,
+ snd:"b, as in bank",
+ like:"A b with a flat cap.",
+ hook:"The real B. Ð’ was taken, so this one was built for the job.",
+ w:{c:"Ð±Ð°Ð½Ðº", t:"bank", e:"bank"},
+ hist:"Invented for Slavic. Greek had let its b-sound drift into v, so scribes reshaped Ð’ to win B back."},
+{id:"G", ch:"Ð“", lo:"Ð³", nm:"ge", say:"Ð³Ñ", grp:"new", day:2,
+ snd:"hard g, as in go",
+ like:"An upside-down L.",
+ hook:"A right angle that says G. Ð“Ð°Ð³Ð°Ñ€Ð¸Ð½ = Gagarin.",
+ w:{c:"Ð³Ð¾Ñ€Ð¾Ð´", t:"gorod", e:"city, town"},
+ hist:"From Greek gamma, carved the same way: Î“."},
+{id:"D", ch:"Ð”", lo:"Ð´", nm:"de", say:"Ð´Ñ", grp:"new", day:2,
+ snd:"d, as in door",
+ like:"A little house on legs.",
+ hook:"D for dwelling: Ð´Ð¾Ð¼ means house.",
+ w:{c:"Ð´Ð¾Ð¼", t:"dom", e:"house, home"},
+ hist:"From Greek delta. Early forms were triangular like Î”; the legs came later."},
+{id:"Z", ch:"Ð—", lo:"Ð·", nm:"ze", say:"Ð·Ñ", grp:"new", day:2,
+ snd:"z, as in zoo",
+ like:"The number 3.",
+ hook:"A 3 that buzzes.",
+ w:{c:"Ð²Ð¾ÐºÐ·Ð°Ð»", t:"vokzal", e:"railway station"},
+ hist:"From Greek zeta. And Ð²Ð¾ÐºÐ·Ð°Ð»? Borrowed from London's Vauxhall, which lent its name to grand stations."},
+{id:"I", ch:"Ð˜", lo:"Ð¸", nm:"ee", say:"Ð¸", grp:"new", day:2,
+ snd:"ee, as in see",
+ like:"A backwards N.",
+ hook:"Backwards N says EE.",
+ w:{c:"ÐºÐ¸Ð½Ð¾", t:"kino", e:"cinema"},
+ hist:"From Greek eta, written H. Its crossbar tilted over centuries until H became Ð˜."},
+{id:"Y", ch:"Ð™", lo:"Ð¹", nm:"ee kratkoye, short i", say:"Ð¸ ÐºÑ€Ð°Ñ‚ÐºÐ¾Ðµ", grp:"new", day:2,
+ snd:"y, as in boy: a glide",
+ like:"Ð˜ in a little hat.",
+ hook:"The y-glide that ends Ñ‡Ð°Ð¹, chai.",
+ w:{c:"Ð¹Ð¾Ð³ÑƒÑ€Ñ‚", t:"yogurt", e:"yoghurt"},
+ hist:"Ð˜ plus a breve mark, made a full letter in the 1700s."},
+{id:"LL", ch:"Ð›", lo:"Ð»", nm:"el", say:"ÑÐ»ÑŒ", grp:"new", day:2,
+ snd:"l, as in lamp",
+ like:"A tent, or goalposts.",
+ hook:"Lambda in a tent: Ð›Ð¾Ð½Ð´Ð¾Ð½ = London.",
+ w:{c:"Ð›Ð¾Ð½Ð´Ð¾Ð½", t:"london", e:"London"},
+ hist:"From Greek lambda, Î›."},
+{id:"P", ch:"ÐŸ", lo:"Ð¿", nm:"pe", say:"Ð¿Ñ", grp:"new", day:2,
+ snd:"p, as in park",
+ like:"Pi, from maths.",
+ hook:"You already know this one from school: Ï€.",
+ w:{c:"Ð¿Ð°Ñ€Ðº", t:"park", e:"park"},
+ hist:"From Greek pi, the same doorway shape."},
+{id:"F", ch:"Ð¤", lo:"Ñ„", nm:"ef", say:"ÑÑ„", grp:"new", day:2,
+ snd:"f, as in football",
+ like:"A person, hands on hips.",
+ hook:"Stands proud and says F.",
+ w:{c:"Ñ„ÑƒÑ‚Ð±Ð¾Ð»", t:"futbol", e:"football"},
+ hist:"From Greek phi. Native Russian words almost never use it: spot Ð¤ and the word is probably borrowed."},
+{id:"EH", ch:"Ð­", lo:"Ñ", nm:"e", say:"Ñ", grp:"new", day:2,
+ snd:"e, as in end",
+ like:"A backwards C with a tongue.",
+ hook:"The plain e, no hidden y. Ð­Ñ‚Ð¾ = this.",
+ w:{c:"Ð°ÑÑ€Ð¾Ð¿Ð¾Ñ€Ñ‚", t:"aeroport", e:"airport"},
+ hist:"Added in the 1700s, mostly to spell borrowed words with a clean e, like Ð°ÑÑ€Ð¾Ð¿Ð¾Ñ€Ñ‚."},
+{id:"YO", ch:"Ð", lo:"Ñ‘", nm:"yo", say:"Ñ‘", grp:"new", day:2,
+ snd:"yo, as in York",
+ like:"Ð• with two dots, shouting YO.",
+ hook:"Always stressed. ÐŸÑ‘Ñ‚Ñ€ = Pyotr, Peter.",
+ w:{c:"ÐŸÑ‘Ñ‚Ñ€", t:"pyotr", e:"Peter, as in Peter the Great"},
+ hist:"The youngest letter: proposed in 1783 at Princess Dashkova's Academy. Print often drops the dots and writes plain Ðµ."},
+{id:"YU", ch:"Ð®", lo:"ÑŽ", nm:"yu", say:"ÑŽ", grp:"new", day:2,
+ snd:"yoo, as in universe",
+ like:"An O on a lead.",
+ hook:"Ð®Ñ€Ð¸Ð¹ Ð“Ð°Ð³Ð°Ñ€Ð¸Ð½: Yuri, first man in space.",
+ w:{c:"ÑŽÐ³", t:"yug", e:"south"},
+ hist:"Squashed down from an old two-letter ligature."},
+{id:"YA", ch:"Ð¯", lo:"Ñ", nm:"ya", say:"Ñ", grp:"new", day:2,
+ snd:"ya, as in yard",
+ like:"A backwards R.",
+ hook:"Backwards R says YA, and on its own Ñ means I.",
+ w:{c:"Ð Ð¾ÑÑÐ¸Ñ", t:"rossiya", e:"Russia"},
+ hist:"Descended from a mediaeval nasal vowel, the little yus. The one-letter word Ñ means I."},
+/* Day 3 */
+{id:"ZH", ch:"Ð–", lo:"Ð¶", nm:"zhe", say:"Ð¶Ñ", grp:"newsnd", day:3,
+ snd:"zh: the s in pleasure",
+ like:"A beetle, legs out.",
+ hook:"Ð–ÑƒÐº means beetle, and the letter is one.",
+ w:{c:"ÑÑ‚Ð°Ð¶", t:"etazh", e:"floor, storey: ÑÑ‚Ð°Ð¶ 1 is the ground floor"},
+ hist:"Not Greek at all: carried over from Glagolitic, the earlier Slavic script."},
+{id:"SH", ch:"Ð¨", lo:"Ñˆ", nm:"sha", say:"ÑˆÐ°", grp:"newsnd", day:3,
+ snd:"sh, as in shop",
+ like:"A comb, teeth up.",
+ hook:"Three teeth, one shush.",
+ w:{c:"ÑˆÐ¾ÐºÐ¾Ð»Ð°Ð´", t:"shokolad", e:"chocolate"},
+ hist:"Almost certainly from Hebrew shin, ×©. One of the oldest non-Greek letters in the set."},
+{id:"SHCH", ch:"Ð©", lo:"Ñ‰", nm:"shcha", say:"Ñ‰Ð°", grp:"newsnd", day:3,
+ snd:"shch: a long soft sh, as in fresh sheets said quickly",
+ like:"Ð¨ with a tail.",
+ hook:"One letter doing the work of four: this is the shch in borscht.",
+ w:{c:"Ð±Ð¾Ñ€Ñ‰", t:"borshch", e:"borscht, beetroot soup"},
+ hist:"The reason borscht is so hard to spell in English."},
+{id:"CH", ch:"Ð§", lo:"Ñ‡", nm:"che", say:"Ñ‡Ðµ", grp:"newsnd", day:3,
+ snd:"ch, as in check",
+ like:"An upside-down chair, or a 4.",
+ hook:"Ð§ÐµÑ‚Ñ‹Ñ€Ðµ, four, starts with it. Ð§Ð°Ð¹ = tea.",
+ w:{c:"Ñ‡Ð°Ð¹", t:"chai", e:"tea"},
+ hist:"Made for a sound Greek never had; its shape may share roots with Ð¦."},
+{id:"TS", ch:"Ð¦", lo:"Ñ†", nm:"tse", say:"Ñ†Ñ", grp:"newsnd", day:3,
+ snd:"ts, as in cats",
+ like:"U with a tiny tail.",
+ hook:"The tsar's letter: Ñ†Ð°Ñ€ÑŒ.",
+ w:{c:"Ñ†ÐµÐ½Ñ‚Ñ€", t:"tsentr", e:"centre"},
+ hist:"Likely from Hebrew tsade. English keeps its sound in the word tsar."},
+{id:"YY", ch:"Ð«", lo:"Ñ‹", nm:"y", say:"Ñ‹", grp:"newsnd", day:3,
+ snd:"i as in bill, but deeper, from the back of the mouth",
+ like:"A stick guarding a small b.",
+ hook:"Say ee, then pull your tongue back. ÐœÑ‹ = we, Ñ‚Ñ‹ = you.",
+ w:{c:"ÑÑ‹Ñ€", t:"syr", e:"cheese"},
+ hist:"Born as two letters written together, Ðª and Ð†. It never starts a word."},
+{id:"SOFT", ch:"Ð¬", lo:"ÑŒ", nm:"myagky znak, soft sign", say:"Ð¼ÑÐ³ÐºÐ¸Ð¹ Ð·Ð½Ð°Ðº", grp:"newsnd", day:3,
+ snd:"silent: adds a y-softness to the letter before",
+ like:"A small b that lost its top.",
+ hook:"A whisper of y. It turns hard endings soft: Ð¿Ð»Ð¾Ñ‰Ð°Ð´ÑŒ.",
+ w:{c:"Ð¿Ð»Ð¾Ñ‰Ð°Ð´ÑŒ", t:"ploshchad", e:"square, as in Red Square"},
+ hist:"Once a short vowel in its own right; the sound faded and left only the softening behind."},
+{id:"HARD", ch:"Ðª", lo:"ÑŠ", nm:"tvyordy znak, hard sign", say:"Ñ‚Ð²Ñ‘Ñ€Ð´Ñ‹Ð¹ Ð·Ð½Ð°Ðº", grp:"newsnd", day:3,
+ snd:"silent: a tiny gap between parts of a word",
+ like:"Ð¬ with a flick. Rare.",
+ hook:"You will meet it a handful of times a year.",
+ w:{c:"Ð²ÑŠÐµÐ·Ð´", t:"vyezd", e:"vehicle entrance"},
+ hist:"Before 1918 it silently ended almost every consonant-final word in Russia. The reform scrapped that and printers saved pages of type at a stroke."}
+];
+
+var DAYMETA = {
+ 1:{title:"Old friends, false friends",
+    intro:"Twelve letters today. Six are exactly what they look like. Six look English but are not: these false friends are the whole reason Cyrillic seems hard, and after today they are yours."},
+ 2:{title:"New shapes, familiar sounds",
+    intro:"Thirteen new shapes, but every sound is one your mouth already makes. Most come straight from Greek capitals. By tonight you can read Ð Ð¾ÑÑÐ¸Ñ."},
+ 3:{title:"The new sounds",
+    intro:"The last eight. Five hissers and hushers that Greek never had, two silent signs, and the strange deep Ð«. After today you can read every letter Russia prints."},
+ 4:{title:"Make it stick",
+    intro:"No new letters. Today is stress, the italic traps, and reading real signs at speed. Finish with the exam."}
+};
+
+var PAYOFF = {
+ 1:[{c:"ÐœÐ•Ð¢Ð Ðž", t:"metro", e:"metro"},
+    {c:"ÐœÐÐ¡ÐšÐ", t:"maska", e:"mask"},
+    {c:"ÐšÐÐ¡Ð¡Ð", t:"kassa", e:"ticket desk"},
+    {c:"Ð Ð•Ð¡Ð¢ÐžÐ ÐÐ", t:"restoran", e:"restaurant"},
+    {c:"ÐœÐžÐ¡ÐšÐ’Ð", t:"moskva", e:"Moscow"},
+    {c:"Ð¡ÐžÐš", t:"sok", e:"juice"},
+    {c:"ÐšÐžÐ¡ÐœÐžÐ¡", t:"kosmos", e:"cosmos, space"},
+    {c:"ÐÐ•Ð¢", t:"net", e:"no"}],
+ 2:[{c:"Ð ÐžÐ¡Ð¡Ð˜Ð¯", t:"rossiya", e:"Russia"},
+    {c:"Ð¡ÐÐÐšÐ¢-ÐŸÐ•Ð¢Ð•Ð Ð‘Ð£Ð Ð“", t:"sankt-peterburg", e:"Saint Petersburg"},
+    {c:"ÐÐ­Ð ÐžÐŸÐžÐ Ð¢", t:"aeroport", e:"airport"},
+    {c:"Ð’ÐžÐšÐ—ÐÐ›", t:"vokzal", e:"railway station"},
+    {c:"Ð‘ÐÐÐš", t:"bank", e:"bank"},
+    {c:"ÐŸÐÐ Ðš", t:"park", e:"park"},
+    {c:"Ð’ÐžÐ”ÐšÐ", t:"vodka", e:"vodka"},
+    {c:"Ð¡ÐŸÐ£Ð¢ÐÐ˜Ðš", t:"sputnik", e:"sputnik, satellite"},
+    {c:"ÐšÐ˜ÐÐž", t:"kino", e:"cinema"},
+    {c:"Ð”Ð", t:"da", e:"yes"}],
+ 3:[{c:"Ð§ÐÐ™", t:"chai", e:"tea"},
+    {c:"Ð‘ÐžÐ Ð©", t:"borshch", e:"borscht"},
+    {c:"Ð¦Ð•ÐÐ¢Ð ", t:"tsentr", e:"centre"},
+    {c:"ÐŸÐ›ÐžÐ©ÐÐ”Ð¬", t:"ploshchad", e:"square"},
+    {c:"Ð­Ð¢ÐÐ–", t:"etazh", e:"floor, storey"},
+    {c:"Ð¨ÐžÐšÐžÐ›ÐÐ”", t:"shokolad", e:"chocolate"},
+    {c:"Ð¡Ð«Ð ", t:"syr", e:"cheese"},
+    {c:"Ð¦ÐÐ Ð¬", t:"tsar", e:"tsar"},
+    {c:"ÐŸÐ£Ð¨ÐšÐ˜Ð", t:"pushkin", e:"Pushkin"},
+    {c:"ÐŸÐ›Ð¯Ð–", t:"plyazh", e:"beach"}]
+};
+
+var SIGNS = [
+ {c:"Ð’Ð¥ÐžÐ”", t:"vkhod", e:"entrance"},
+ {c:"Ð’Ð«Ð¥ÐžÐ”", t:"vykhod", e:"exit"},
+ {c:"Ð¡Ð¢ÐžÐŸ", t:"stop", e:"stop"},
+ {c:"ÐžÐ¢ÐšÐ Ð«Ð¢Ðž", t:"otkryto", e:"open"},
+ {c:"Ð—ÐÐšÐ Ð«Ð¢Ðž", t:"zakryto", e:"closed"},
+ {c:"ÐšÐÐ¡Ð¡Ð", t:"kassa", e:"ticket desk, till"},
+ {c:"ÐÐŸÐ¢Ð•ÐšÐ", t:"apteka", e:"pharmacy"},
+ {c:"Ð’ÐžÐšÐ—ÐÐ›", t:"vokzal", e:"railway station"},
+ {c:"ÐÐ­Ð ÐžÐŸÐžÐ Ð¢", t:"aeroport", e:"airport"},
+ {c:"ÐœÐ•Ð¢Ð Ðž", t:"metro", e:"metro"},
+ {c:"Ð¢ÐÐšÐ¡Ð˜", t:"taksi", e:"taxi"},
+ {c:"ÐÐ’Ð¢ÐžÐ‘Ð£Ð¡", t:"avtobus", e:"bus"},
+ {c:"Ð¢Ð£ÐÐ›Ð•Ð¢", t:"tualet", e:"toilet"},
+ {c:"ÐœÐÐ“ÐÐ—Ð˜Ð", t:"magazin", e:"shop"},
+ {c:"Ð Ð«ÐÐžÐš", t:"rynok", e:"market"},
+ {c:"Ð£Ð›Ð˜Ð¦Ð", t:"ulitsa", e:"street"},
+ {c:"ÐŸÐ›ÐžÐ©ÐÐ”Ð¬", t:"ploshchad", e:"square"},
+ {c:"Ð“ÐžÐ¡Ð¢Ð˜ÐÐ˜Ð¦Ð", t:"gostinitsa", e:"hotel"},
+ {c:"Ð Ð•Ð¡Ð¢ÐžÐ ÐÐ", t:"restoran", e:"restaurant"},
+ {c:"ÐÐ• ÐšÐ£Ð Ð˜Ð¢Ð¬", t:"ne kurit", e:"no smoking"},
+ {c:"ÐŸÐžÐ›Ð˜Ð¦Ð˜Ð¯", t:"politsiya", e:"police"},
+ {c:"ÐšÐ Ð•ÐœÐ›Ð¬", t:"kreml", e:"the Kremlin"},
+ {c:"ÐšÐ ÐÐ¡ÐÐÐ¯ ÐŸÐ›ÐžÐ©ÐÐ”Ð¬", t:"krasnaya ploshchad", e:"Red Square"},
+ {c:"Ð¡ÐÐÐšÐ¢-ÐŸÐ•Ð¢Ð•Ð Ð‘Ð£Ð Ð“", t:"sankt-peterburg", e:"Saint Petersburg"},
+ {c:"Ð’Ð›ÐÐ”Ð˜Ð’ÐžÐ¡Ð¢ÐžÐš", t:"vladivostok", e:"Vladivostok"}
+];
+
+var HISTORY = [
+ {y:"863", t:"Two brothers, one mission",
+  d:"Byzantine monks Cyril and Methodius, from Thessaloniki, are sent to the Slavs and invent the first Slavic script, Glagolitic, to translate the Bible."},
+ {y:"c. 893", t:"Cyrillic is born, without Cyril",
+  d:"Their students in Bulgaria build a simpler script from Greek capitals plus new letters for Slavic sounds, and name it after their teacher. Cyril never saw the alphabet that carries his name."},
+ {y:"988", t:"It reaches Russia",
+  d:"Prince Vladimir baptises Kievan Rus. Cyrillic arrives in the lands that become Russia with the church books, and stays."},
+ {y:"1708", t:"Peter the Great modernises it",
+  d:"The tsar strips the alphabet for his new civil script: rounder, Latin-influenced letterforms for a modernising empire. The church keeps the old style; Arabic numerals replace letter-numbers."},
+ {y:"1783", t:"The newest letter",
+  d:"Ð is proposed under Princess Dashkova, head of the Russian Academy: the only letter with a birthday and a named champion."},
+ {y:"1918", t:"The big cut",
+  d:"The Bolsheviks drop four dead letters, yat Ñ£, fita Ñ³, izhitsa Ñµ and decimal Ñ–, and the silent word-final ÑŠ. The alphabet settles at today's 33."},
+ {y:"Today", t:"A world script",
+  d:"Cyrillic serves about 250 million people across more than 50 languages, and it is one of the European Union's three official scripts."}
+];
+
+var DECODE = {
+ 1:[
+  {c:"ÐœÐžÐ¡ÐšÐ’Ð", o:["moskva","mockba","moskba"], a:0, why:"Ð¡ says s, Ð’ says v. Stress on the end: mask-VA."},
+  {c:"Ð Ð•Ð¡Ð¢ÐžÐ ÐÐ", o:["restoran","pectopah","resporan"], a:0, why:"Ð  is r, Ð¡ is s, Ð is n. The famous pectopah trap."},
+  {c:"ÐœÐÐ¡ÐšÐ", o:["maska","macka","maksa"], a:0, why:"Ð¡ says s, Ðš says k: MAS-ka, mask."},
+  {c:"ÐÐ•Ð¢", o:["net","het","nem"], a:0, why:"Ð is n, not h. With the ye of Ð• it comes out nyet."},
+  {c:"Ð£Ð¢Ð Ðž", o:["utro","ytpo","urto"], a:0, why:"Ð£ says oo, Ð  says r: OO-tra."},
+  {c:"Ð¡ÐžÐš", o:["sok","cok","som"], a:0, why:"Ð¡ is always s. Juice."},
+  {c:"ÐšÐžÐ¡ÐœÐžÐ¡", o:["kosmos","cosmoc","kosmoc"], a:0, why:"Both Ð¡ letters hiss: KOS-mas."}
+ ],
+ 2:[
+  {c:"Ð’ÐžÐšÐ—ÐÐ›", o:["vokzal","bokzal","voksal"], a:0, why:"Ð’ says v, Ð— says z. Borrowed long ago from London's Vauxhall."},
+  {c:"Ð ÐžÐ¡Ð¡Ð˜Ð¯", o:["rossiya","poccia","rossina"], a:0, why:"Ð¯ says ya: ra-SEE-ya."},
+  {c:"Ð¡ÐŸÐ£Ð¢ÐÐ˜Ðš", o:["sputnik","cnytnuk","spuntik"], a:0, why:"Ð˜ says ee. The 1957 satellite that made this a world word."},
+  {c:"ÐÐ­Ð ÐžÐŸÐžÐ Ð¢", o:["aeroport","aeropont","aehoport"], a:0, why:"Ð­ is the plain e: a-e-ra-PORT."},
+  {c:"Ð’ÐžÐ”ÐšÐ", o:["vodka","bodka","vodra"], a:0, why:"Ð’ v, Ð” d, Ðš k. Literally: little water."},
+  {c:"ÐŸÐÐ Ðš", o:["park","nark","rapk"], a:0, why:"ÐŸ says p, Ð  says r. Two different letters, one English shape."},
+  {c:"Ð”Ð", o:["da","ba","ga"], a:0, why:"Ð” says d. Ð”Ð° = yes."}
+ ],
+ 3:[
+  {c:"Ð§ÐÐ™", o:["chai","yau","chan"], a:0, why:"Ð§ ch, then the Ð™ glide: chai."},
+  {c:"Ð‘ÐžÐ Ð©", o:["borshch","borsh","bopsh"], a:0, why:"Ð© is the long soft shch. English spells it borscht."},
+  {c:"Ð¦Ð•ÐÐ¢Ð ", o:["tsentr","centr","tsenpr"], a:0, why:"Ð¦ says ts: TSENTR, centre."},
+  {c:"ÐŸÐ›ÐžÐ©ÐÐ”Ð¬", o:["ploshchad","ploshad","plosdab"], a:0, why:"Ð© shch, and the soft sign softens the final d."},
+  {c:"Ð­Ð¢ÐÐ–", o:["etazh","etak","estazh"], a:0, why:"Ð– says zh. On lift buttons everywhere."},
+  {c:"Ð¡Ð«Ð ", o:["syr","cyp","sur"], a:0, why:"Ð« is the deep i: syr, cheese."}
+ ],
+ exam:[
+  {c:"Ð’Ð«Ð¥ÐžÐ”", o:["vykhod","byhod","vyhot"], a:0, why:"Ð’ v, Ð« deep i, Ð¥ kh: exit. The sign you need at the metro."},
+  {c:"ÐšÐ Ð•ÐœÐ›Ð¬", o:["kreml","kpemb","kremp"], a:0, why:"Ð  r, Ð› l, and the soft sign softens the l."},
+  {c:"Ð¢ÐÐšÐ¡Ð˜", o:["taksi","tacsu","takcy"], a:0, why:"Ðš k, Ð¡ s, Ð˜ ee: taxi."},
+  {c:"ÐœÐ•Ð¢Ð Ðž", o:["metro","mepo","metpo"], a:0, why:"Ð  says r, always."}
+ ]
+};
+
+/* ---------------- state ---------------- */
+
+var store = {seen:{}, best:{}};
+try{
+  var raw = localStorage.getItem("cyr4_v1");
+  if(raw){ store = JSON.parse(raw) || store; store.seen = store.seen||{}; store.best = store.best||{}; }
+}catch(e){}
+function save(){ try{ localStorage.setItem("cyr4_v1", JSON.stringify(store)); }catch(e){} }
+
+var quiz = null; /* {kind:"day"|"exam", day, qs, i, score, ans, done} */
+
+/* ---------------- audio ---------------- */
+
+var ruVoice = null;
+function loadVoices(){
+  if(!window.speechSynthesis) { document.documentElement.classList.add("no-audio"); return; }
+  var v = speechSynthesis.getVoices() || [];
+  ruVoice = null;
+  for(var i=0;i<v.length;i++){
+    if(v[i].lang && v[i].lang.toLowerCase().indexOf("ru")===0){ ruVoice = v[i]; break; }
+  }
+  document.documentElement.classList.toggle("no-audio", !ruVoice);
+}
+if(window.speechSynthesis){
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+function say(t){
+  if(!window.speechSynthesis) return;
+  try{
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    if(ruVoice) u.voice = ruVoice;
+    u.lang = "ru-RU"; u.rate = 0.82;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+var SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9.5 9.5 0 0 1 0 13"/></svg>';
+function spkBtn(text, label){
+  return '<button class="spk" aria-label="'+(label||"Listen")+'" onclick="event.stopPropagation();say(\''+text+'\')">'+SPK+'</button>';
+}
+
+/* ---------------- helpers ---------------- */
+
+function shuffle(a){
+  a = a.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+function sample(a,n){ return shuffle(a).slice(0,n); }
+function dayLetters(d){ return L.filter(function(x){return x.day===d;}); }
+
+function progressPct(){
+  var b = store.best;
+  var v = (b.d1||0)+(b.d2||0)+(b.d3||0)+(b.exam||0);
+  return Math.round(v/4);
+}
+function dayState(d){
+  var key = d===4 ? "exam" : "d"+d;
+  var best = store.best[key];
+  var seen = dayLetters(d).length ? dayLetters(d).every(function(x){return store.seen[x.id];}) : true;
+  if(best>=70) return {label:"Done. Best "+best+"%", done:true};
+  if(best>0) return {label:"Best "+best+"%: hit 70% to finish", done:false};
+  if(d===4) return {label:"Signs, traps and the exam", done:false};
+  if(seen) return {label:"Letters read: take the quiz", done:false};
+  return {label:dayLetters(d).length+" letters", done:false};
+}
+
+/* ---------------- quiz engine ---------------- */
+
+function letterQ(letter, pool){
+  var dir = Math.random()<0.5;
+  if(dir){
+    var wrongs = sample(pool.filter(function(x){return x.id!==letter.id && x.snd!==letter.snd;}),3)
+      .map(function(x){return {t:x.snd, ok:false};});
+    var opts = shuffle(wrongs.concat([{t:letter.snd, ok:true}]));
+    return {prompt:"What does this letter say?", glyph:letter.ch+" "+letter.lo, opts:opts,
+      why:letter.ch+" "+letter.lo+": "+letter.snd+". "+letter.like};
+  }else{
+    var wrongs2 = sample(pool.filter(function(x){return x.id!==letter.id && x.snd!==letter.snd;}),3)
+      .map(function(x){return {t:x.ch+" "+x.lo, g:true, ok:false};});
+    var opts2 = shuffle(wrongs2.concat([{t:letter.ch+" "+letter.lo, g:true, ok:true}]));
+    return {prompt:"Which letter says: "+letter.snd+"?", glyph:null, opts:opts2,
+      why:letter.ch+" "+letter.lo+": "+letter.snd+". "+letter.like};
+  }
+}
+function decodeQ(d){
+  var opts = shuffle(d.o.map(function(t,i){return {t:t, ok:i===d.a};}));
+  return {prompt:"Read it:", glyph:d.c, opts:opts, why:d.why, decode:true};
+}
+function startDayQuiz(day){
+  var pool = L.filter(function(x){return x.day<=day;});
+  var letters = sample(dayLetters(day), 5);
+  var qs = letters.map(function(l){return letterQ(l, pool);})
+    .concat(sample(DECODE[day], 5).map(decodeQ));
+  quiz = {kind:"day", day:day, qs:shuffle(qs), i:0, score:0, ans:null, done:false};
+  location.hash = "#/quiz/"+day;
+}
+function startExam(){
+  var qs = sample(L,12).map(function(l){return letterQ(l, L);});
+  var allDec = DECODE[1].concat(DECODE[2], DECODE[3], DECODE.exam);
+  qs = qs.concat(sample(allDec, 8).map(decodeQ));
+  quiz = {kind:"exam", day:4, qs:shuffle(qs), i:0, score:0, ans:null, done:false};
+  location.hash = "#/exam";
+}
+function answer(i){
+  if(!quiz || quiz.ans!==null) return;
+  quiz.ans = i;
+  if(quiz.qs[quiz.i].opts[i].ok) quiz.score++;
+  render();
+}
+function nextQ(){
+  if(!quiz) return;
+  if(quiz.i < quiz.qs.length-1){ quiz.i++; quiz.ans=null; render(); window.scrollTo(0,0); }
+  else{
+    quiz.done = true;
+    var pct = Math.round(100*quiz.score/quiz.qs.length);
+    var key = quiz.kind==="exam" ? "exam" : "d"+quiz.day;
+    if(!store.best[key] || pct>store.best[key]) store.best[key]=pct;
+    save(); render(); window.scrollTo(0,0);
+  }
+}
+
+/* ---------------- views ---------------- */
+
+function tagFor(g){
+  if(g==="same") return '<span class="tag">Old friend</span>';
+  if(g==="false") return '<span class="tag false">False friend</span>';
+  if(g==="new") return '<span class="tag">New shape</span>';
+  return '<span class="tag">New sound</span>';
+}
+
+function letterCard(l){
+  return '<div class="lcard">'
+    +'<div class="top">'+tagFor(l.grp)+spkBtn(l.say,"Hear the letter")+'</div>'
+    +'<div class="glyph">'+l.ch+" "+l.lo+'</div>'
+    +'<div class="lname">Called <b>'+l.nm+'</b></div>'
+    +'<div class="row2"><span class="k">Looks like</span><span>'+l.like+'</span>'
+    +'<span class="k">Says</span><span>'+l.snd+'</span></div>'
+    +'<div class="hook">'+l.hook+'</div>'
+    +'<div class="exw"><span class="cy">'+l.w.c+'</span>'
+    +'<span class="tr">'+l.w.t+'<br>'+l.w.e+'</span>'
+    +'<span style="margin-left:auto">'+spkBtn(l.w.c,"Hear the word")+'</span></div>'
+    +'<div class="hist">'+l.hist+'</div>'
+    +'</div>';
+}
+
+function wordRow(w, id){
+  return '<div class="wordrow tap" role="button" tabindex="0" id="'+id+'"'
+    +' onclick="toggleRow(\''+id+'\')" onkeydown="if(event.key===\'Enter\')toggleRow(\''+id+'\')">'
+    +'<span class="cy">'+w.c+'</span>'
+    +'<span class="ans" id="'+id+'-a"><span class="hidden-hint">tap to check</span></span>'
+    +spkBtn(w.c,"Hear it")
+    +'</div>';
+}
+function toggleRow(id){
+  var el = document.getElementById(id+"-a");
+  var w = el.getAttribute("data-open");
+  if(w){ el.innerHTML = '<span class="hidden-hint">tap to check</span>'; el.removeAttribute("data-open"); }
+  else{
+    el.innerHTML = "<b>"+el.getAttribute("data-t")+"</b><br>"+el.getAttribute("data-e");
+    el.setAttribute("data-open","1");
+  }
+}
+
+function vHome(){
+  var pct = progressPct();
+  var h = '<div class="fade">'
+    +'<p class="eyebrow red">A four day course</p>'
+    +'<h1>Cyrillic. Four Days.</h1>'
+    +'<p class="lead">33 letters, most of them old friends in disguise. By Day 4 you will sound out metro maps, menus and street signs for real.</p>'
+    +'<div class="stack" style="margin-top:18px">';
+  h += '<button class="card soft tap" onclick="location.hash=\'#/history\'">'
+    +'<span class="eyebrow">Start here</span>'
+    +'<h2>Twelve centuries in six moments</h2>'
+    +'<span class="small">Where these letters came from: two monks, a tsar and a revolution.</span>'
+    +'</button>';
+  for(var d=1; d<=4; d++){
+    var st = dayState(d);
+    var chips = d<4 ? dayLetters(d).map(function(x){return x.ch;}).join(" ") : "Ð¡Ð¢ÐžÐŸ ÐšÐÐ¡Ð¡Ð Ð’Ð«Ð¥ÐžÐ”";
+    h += '<button class="card tap" onclick="location.hash=\'#/day/'+d+'\'">'
+      +'<span class="eyebrow'+(st.done?"":" red")+'">Day '+d+(st.done?" âœ“":"")+'</span>'
+      +'<h2>'+DAYMETA[d].title+'</h2>'
+      +'<div class="daychips">'+chips+'</div>'
+      +'<div class="status">'+(st.done?"<b>"+st.label+"</b>":st.label)+'</div>'
+      +'</button>';
+  }
+  h += '<button class="card soft tap" onclick="location.hash=\'#/ref\'">'
+    +'<span class="eyebrow">Reference</span>'
+    +'<h2>All 33 letters</h2>'
+    +'<span class="small">The whole alphabet on one page, grouped the way you learned it.</span>'
+    +'</button>';
+  h += '</div>'
+    +'<div class="foot"><button onclick="resetAll()">Reset progress</button></div>'
+    +'</div>';
+  return h;
+}
+
+function vHistory(){
+  var h = '<div class="fade">'
+    +'<p class="eyebrow red">History</p>'
+    +'<h1>Twelve centuries in six moments</h1>'
+    +'<p class="lead">Enough to read the alphabet with respect. The detail lives on each letter card, Days 1 to 3.</p>'
+    +'<div class="card" style="margin-top:14px"><div class="tl">';
+  HISTORY.forEach(function(m){
+    h += '<div class="tl-item"><span class="tl-y">'+m.y+'</span>'
+      +'<span><span class="tl-t">'+m.t+'</span><br><span class="tl-d">'+m.d+'</span></span></div>';
+  });
+  h += '</div></div>'
+    +'<div class="btnrow"><button class="btn" onclick="location.hash=\'#/day/1\'">Start Day 1</button></div>'
+    +'</div>';
+  return h;
+}
+
+function vDay(d){
+  dayLetters(d).forEach(function(x){ store.seen[x.id]=true; });
+  save();
+  var meta = DAYMETA[d];
+  var h = '<div class="fade">'
+    +'<p class="eyebrow red">Day '+d+'</p>'
+    +'<h1>'+meta.title+'</h1>'
+    +'<p class="lead">'+meta.intro+'</p>'
+    +'<div class="stack" style="margin-top:16px">';
+  var letters = dayLetters(d);
+  var lastGrp = null;
+  letters.forEach(function(l){
+    if(d===1 && l.grp!==lastGrp){
+      lastGrp = l.grp;
+      if(l.grp==="false"){
+        h += '<div style="margin:8px 0 -4px"><p class="eyebrow red">The six false friends</p>'
+          +'<p class="small" style="margin:4px 0 0">These look English and are not. Slow down for these six and Cyrillic is beaten.</p></div>';
+      } else {
+        h += '<div style="margin:8px 0 -4px"><p class="eyebrow">Six you already know</p></div>';
+      }
+    }
+    h += letterCard(l);
+  });
+
+  if(d===1){
+    h += '<div class="card soft">'
+      +'<p class="eyebrow red">The Moscow test</p>'
+      +'<h2>Moscow vs ÐœÐžÐ¡ÐšÐ’Ð</h2>'
+      +'<table class="mtable">'
+      +'<tr><td class="c1">Ðœ <span>â†’ M</span></td><td class="c2">same letter, same sound</td></tr>'
+      +'<tr><td class="c1">Ð¾ <span>â†’ O</span></td><td class="c2">unstressed here, so it relaxes to a</td></tr>'
+      +'<tr><td class="c1">Ñ <span>â†’ S</span></td><td class="c2">the C-shaped S</td></tr>'
+      +'<tr><td class="c1">Ðº <span>â†’ K</span></td><td class="c2">same letter</td></tr>'
+      +'<tr><td class="c1">Ð² <span>â†’ V</span></td><td class="c2">the B-shaped V</td></tr>'
+      +'<tr><td class="c1">Ð° <span>â†’ A</span></td><td class="c2">stressed: a full ah</td></tr>'
+      +'</table>'
+      +'<p style="font-size:14.5px; margin:8px 0 4px">Say it: <b>mask-VA</b>. Not MOS-cow.</p>'
+      +'<p class="small" style="margin:0">Why two names? English borrowed the city\'s older name, Moskov, centuries ago, filtered through German Moskau and French Moscou. Russian moved on to ÐœÐ¾ÑÐºÐ²Ð°, which is also the name of the river the city sits on. '
+      + spkBtn("ÐœÐ¾ÑÐºÐ²Ð°","Hear Moscow") +'</p>'
+      +'</div>';
+  }
+
+  if(PAYOFF[d]){
+    h += '<div class="card">'
+      +'<p class="eyebrow red">Now you can read</p>'
+      +'<p class="small" style="margin:6px 0 4px">Real words, only today\'s letters and earlier. Say each one out loud, then tap to check.</p>';
+    PAYOFF[d].forEach(function(w,i){ h += wordRow(w, "pf"+d+"_"+i); });
+    h += '</div>';
+    h += '<button class="btn" onclick="startDayQuiz('+d+')">Take the Day '+d+' quiz</button>';
+  }
+
+  if(d===4){
+    h += '<div class="card">'
+      +'<p class="eyebrow red">Rule 1: stress</p>'
+      +'<h2>Unstressed Ð¾ relaxes to a</h2>'
+      +'<p style="font-size:14.5px; margin:6px 0 0">Every Russian word has one stressed vowel and it takes the energy. Unstressed Ð¾ sounds like a, unstressed Ðµ drifts towards i. So ÐœÐ¾ÑÐºÐ²Ð° = mask-VA and Ð¼Ð¾Ð»Ð¾ÐºÐ¾, milk, = mala-KO. You do not need to know where the stress falls to read a sign; near enough is understood.</p>'
+      +'</div>';
+    h += '<div class="card">'
+      +'<p class="eyebrow red">Rule 2: the y-team</p>'
+      +'<h2>Ð• Ð Ð® Ð¯ carry a built-in y</h2>'
+      +'<p style="font-size:14.5px; margin:6px 0 0">ye, yo, yoo, ya. After a consonant the y mostly melts into it and softens it: Ð½ÐµÑ‚ comes out nyet. Ð­ exists precisely to write a plain e with no y.</p>'
+      +'</div>';
+    h += '<div class="card">'
+      +'<p class="eyebrow red">Rule 3: the italic traps</p>'
+      +'<h2>Four letters change costume in italics</h2>'
+      +'<table class="mtable">'
+      +'<tr><td class="c1">Ñ‚ <span>â†’</span> <i>Ñ‚</i></td><td class="c2">can look like an m</td></tr>'
+      +'<tr><td class="c1">Ð¸ <span>â†’</span> <i>Ð¸</i></td><td class="c2">can look like a u</td></tr>'
+      +'<tr><td class="c1">Ð¿ <span>â†’</span> <i>Ð¿</i></td><td class="c2">can look like an n</td></tr>'
+      +'<tr><td class="c1">Ð´ <span>â†’</span> <i>Ð´</i></td><td class="c2">can look like a g or a curly d</td></tr>'
+      +'</table>'
+      +'<p class="small" style="margin:6px 0 0">Menus and adverts love italics. If a word looks impossible, suspect these four. How they render depends on the typeface; the descriptions are the reliable part.</p>'
+      +'</div>';
+    h += '<button class="btn ghost" onclick="location.hash=\'#/signs\'">Sign decoder: 25 real signs</button>';
+    h += '<button class="btn" onclick="startExam()">The final exam</button>';
+  }
+
+  h += '</div></div>';
+  return h;
+}
+
+function vSigns(){
+  var h = '<div class="fade">'
+    +'<p class="eyebrow red">Day 4</p>'
+    +'<h1>The sign decoder</h1>'
+    +'<p class="lead">25 signs you would actually meet. Read each aloud before you tap. Aim for a clean sweep.</p>'
+    +'<div class="card" style="margin-top:14px">';
+  SIGNS.forEach(function(w,i){ h += wordRow(w, "sg"+i); });
+  h += '</div>'
+    +'<div class="btnrow"><button class="btn" onclick="startExam()">The final exam</button></div>'
+    +'</div>';
+  return h;
+}
+
+function vRef(){
+  var groups = [
+    {t:"Old friends", g:"same"},
+    {t:"False friends", g:"false"},
+    {t:"New shapes, familiar sounds", g:"new"},
+    {t:"New sounds", g:"newsnd"}
+  ];
+  var h = '<div class="fade">'
+    +'<p class="eyebrow red">Reference</p>'
+    +'<h1>All 33 letters</h1>'
+    +'<button class="btn ghost" style="margin:10px 0 4px" onclick="sayAlphabet()">Hear the whole alphabet</button>';
+  groups.forEach(function(gr){
+    h += '<p class="eyebrow refhead">'+gr.t+'</p><div class="card">';
+    L.filter(function(x){return x.grp===gr.g;}).forEach(function(l){
+      h += '<div class="refrow"><span class="g">'+l.ch+" "+l.lo+'</span>'
+        +'<span class="s">'+l.snd+'</span>'+spkBtn(l.say,"Hear it")+'</div>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+function sayAlphabet(){
+  say(L.map(function(l){return l.say;}).join(", "));
+}
+
+function vQuiz(){
+  if(!quiz) { location.hash="#/"; return ""; }
+  if(quiz.done){
+    var pct = Math.round(100*quiz.score/quiz.qs.length);
+    var msg = pct>=90 ? "Excellent. Move on with confidence."
+      : pct>=70 ? "Solid. That is a pass: this day is done."
+      : "Not yet. Run it again: repetition is the entire trick.";
+    return '<div class="fade" style="text-align:center; padding-top:20px">'
+      +'<p class="eyebrow red">'+(quiz.kind==="exam"?"Final exam":"Day "+quiz.day+" quiz")+'</p>'
+      +'<div class="scorebig">'+quiz.score+' / '+quiz.qs.length+'</div>'
+      +'<p class="lead" style="margin-top:6px">'+msg+'</p>'
+      +'<div class="btnrow" style="max-width:340px; margin:20px auto 0">'
+      +(quiz.kind==="exam"
+        ? '<button class="btn ghost" onclick="startExam()">Retake</button><button class="btn" onclick="location.hash=\'#/\'">Home</button>'
+        : '<button class="btn ghost" onclick="startDayQuiz('+quiz.day+')">Retake</button><button class="btn" onclick="location.hash=\'#/\'">Home</button>')
+      +'</div></div>';
+  }
+  var q = quiz.qs[quiz.i];
+  var h = '<div class="fade">'
+    +'<div class="q-meta"><span>'+(quiz.kind==="exam"?"Final exam":"Day "+quiz.day+" quiz")+'</span>'
+    +'<span>'+(quiz.i+1)+' / '+quiz.qs.length+'</span></div>'
+    +'<div class="card">'
+    +'<p class="q-prompt">'+q.prompt+'</p>'
+    +(q.glyph?'<div class="q-glyph">'+q.glyph+'</div>':"")
+    +'<div class="opts">';
+  q.opts.forEach(function(o,i){
+    var cls = "opt";
+    if(quiz.ans!==null){
+      if(o.ok) cls += " correct";
+      else if(i===quiz.ans) cls += " wrong";
+      else cls += " dim";
+    }
+    h += '<button class="'+cls+'" onclick="answer('+i+')">'
+      +(o.g?'<span class="og">'+o.t+'</span>':o.t)+'</button>';
+  });
+  h += '</div>';
+  if(quiz.ans!==null){ h += '<div class="q-why">'+q.why+'</div>'; }
+  h += '</div>';
+  if(quiz.ans!==null){
+    h += '<button class="btn" style="margin-top:14px" onclick="nextQ()">'
+      +(quiz.i===quiz.qs.length-1?"Finish":"Next")+'</button>';
+  }
+  h += '</div>';
+  return h;
+}
+
+/* ---------------- router ---------------- */
+
+function resetAll(){
+  store = {seen:{}, best:{}}; save(); render();
+}
+
+function goBack(){
+  var hash = location.hash || "#/";
+  if(hash.indexOf("#/quiz/")===0 && quiz){ location.hash = "#/day/"+quiz.day; return; }
+  if(hash.indexOf("#/day/")===0 || hash==="#/history" || hash==="#/ref" || hash==="#/exam"){ location.hash="#/"; return; }
+  if(hash==="#/signs"){ location.hash="#/day/4"; return; }
+  location.hash = "#/";
+}
+
+function render(){
+  var hash = location.hash || "#/";
+  var app = document.getElementById("app");
+  var back = document.getElementById("backbtn");
+  var html = "";
+  if(hash==="#/" || hash==="#"){ html = vHome(); back.style.display="none"; }
+  else{
+    back.style.display="flex";
+    if(hash==="#/history") html = vHistory();
+    else if(hash.indexOf("#/day/")===0){
+      var d = parseInt(hash.slice(6),10);
+      html = (d>=1&&d<=4) ? vDay(d) : vHome();
+    }
+    else if(hash.indexOf("#/quiz/")===0 || hash==="#/exam"){
+      if(!quiz){ location.hash="#/"; return; }
+      html = vQuiz();
+    }
+    else if(hash==="#/signs") html = vSigns();
+    else if(hash==="#/ref") html = vRef();
+    else { html = vHome(); back.style.display="none"; }
+  }
+  app.innerHTML = html;
+  /* stash reveal data after innerHTML so attributes survive quoting */
+  hydrateRows();
+  var pct = progressPct();
+  document.getElementById("tbpct").textContent = pct>0 ? pct+"%" : "";
+  document.getElementById("pfill").style.width = pct+"%";
+}
+
+/* wordRow answers are injected via data attributes to avoid quote headaches */
+var ROWDATA = {};
+function hydrateRows(){
+  Object.keys(ROWDATA).forEach(function(id){
+    var el = document.getElementById(id+"-a");
+    if(el){ el.setAttribute("data-t", ROWDATA[id].t); el.setAttribute("data-e", ROWDATA[id].e); }
+  });
+}
+/* register row data */
+(function(){
+  [1,2,3].forEach(function(d){
+    PAYOFF[d].forEach(function(w,i){ ROWDATA["pf"+d+"_"+i] = w; });
+  });
+  SIGNS.forEach(function(w,i){ ROWDATA["sg"+i] = w; });
+})();
+
+window.addEventListener("hashchange", function(){ render(); window.scrollTo(0,0); });
+render();
+</script>
+
+<!-- MJB unified analytics: page views, clicks, video plays -> Central wh_web_events -->
+<script>
+(function(){
+  var SITE='marcusjball';
+  var EP='https://central-2-mcp-production.up.railway.app/public/analytics';
+  var sid;
+  try{ sid=localStorage.getItem('mjb_sid'); if(!sid){ sid='s_'+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('mjb_sid',sid);} }catch(e){ sid=''; }
+  function send(ev,d){ try{ var b=JSON.stringify(Object.assign({site:SITE,event:ev,page:(location.pathname+location.hash).slice(0,300),session_id:sid,referrer:(document.referrer||'').slice(0,300)},d||{}));
+    if(navigator.sendBeacon){ navigator.sendBeacon(EP,new Blob([b],{type:'text/plain'})); } else { fetch(EP,{method:'POST',headers:{'Content-Type':'text/plain'},body:b,keepalive:true}); } }catch(e){} }
+  send('pageview',{});
+  window.addEventListener('hashchange',function(){ send('pageview',{}); });
+  window.addEventListener('popstate',function(){ send('pageview',{}); });
+  try{ var _ps=history.pushState; history.pushState=function(){ _ps.apply(this,arguments); try{ send('pageview',{}); }catch(e){} }; }catch(e){}
+  document.addEventListener('click',function(e){ var el=e.target&&e.target.closest?e.target.closest('a,button,[role=button],[data-track]'):null; if(!el) return;
+    var label=(el.getAttribute('aria-label')||el.getAttribute('data-track')||(el.textContent||'').trim()||el.tagName||'').replace(/\s+/g,' ').slice(0,140);
+    var href=el.getAttribute('href')||''; send('click',{label:label,href:href}); },true);
+  function vids(){ var vs=document.querySelectorAll('video'); for(var i=0;i<vs.length;i++){ (function(v){ if(v.__mjb) return; v.__mjb=1;
+    v.addEventListener('play',function(){ send('video_play',{label:(v.getAttribute('src')||v.currentSrc||'video').slice(0,140)}); });
+    v.addEventListener('ended',function(){ send('video_complete',{label:(v.getAttribute('src')||v.currentSrc||'video').slice(0,140)}); }); })(vs[i]); } }
+  vids(); document.addEventListener('DOMContentLoaded',vids);
+  try{ new MutationObserver(vids).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
+</body>
+</html>

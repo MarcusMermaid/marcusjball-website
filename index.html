@@ -184,6 +184,8 @@
 @media(max-width:900px){.mjb-sqcol:nth-child(3){display:none}}
 @media(max-width:600px){.mjb-sq{gap:0}.mjb-sqcol:nth-child(2){display:none}.mjb-sqcol{max-width:none}}
 @media(prefers-reduced-motion:reduce){.mjb-sqcolinner{animation:none}}
+nav a.nav-cta{background:var(--gold);color:var(--ink);padding:7px 15px;border-radius:999px;font-weight:700;opacity:1;letter-spacing:.09em;box-shadow:0 4px 14px rgba(200,162,74,.30);transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
+nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 20px rgba(200,162,74,.45)}
 </style>
 </head>
 <body>
@@ -200,6 +202,7 @@
       <a href="https://www.execprosec.com" target="_blank" rel="noopener">ExecProsec</a>
       <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
       <button onclick="openLeft('contact')">Contact</button>
+      <a class="nav-cta" href="https://www.execprosec.com/10YearReport" target="_blank" rel="noopener">Fund Marcus&rsquo;s work</a>
     </nav>
   </header>
 
@@ -397,7 +400,7 @@ function renderTestimonials(box){
   if(!Q.length){box.innerHTML='<p class="bio-p">Testimonials unavailable.</p>';return;}
   function esc2(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   var intro=document.createElement('p'); intro.className='bio-p';
-  intro.textContent='Over 19,000 people have funded my work since 2016 and they\'ve left over 5000 messages of support. Here are some examples of what they\'ve said:';
+  intro.textContent='Over 19,000 people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support:';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var NCOL=3,cols=[],c;for(c=0;c<NCOL;c++)cols.push('');

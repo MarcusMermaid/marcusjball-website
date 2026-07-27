@@ -168,6 +168,23 @@
     .pp-body{flex:1}
   }
 </style>
+<style>
+/* TESTIMONIALS CONVEYOR (personal-site theme) */
+.mjb-sq{position:relative;height:min(140vh,1400px);overflow:hidden;margin-top:10px;display:flex;gap:18px;justify-content:center;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%)}
+.mjb-sqcol{flex:1 1 0;max-width:340px;min-width:0}
+.mjb-sqcolinner{will-change:transform;animation:mjbSqUp linear infinite}
+.mjb-sq:hover .mjb-sqcolinner{animation-play-state:paused}
+@keyframes mjbSqUp{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.mjb-sqcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:14px 16px;margin:0 0 14px;transition:background .25s ease,border-color .25s ease}
+.mjb-sqcard:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+.mjb-sqcard p{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.85);margin:0 0 8px}
+.mjb-sqname{font-size:12px;letter-spacing:.05em;color:var(--gold)}
+.mjb-sq.mjb-static{height:auto;overflow:visible;-webkit-mask:none;mask:none}
+.mjb-sq.mjb-static .mjb-sqcolinner{animation:none}
+@media(max-width:900px){.mjb-sqcol:nth-child(3){display:none}}
+@media(max-width:600px){.mjb-sq{gap:0}.mjb-sqcol:nth-child(2){display:none}.mjb-sqcol{max-width:none}}
+@media(prefers-reduced-motion:reduce){.mjb-sqcolinner{animation:none}}
+</style>
 </head>
 <body>
 <div class="hero">
@@ -177,10 +194,11 @@
     <a class="brand" href="index.html"><svg class="brandmark" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="hm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#hm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>MARCUS J BALL</a>
     <nav>
       <button onclick="openLeft('bio')">Biography</button>
+      <button onclick="openLeft('testimonials')">Testimonials</button>
+      <button onclick="openLeft('press')">Press</button>
+      <button onclick="openLeft('photos')">Photographs</button>
       <a href="https://www.execprosec.com" target="_blank" rel="noopener">ExecProsec</a>
       <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
-      <button onclick="openLeft('photos')">Photographs</button>
-      <button onclick="openLeft('press')">Press</button>
       <button onclick="openLeft('contact')">Contact</button>
     </nav>
   </header>
@@ -284,6 +302,7 @@
 <script src="bio-data.js?v=kazeem2"></script>
 <script src="photos-data.js"></script>
 <script src="press-data.js"></script>
+<script src="testimonials-data.js"></script>
 <script>
 function openM(w){if(w==='contact'){var f=document.getElementById('cf-form'),t=document.getElementById('cf-thanks');if(f&&t){f.style.display='';t.style.display='none';}}document.getElementById('m-'+w).classList.add('open');}
 function sendContact(){
@@ -316,6 +335,7 @@ function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 /* one left-hand scroll panel hosts Biography, Photographs and Press */
 var LEFT={
   bio:{title:'Biography', render:renderBio},
+  testimonials:{title:'Testimonials', render:renderTestimonials},
   photos:{title:'Photographs', render:renderPhotos},
   press:{title:'Press coverage', render:renderPress},
   contact:{title:'Contact', render:renderContact}
@@ -347,8 +367,8 @@ function fallbackCopy(text){
     .catch(function(){});
 })();
 /* -- URL routing: each panel gets a real, shareable path -- */
-var PATHS={ bio:'/biography', photos:'/photographs', press:'/press', contact:'/contact' };
-var PATH_TO_KIND={ '/biography':'bio', '/photographs':'photos', '/press':'press', '/contact':'contact' };
+var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs', press:'/press', contact:'/contact' };
+var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photographs':'photos', '/press':'press', '/contact':'contact' };
 function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
@@ -372,6 +392,22 @@ document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('clic
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeM();closeLeft();}});
 routeFromPath();
 
+function renderTestimonials(box){
+  var Q=window.SUPPORTER_QUOTES||[];
+  if(!Q.length){box.innerHTML='<p class="bio-p">Testimonials unavailable.</p>';return;}
+  function esc2(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var intro=document.createElement('p'); intro.className='bio-p';
+  intro.textContent='Over 19,000 people have funded my work since 2016 and they\'ve left over 5000 messages of support. Here are some examples of what they\'ve said:';
+  box.appendChild(intro);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var NCOL=3,cols=[],c;for(c=0;c<NCOL;c++)cols.push('');
+  for(var i=0;i<Q.length;i++){cols[i%NCOL]+='<div class="mjb-sqcard"><p>'+esc2(Q[i].q)+'</p><div class="mjb-sqname">\u2014 '+esc2(Q[i].n)+'</div></div>';}
+  var wrap=document.createElement('div');
+  if(reduce){wrap.className='mjb-sq mjb-static';var hs='';for(c=0;c<NCOL;c++)hs+='<div class="mjb-sqcol"><div class="mjb-sqcolinner">'+cols[c]+'</div></div>';wrap.innerHTML=hs;box.appendChild(wrap);return;}
+  wrap.className='mjb-sq';var per=Math.ceil(Q.length/NCOL),h='';
+  for(c=0;c<NCOL;c++){var dur=Math.max(120,Math.round(per*6.93));h+='<div class="mjb-sqcol"><div class="mjb-sqcolinner" style="animation-duration:'+dur+'s">'+cols[c]+cols[c]+'</div></div>';}
+  wrap.innerHTML=h;box.appendChild(wrap);
+}
 function renderBio(box){
   if(!window.BIO){box.innerHTML='<p class="bio-p">Biography unavailable.</p>';return;}
   window.BIO.forEach(function(o){

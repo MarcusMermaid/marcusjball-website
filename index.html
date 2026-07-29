@@ -24,7 +24,7 @@
   .hero .grad{position:absolute;inset:0;background:linear-gradient(95deg,rgba(11,12,15,.92) 0%,rgba(11,12,15,.8) 28%,rgba(11,12,15,.5) 48%,rgba(11,12,15,.18) 68%,rgba(11,12,15,.03) 100%)}
   .hero .vig{position:absolute;inset:0;background:radial-gradient(120% 120% at 70% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.45) 100%)}
   /* rotating hero carousel — JS crossfades the .slide layers every 4s */
-  .hero .herobg{position:absolute;inset:0;background:#0b0c0f url('photos/p07.jpg') var(--hero-x) var(--hero-y)/cover no-repeat;transition:opacity 1.4s ease}
+  .hero .herobg{position:absolute;inset:0;background:#0b0c0f url('photos/p07.jpg') var(--hero-x) var(--hero-y)/cover no-repeat}
   @media(max-width:900px){.hero .herobg{background-size:cover;background-position:var(--hero-x) var(--hero-y)}}
   .hero .svid video{width:100%;height:100%;object-fit:cover;display:block}
   /* social-proof metrics */
@@ -212,7 +212,7 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 #m-photo img{max-width:92vw;max-height:88vh;width:auto;height:auto;display:block;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
 .m-photo-x{position:absolute;top:-16px;right:-16px;width:40px;height:40px;border-radius:50%;background:var(--ink);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:20px;line-height:36px;cursor:pointer;padding:0}
 /* rotating second hero layer (P20), face kept right-of-centre */
-.hero .herobg2{position:absolute;inset:0;background:#0b0c0f url('photos/p20.jpg') 8% 45%/auto 145% no-repeat;opacity:0;transition:opacity 1.4s ease;pointer-events:none}
+.hero .herobg2{position:absolute;inset:0;background:#0b0c0f url('photos/p20.jpg') 8% 45%/auto 145% no-repeat;opacity:0;pointer-events:none}
 @media(max-width:900px){.hero .herobg2{background-size:cover;background-position:64% 28%}}
 @media(prefers-reduced-motion:reduce){.hero .herobg2{transition:none}}
 </style>
@@ -511,18 +511,18 @@ function renderPress(box){
 })();
 </script>
 <script>
-/* MJB bouncing ball -- home only; a gentle, constant-energy bounce around the page (never speeds
-   up), subtle white trail. Docks to the logo on inner pages; frame-rate independent. */
+/* MJB ball -- home only; rocket-powered: constant speed, straight lines, reflects off all four
+   walls, never loses energy (no gravity), with a subtle white jet out the back. Docks to the logo
+   on inner pages; frame-rate independent. */
 (function(){
   try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
   var ball=document.createElement('div'); ball.id='mjb-ball'; ball.setAttribute('aria-hidden','true'); ball.style.display='none';
   ball.innerHTML='<svg viewBox="0 0 100 100"><defs><radialGradient id="bbm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bbm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>';
   var trail=document.createElement('div'); trail.className='mjb-trail'; trail.setAttribute('aria-hidden','true'); trail.style.display='none';
-  var bm=null, SIZE=26, R=13, TH=16, sx=72, sy=48, x=72, y=48, vx=3.2, vy=0, g=0.1, running=false, last=0, launchT=null;
-  var MAX=12, MINVX=2.8;
-  function cap(v){ return v>MAX?MAX:(v<-MAX?-MAX:v); }
+  var bm=null, SIZE=26, R=13, TH=16, sx=72, sy=48, x=72, y=48, running=false, last=0, launchT=null;
+  var SPEED=4.8, ANG=33*Math.PI/180, vx=SPEED*Math.cos(ANG), vy=SPEED*Math.sin(ANG);
   function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }
-  function drawTrail(){ var sp=Math.sqrt(vx*vx+vy*vy), len=Math.min(70, sp*2.3), ang=Math.atan2(vy,vx)*180/Math.PI; trail.style.width=len+'px'; trail.style.opacity=Math.min(0.16, sp/300); trail.style.transform='translate('+(x-len)+'px,'+(y-TH/2)+'px) rotate('+ang+'deg)'; }
+  function drawJet(){ var len=SPEED*6, ang=Math.atan2(vy,vx)*180/Math.PI; trail.style.width=len+'px'; trail.style.opacity='0.2'; trail.style.transform='translate('+(x-len)+'px,'+(y-TH/2)+'px) rotate('+ang+'deg)'; }
   function measure(){ bm=document.querySelector('.brandmark'); if(bm){ var r=bm.getBoundingClientRect(); if(r.width){ SIZE=Math.round(r.width); R=SIZE/2; sx=r.left+r.width/2; sy=r.top+r.height/2; ball.style.width=SIZE+'px'; ball.style.height=SIZE+'px'; } } TH=Math.max(10,Math.round(SIZE*0.6)); trail.style.height=TH+'px'; trail.style.borderRadius=(TH/2)+'px'; }
   function isDrawer(){ var lp=document.getElementById('leftpanel'); return !!(lp && lp.classList.contains('open')); }
   function blast(cx,cy){ var d=document.createElement('div'); d.className='mjb-blast'; d.style.left=cx+'px'; d.style.top=cy+'px'; var html='<span class="mjb-flash"></span><span class="mjb-ring"></span><span class="mjb-ring mjb-ring2"></span>'; for(var i=0;i<360;i+=45){ html+='<i class="mjb-spark" style="--a:'+i+'deg"></i>'; } d.innerHTML=html; document.body.appendChild(d); setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 850); }
@@ -532,19 +532,16 @@ function renderPress(box){
     if(!last){ last=t; return; }
     var dt=(t-last)/16.6667; last=t; if(dt>3.2) dt=3.2;
     var W=window.innerWidth, H=window.innerHeight;
-    vy+=g*dt; x+=vx*dt; y+=vy*dt;
-    if(y+R>H){ y=H-R; vy=-Math.abs(vy); }
-    else if(y-R<0){ y=R; vy=Math.abs(vy); }
-    if(x+R>W){ x=W-R; vx=-Math.abs(vx); }
-    else if(x-R<0){ x=R; vx=Math.abs(vx); }
-    if(Math.abs(vx)<MINVX) vx=(vx<0?-1:1)*MINVX;
-    vx=cap(vx); vy=cap(vy); place(); drawTrail();
+    x+=vx*dt; y+=vy*dt;
+    if(x+R>W){ x=W-R; vx=-Math.abs(vx); } else if(x-R<0){ x=R; vx=Math.abs(vx); }
+    if(y+R>H){ y=H-R; vy=-Math.abs(vy); } else if(y-R<0){ y=R; vy=Math.abs(vy); }
+    place(); drawJet();
   }
   function dock(){ clearTimeout(launchT); running=false; ball.style.display='none'; trail.style.display='none'; if(bm) bm.style.visibility=''; }
   function launch(delay){
     if(isDrawer() || running) return;
     clearTimeout(launchT); measure();
-    x=sx; y=sy; vx=3.2; vy=0; last=0; place();
+    x=sx; y=sy; vx=SPEED*Math.cos(ANG); vy=SPEED*Math.sin(ANG); last=0; place();
     ball.style.display=''; if(bm) bm.style.visibility='';
     launchT=setTimeout(function(){ if(isDrawer()){ dock(); return; } if(bm) bm.style.visibility='hidden'; blast(sx,sy); trail.style.display=''; last=0; running=true; }, delay);
   }
@@ -567,7 +564,7 @@ function renderPress(box){
     testimonials:{img:'photos/p20.jpg',size:'auto 135%',pos:'5% 43%',mpos:'62% 26%'},
     press:{img:'photos/p15.jpg',size:'cover',pos:'52% 30%',mpos:'55% 26%'},
     contact:{img:'photos/p27.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
-    photos:{img:'photos/p07.jpg',size:'cover',pos:'52% 58%',mpos:'52% 40%'}
+    photos:{img:'photos/p09.jpg',size:'cover',pos:'72% 28%',mpos:'75% 30%'}
   };
   function apply(el,sl){ var mob=window.innerWidth<=900; el.style.backgroundColor='#0b0c0f'; el.style.backgroundImage="url('"+sl.img+"')"; el.style.backgroundRepeat='no-repeat'; el.style.backgroundSize=mob?'cover':sl.size; el.style.backgroundPosition=mob?sl.mpos:sl.pos; }
   var layers=[A,B], active=0, curKind='home';

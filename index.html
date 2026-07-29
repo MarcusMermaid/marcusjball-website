@@ -203,10 +203,26 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 <style>
 .covered{text-shadow:0 2px 14px rgba(0,0,0,.92),0 0 4px rgba(0,0,0,.6)}
 </style>
+<style>
+/* photo Expand lightbox */
+.tile img{cursor:zoom-in}
+.tile-acts{display:flex;border-top:1px solid rgba(255,255,255,.1)}
+.tact{flex:1;text-align:center;padding:11px;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:none;font-family:inherit;text-decoration:none}
+.tact+.tact{border-left:1px solid rgba(255,255,255,.1)}
+.tact:hover{background:rgba(200,162,74,.12)}
+#m-photo{z-index:80}
+.m-photo-wrap{position:relative;max-width:92vw;max-height:88vh}
+#m-photo img{max-width:92vw;max-height:88vh;width:auto;height:auto;display:block;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
+.m-photo-x{position:absolute;top:-16px;right:-16px;width:40px;height:40px;border-radius:50%;background:var(--ink);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:20px;line-height:36px;cursor:pointer;padding:0}
+/* rotating second hero layer (P20), face kept right-of-centre */
+.hero .herobg2{position:absolute;inset:0;background:#0b0c0f url('photos/p20.jpg') 8% 45%/auto 145% no-repeat;opacity:0;transition:opacity 1.4s ease;pointer-events:none}
+@media(max-width:900px){.hero .herobg2{background-size:cover;background-position:64% 28%}}
+@media(prefers-reduced-motion:reduce){.hero .herobg2{transition:none}}
+</style>
 </head>
 <body>
 <div class="hero">
-  <div class="herobg"></div>
+  <div class="herobg"></div><div class="herobg2"></div>
   <div class="grad"></div><div class="vig"></div>
   <header>
     <a class="brand" href="index.html"><svg class="brandmark" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="hm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#hm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>MARCUS J BALL</a>
@@ -295,7 +311,7 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 </div>
 
 <!-- CONTACT -->
-<div class="modal" id="m-contact">
+<div class="modal" id="m-photo"><div class="m-photo-wrap"><button class="m-photo-x" type="button" onclick="closeM()" aria-label="Close">&times;</button><img id="m-photo-img" src="" alt="Marcus J Ball"></div></div><div class="modal" id="m-contact">
   <div class="card">
     <button class="x" onclick="closeM()">&times;</button>
     <h2>Get in touch</h2>
@@ -349,6 +365,7 @@ function subscribe(){
     }).catch(function(){btn.disabled=false;btn.textContent='Subscribe';alert('Could not subscribe right now — please try again in a moment.');});
 }
 function closeM(){document.querySelectorAll('.modal').forEach(function(m){m.classList.remove('open');});}
+function openPhoto(src){var img=document.getElementById('m-photo-img');if(img)img.src=src;var m=document.getElementById('m-photo');if(m)m.classList.add('open');}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 /* one left-hand scroll panel hosts Biography, Photographs and Press */
@@ -441,7 +458,7 @@ function renderPhotos(box){
   var g=document.createElement('div'); g.className='pp-gal';
   (window.PHOTOS||[]).forEach(function(p){
     var d=document.createElement('div'); d.className='tile';
-    d.innerHTML='<img loading="lazy" src="'+p.f+'" alt="'+esc(p.a||'Marcus J Ball')+'"><a class="dl" href="'+p.f+'" download>Download</a>';
+    d.innerHTML='<img loading="lazy" src="'+p.f+'" alt="'+esc(p.a||'Marcus J Ball')+'" onclick="openPhoto(\''+p.f+'\')"><div class="tile-acts"><button class="tact" type="button" onclick="openPhoto(\''+p.f+'\')">Expand</button><a class="tact" href="'+p.f+'" download>Download</a></div>';
     g.appendChild(d);
   });
   box.appendChild(g);
@@ -547,6 +564,11 @@ function renderPress(box){
     if(isDrawer()) dock(); else launch(3000);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<script>
+(function(){ var alt=document.querySelector('.hero .herobg2'); if(!alt) return;
+  var on=false; setInterval(function(){ on=!on; alt.style.opacity=on?'1':'0'; }, 20000);
 })();
 </script>
 </body>

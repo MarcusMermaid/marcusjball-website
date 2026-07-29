@@ -190,7 +190,15 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 <style>
 #mjb-ball{position:fixed;top:0;left:0;z-index:2;pointer-events:none;will-change:transform;filter:drop-shadow(0 5px 13px rgba(0,0,0,.45))}
 #mjb-ball svg{width:100%;height:100%;display:block}
-@media(prefers-reduced-motion:reduce){#mjb-ball{display:none}}
+.mjb-blast{position:fixed;width:0;height:0;z-index:11;pointer-events:none}
+.mjb-flash{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#c8a24a 42%,rgba(200,162,74,0) 70%);animation:mjbFlash .45s ease-out forwards}
+.mjb-ring{position:absolute;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;border:2.5px solid #c8a24a;animation:mjbRing .62s ease-out forwards}
+.mjb-ring2{border-color:#fff;animation-delay:.09s}
+.mjb-spark{position:absolute;left:-1.5px;top:-2px;width:3px;height:15px;border-radius:2px;background:linear-gradient(#fff,#c8a24a);transform-origin:50% 0;animation:mjbSpark .55s ease-out forwards}
+@keyframes mjbFlash{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.7);opacity:0}}
+@keyframes mjbRing{0%{transform:scale(.3);opacity:.95}100%{transform:scale(3.1);opacity:0}}
+@keyframes mjbSpark{0%{transform:rotate(var(--a)) translateY(2px) scaleY(1);opacity:1}100%{transform:rotate(var(--a)) translateY(30px) scaleY(.35);opacity:0}}
+@media(prefers-reduced-motion:reduce){#mjb-ball,.mjb-blast{display:none}}
 </style>
 </head>
 <body>
@@ -481,37 +489,52 @@ function renderPress(box){
 })();
 </script>
 <script>
-/* MJB bouncing ball -- playful "Ball" easter egg. Behind the text, above the photo. */
+/* MJB bouncing ball -- high-energy "Ball": drops out of the logo (leaving a gap + an energy
+   blast), then ricochets wall-to-wall, gaining speed on every impact. Behind text, above photo. */
 (function(){
   try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
   var ball=document.createElement('div');
   ball.id='mjb-ball'; ball.setAttribute('aria-hidden','true');
   ball.innerHTML='<svg viewBox="0 0 100 100"><defs><radialGradient id="bbm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bbm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>';
+  function blast(cx,cy){
+    var d=document.createElement('div'); d.className='mjb-blast'; d.style.left=cx+'px'; d.style.top=cy+'px';
+    var html='<span class="mjb-flash"></span><span class="mjb-ring"></span><span class="mjb-ring mjb-ring2"></span>';
+    for(var a=0;a<360;a+=45){ html+='<i class="mjb-spark" style="--a:'+a+'deg"></i>'; }
+    d.innerHTML=html; document.body.appendChild(d);
+    setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 850);
+  }
   function start(){
     document.body.appendChild(ball);
     var SIZE=26, sx=72, sy=48, bm=document.querySelector('.brandmark');
     if(bm){ var r=bm.getBoundingClientRect(); if(r.width){ SIZE=Math.round(r.width); sx=r.left+r.width/2; sy=r.top+r.height/2; } }
     var R=SIZE/2;
     ball.style.width=SIZE+'px'; ball.style.height=SIZE+'px';
-    var x=sx, y=sy, vx=2.6, vy=0, g=0.5, running=false;
+    var x=sx, y=sy, vx=6, vy=1, g=0.62, running=false;
+    var GAIN=1.06, MAX=24, MINVX=6.5, MINFLOOR=14;
+    function cap(v){ return v>MAX?MAX:(v<-MAX?-MAX:v); }
+    function boost(){ vx=cap(vx*GAIN); vy=cap(vy*GAIN); }
     function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }
     place();
     function frame(){
       if(running){
         var W=window.innerWidth, H=window.innerHeight;
         vy+=g; x+=vx; y+=vy;
-        if(y+R>H){ y=H-R; vy=-Math.abs(vy)*0.9; vx+=(Math.random()-0.5)*1.4; if(Math.abs(vy)<7.5) vy=-(7.5+Math.random()*4.5); }
-        if(y-R<0){ y=R; vy=Math.abs(vy)*0.9; }
-        if(x+R>W){ x=W-R; vx=-Math.abs(vx)*0.96; }
-        if(x-R<0){ x=R; vx=Math.abs(vx)*0.96; }
-        if(Math.abs(vx)<1.6) vx=(vx<0?-1:1)*1.6;
-        if(vx>17) vx=17; else if(vx<-17) vx=-17; if(vy>27) vy=27;
+        if(y+R>H){ y=H-R; vy=-Math.abs(vy); if(Math.abs(vy)<MINFLOOR) vy=-MINFLOOR; vx+=(Math.random()-0.5)*2; boost(); }
+        if(y-R<0){ y=R; vy=Math.abs(vy); boost(); }
+        if(x+R>W){ x=W-R; vx=-Math.abs(vx); boost(); }
+        if(x-R<0){ x=R; vx=Math.abs(vx); boost(); }
+        if(Math.abs(vx)<MINVX) vx=(vx<0?-1:1)*MINVX;
+        vx=cap(vx); vy=cap(vy);
         place();
       }
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    setTimeout(function(){ running=true; }, 3200);
+    setTimeout(function(){
+      running=true;
+      if(bm) bm.style.visibility='hidden';   /* the ball leaves an empty space in its wake */
+      blast(sx, sy);
+    }, 3000);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

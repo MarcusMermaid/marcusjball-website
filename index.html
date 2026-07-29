@@ -187,6 +187,11 @@
 nav a.nav-cta{background:var(--gold);color:var(--ink);padding:7px 15px;border-radius:999px;font-weight:700;opacity:1;letter-spacing:.09em;box-shadow:0 4px 14px rgba(200,162,74,.30);transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
 nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 20px rgba(200,162,74,.45)}
 </style>
+<style>
+#mjb-ball{position:fixed;top:0;left:0;z-index:2;pointer-events:none;will-change:transform;filter:drop-shadow(0 5px 13px rgba(0,0,0,.45))}
+#mjb-ball svg{width:100%;height:100%;display:block}
+@media(prefers-reduced-motion:reduce){#mjb-ball{display:none}}
+</style>
 </head>
 <body>
 <div class="hero">
@@ -473,6 +478,42 @@ function renderPress(box){
     v.addEventListener('ended',function(){ send('video_complete',{label:(v.getAttribute('src')||v.currentSrc||'video').slice(0,140)}); }); })(vs[i]); } }
   vids(); document.addEventListener('DOMContentLoaded',vids);
   try{ new MutationObserver(vids).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
+<script>
+/* MJB bouncing ball -- playful "Ball" easter egg. Behind the text, above the photo. */
+(function(){
+  try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
+  var ball=document.createElement('div');
+  ball.id='mjb-ball'; ball.setAttribute('aria-hidden','true');
+  ball.innerHTML='<svg viewBox="0 0 100 100"><defs><radialGradient id="bbm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bbm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>';
+  function start(){
+    document.body.appendChild(ball);
+    var SIZE=26, sx=72, sy=48, bm=document.querySelector('.brandmark');
+    if(bm){ var r=bm.getBoundingClientRect(); if(r.width){ SIZE=Math.round(r.width); sx=r.left+r.width/2; sy=r.top+r.height/2; } }
+    var R=SIZE/2;
+    ball.style.width=SIZE+'px'; ball.style.height=SIZE+'px';
+    var x=sx, y=sy, vx=2.6, vy=0, g=0.5, running=false;
+    function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }
+    place();
+    function frame(){
+      if(running){
+        var W=window.innerWidth, H=window.innerHeight;
+        vy+=g; x+=vx; y+=vy;
+        if(y+R>H){ y=H-R; vy=-Math.abs(vy)*0.9; vx+=(Math.random()-0.5)*1.4; if(Math.abs(vy)<7.5) vy=-(7.5+Math.random()*4.5); }
+        if(y-R<0){ y=R; vy=Math.abs(vy)*0.9; }
+        if(x+R>W){ x=W-R; vx=-Math.abs(vx)*0.96; }
+        if(x-R<0){ x=R; vx=Math.abs(vx)*0.96; }
+        if(Math.abs(vx)<1.6) vx=(vx<0?-1:1)*1.6;
+        if(vx>17) vx=17; else if(vx<-17) vx=-17; if(vy>27) vy=27;
+        place();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    setTimeout(function(){ running=true; }, 3200);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
 </body>

@@ -14,8 +14,8 @@
        on the site, his face stays consistently and pleasingly placed. If the hero
        image (mjb-bg.jpg) is ever replaced, update ONLY these three values. */
     --hero-zoom:124%;  /* how far to zoom in on the face (background-size height) */
-    --hero-x:70%;      /* face horizontal focal position */
-    --hero-y:6%}       /* vertical focal: top of head sits just under the titles (clear gap), only the tops of the audience peek in at the bottom */
+    --hero-x:52%;      /* face horizontal focal position */
+    --hero-y:42%}       /* vertical focal: top of head sits just under the titles (clear gap), only the tops of the audience peek in at the bottom */
   html,body{height:100%}
   body{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--ink);color:#fff;-webkit-font-smoothing:antialiased;overflow:hidden}
   /* HERO with photo on the right (drop your photo in as hero.jpg) */
@@ -24,7 +24,7 @@
   .hero .grad{position:absolute;inset:0;background:linear-gradient(95deg,#0b0c0f 0%,#0b0c0f 30%,rgba(11,12,15,.9) 50%,rgba(11,12,15,.45) 73%,rgba(11,12,15,0) 100%)}
   .hero .vig{position:absolute;inset:0;background:radial-gradient(120% 120% at 70% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.45) 100%)}
   /* rotating hero carousel — JS crossfades the .slide layers every 4s */
-  .hero .herobg{position:absolute;inset:0;background:#0b0c0f url('mjb-bg.jpg') var(--hero-x) var(--hero-y)/auto var(--hero-zoom) no-repeat}
+  .hero .herobg{position:absolute;inset:0;background:#0b0c0f url('photos/p07.jpg') var(--hero-x) var(--hero-y)/auto var(--hero-zoom) no-repeat}
   @media(max-width:900px){.hero .herobg{background-size:cover;background-position:var(--hero-x) var(--hero-y)}}
   .hero .svid video{width:100%;height:100%;object-fit:cover;display:block}
   /* social-proof metrics */
@@ -200,11 +200,16 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 @keyframes mjbSpark{0%{transform:rotate(var(--a)) translateY(2px) scaleY(1);opacity:1}100%{transform:rotate(var(--a)) translateY(30px) scaleY(.35);opacity:0}}
 @media(prefers-reduced-motion:reduce){#mjb-ball,.mjb-blast{display:none}}
 </style>
+<style>
+.hero-inset{position:absolute;z-index:6;top:120px;right:40px;width:min(30vw,320px);aspect-ratio:3/2;border-radius:12px;border:2px solid rgba(200,162,74,.85);box-shadow:0 16px 42px rgba(0,0,0,.6);overflow:hidden;background:#0b0c0f url('photos/p09.jpg') 80% center/cover no-repeat}
+.hero-inset::after{content:'MARCUS AT THE PODIUM';position:absolute;left:0;right:0;bottom:0;padding:8px 11px;font-size:9.5px;letter-spacing:.15em;color:#fff;text-align:right;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+@media(max-width:900px){.hero-inset{display:none}}
+</style>
 </head>
 <body>
 <div class="hero">
   <div class="herobg"></div>
-  <div class="grad"></div><div class="vig"></div>
+  <div class="grad"></div><div class="vig"></div><div class="hero-inset" aria-hidden="true"></div>
   <header>
     <a class="brand" href="index.html"><svg class="brandmark" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="hm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#hm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>MARCUS J BALL</a>
     <nav>
@@ -489,8 +494,8 @@ function renderPress(box){
 })();
 </script>
 <script>
-/* MJB bouncing ball -- high-energy "Ball": drops out of the logo (leaving a gap + an energy
-   blast), then ricochets wall-to-wall, gaining speed on every impact. Behind text, above photo. */
+/* MJB bouncing ball -- gains 10% power on EVERY wall/floor/ceiling hit (pinball), and moves
+   at a constant real speed on every page (delta-time, so heavy pages can't slow it down). */
 (function(){
   try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
   var ball=document.createElement('div');
@@ -509,32 +514,29 @@ function renderPress(box){
     if(bm){ var r=bm.getBoundingClientRect(); if(r.width){ SIZE=Math.round(r.width); sx=r.left+r.width/2; sy=r.top+r.height/2; } }
     var R=SIZE/2;
     ball.style.width=SIZE+'px'; ball.style.height=SIZE+'px';
-    var x=sx, y=sy, vx=6, vy=1, g=0.62, running=false;
-    var GAIN=1.06, MAX=24, MINVX=6.5, MINFLOOR=14;
+    var x=sx, y=sy, vx=6, vy=1, g=0.55, running=false, last=0;
+    var GAIN=1.10, MAX=44, MINVX=6.5, MINFLOOR=14;
     function cap(v){ return v>MAX?MAX:(v<-MAX?-MAX:v); }
     function boost(){ vx=cap(vx*GAIN); vy=cap(vy*GAIN); }
     function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }
     place();
-    function frame(){
-      if(running){
-        var W=window.innerWidth, H=window.innerHeight;
-        vy+=g; x+=vx; y+=vy;
-        if(y+R>H){ y=H-R; vy=-Math.abs(vy); if(Math.abs(vy)<MINFLOOR) vy=-MINFLOOR; vx+=(Math.random()-0.5)*2; boost(); }
-        if(y-R<0){ y=R; vy=Math.abs(vy); boost(); }
-        if(x+R>W){ x=W-R; vx=-Math.abs(vx); boost(); }
-        if(x-R<0){ x=R; vx=Math.abs(vx); boost(); }
-        if(Math.abs(vx)<MINVX) vx=(vx<0?-1:1)*MINVX;
-        vx=cap(vx); vy=cap(vy);
-        place();
-      }
+    function frame(t){
       requestAnimationFrame(frame);
+      if(!running) return;
+      if(!last){ last=t; return; }
+      var dt=(t-last)/16.6667; last=t; if(dt>3.2) dt=3.2;
+      var W=window.innerWidth, H=window.innerHeight;
+      vy+=g*dt; x+=vx*dt; y+=vy*dt;
+      if(y+R>H){ y=H-R; vy=-Math.abs(vy); if(Math.abs(vy)<MINFLOOR) vy=-MINFLOOR; vx+=(Math.random()-0.5)*2; boost(); }
+      else if(y-R<0){ y=R; vy=Math.abs(vy); boost(); }
+      if(x+R>W){ x=W-R; vx=-Math.abs(vx); boost(); }
+      else if(x-R<0){ x=R; vx=Math.abs(vx); boost(); }
+      if(Math.abs(vx)<MINVX) vx=(vx<0?-1:1)*MINVX;
+      vx=cap(vx); vy=cap(vy);
+      place();
     }
     requestAnimationFrame(frame);
-    setTimeout(function(){
-      running=true;
-      if(bm) bm.style.visibility='hidden';   /* the ball leaves an empty space in its wake */
-      blast(sx, sy);
-    }, 3000);
+    setTimeout(function(){ running=true; if(bm) bm.style.visibility='hidden'; blast(sx,sy); }, 3000);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

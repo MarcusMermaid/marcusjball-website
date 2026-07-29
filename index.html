@@ -201,9 +201,6 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 @media(prefers-reduced-motion:reduce){#mjb-ball,.mjb-blast{display:none}}
 </style>
 <style>
-.covered{text-shadow:0 2px 14px rgba(0,0,0,.92),0 0 4px rgba(0,0,0,.6)}
-</style>
-<style>
 /* photo Expand lightbox */
 .tile img{cursor:zoom-in}
 .tile-acts{display:flex;border-top:1px solid rgba(255,255,255,.1)}
@@ -522,7 +519,7 @@ function renderPress(box){
   ball.innerHTML='<svg viewBox="0 0 100 100"><defs><radialGradient id="bbm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bbm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>';
   var trail=document.createElement('div'); trail.className='mjb-trail'; trail.setAttribute('aria-hidden','true'); trail.style.display='none';
   var bm=null, SIZE=26, R=13, TH=16, sx=72, sy=48, x=72, y=48, vx=6, vy=1, g=0.55, running=false, last=0, launchT=null;
-  var GAIN=1.05, MAX=44, MINVX=6.5, MINFLOOR=14;
+  var GAIN=1.05, MAX=22, MINVX=6.5, MINFLOOR=14;
   function cap(v){ return v>MAX?MAX:(v<-MAX?-MAX:v); }
   function boost(){ vx=cap(vx*GAIN); vy=cap(vy*GAIN); }
   function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }

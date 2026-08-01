@@ -344,8 +344,8 @@ function sendContact(){
   var g=function(id){return (document.getElementById(id).value||'').trim();};
   var msg=g('cf-msg'); if(!msg){document.getElementById('cf-msg').focus();return;}
   var btn=document.getElementById('cf-send'); btn.disabled=true; btn.textContent='Sending…';
-  var body=new URLSearchParams({first:g('cf-first'),last:g('cf-last'),email:g('cf-email'),message:msg,website:g('cf-website')});
-  fetch('https://web-production-f8552.up.railway.app/api/contact',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+  var body=new URLSearchParams({name:(g('cf-first')+' '+g('cf-last')).trim(),email:g('cf-email'),message:msg,website:g('cf-website'),source:'marcusjball.com contact form'});
+  fetch('https://central-2-mcp-production.up.railway.app/public/contact',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
     .then(function(r){return r.json();}).then(function(){
       document.getElementById('cf-form').style.display='none';
       document.getElementById('cf-thanks').style.display='block';

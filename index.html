@@ -241,7 +241,7 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
   <div class="covered">
     <p class="bio">Marcus J Ball has been campaigning to criminalise lying in politics since June 2016. He is the private prosecutor who prosecuted Boris Johnson for alleged Misconduct in Public Office, in an attempt to set a precedent that lying in politics was a criminal offence. He is the producer and presenter of an upcoming documentary film about lying in politics and the fight to make it illegal. The UK government is now criminalising lying by the Prime Minister, ministers and nearly all public officials with the new “Misleading the Public” offence in the Public Office (Accountability) Bill. He is campaigning to strengthen it using his experience prosecuting Johnson and extend it to all lawmakers and judges.</p>
     <div class="metrics">
-      <div class="metric"><b id="m-backers">19,000+</b><span>Financial Backers</span></div>
+      <div class="metric"><b id="m-backers">19,085</b><span>Financial Backers</span></div>
       <div class="metric"><b id="m-followers">53,000+</b><span>Followers across platforms</span></div>
     </div>
     <div class="lab">Work covered by</div>
@@ -401,7 +401,7 @@ function fallbackCopy(text){
 (function(){
   fetch('https://central-2-mcp-production.up.railway.app/public/backers')
     .then(function(r){return r.json();})
-    .then(function(d){ if(d && typeof d.backers==='number' && d.backers>0){ var el=document.getElementById('m-backers'); if(el) el.textContent=d.backers.toLocaleString('en-GB')+'+'; } })
+    .then(function(d){ if(d && typeof d.backers==='number' && d.backers>0){ var el=document.getElementById('m-backers'); if(el) el.textContent=d.backers.toLocaleString('en-GB'); } })
     .catch(function(){});
 })();
 /* -- URL routing: each panel gets a real, shareable path -- */
@@ -435,7 +435,7 @@ function renderTestimonials(box){
   if(!Q.length){box.innerHTML='<p class="bio-p">Testimonials unavailable.</p>';return;}
   function esc2(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   var intro=document.createElement('p'); intro.className='bio-p';
-  intro.textContent='Over 19,000 people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
+  intro.textContent='19,085 people have given money to fund Marcus\'s work since 2016 (a further 248 tried to contribute but their payments failed) and they wrote over 5,000 messages of support.';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var NCOL=3,cols=[],c;for(c=0;c<NCOL;c++)cols.push('');

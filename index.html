@@ -435,7 +435,7 @@ function renderTestimonials(box){
   if(!Q.length){box.innerHTML='<p class="bio-p">Testimonials unavailable.</p>';return;}
   function esc2(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   var intro=document.createElement('p'); intro.className='bio-p';
-  intro.textContent='19,085 people have given money to fund Marcus\'s work since 2016 (a further 248 tried to contribute but their payments failed) and they wrote over 5,000 messages of support.';
+  intro.textContent='19,085 people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var NCOL=3,cols=[],c;for(c=0;c<NCOL;c++)cols.push('');

@@ -149,6 +149,17 @@
   #m-contact input,#m-contact textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);border-radius:10px;color:#fff;font-family:inherit;font-size:14.5px;padding:12px 13px;margin-top:10px;outline:none}
   #m-contact input:focus,#m-contact textarea:focus{border-color:var(--gold)}
   #m-contact textarea{resize:vertical;min-height:96px;line-height:1.5}
+  .cp-form input,.cp-form textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);border-radius:10px;color:#fff;font-family:inherit;font-size:15px;padding:12px 14px;margin-bottom:12px;outline:none;transition:border-color .15s}
+  .cp-form input:focus,.cp-form textarea:focus{border-color:var(--gold)}
+  .cp-form textarea{resize:vertical;min-height:150px;line-height:1.55}
+  .cp-row{display:flex;gap:12px}
+  .cp-row input{flex:1 1 0;min-width:0}
+  .cp-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .cp-count{font-size:13px;letter-spacing:.04em;color:rgba(255,255,255,.5)}
+  .cp-count.over{color:#e0564f}
+  .cp-thanks{display:none;text-align:center;padding:22px 0}
+  .cp-thanks h3{font-size:21px;font-weight:500;margin:14px 0 0;color:#fff}
+  @media(max-width:720px){.cp-row{flex-direction:column;gap:0}.cp-form input,.cp-form textarea{font-size:16px}.cp-foot .cf-send{width:100%;min-height:48px}}
   .cf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
   .cf-send{width:100%;margin-top:14px;border:none;border-radius:11px;background:var(--gold);color:#15100a;font-weight:700;font-size:15px;padding:14px;cursor:pointer;font-family:inherit}
   .cf-send:hover{filter:brightness(1.06)}.cf-send:disabled{opacity:.5;cursor:default}
@@ -461,17 +472,51 @@ var LEFT={
   contact:{title:'Contact', render:renderContact}
 };
 function renderContact(box){
-  box.innerHTML='<p class="bio-p" style="font-size:19px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
-    +'<span style="color:var(--gold)">MJB@ExecProsec.com</span>'
-    +'<button type="button" id="copy-email" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:13px;cursor:pointer">Copy</button>'
-    +'</p>';
-  var b=document.getElementById('copy-email');
-  if(b){b.addEventListener('click',function(){
-    var done=function(){b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy';},1600);};
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText('MJB@ExecProsec.com').then(done).catch(function(){fallbackCopy('MJB@ExecProsec.com');done();});
-    } else { fallbackCopy('MJB@ExecProsec.com'); done(); }
-  });}
+  box.innerHTML=''
+    +'<div class="cp-form" id="cp-form">'
+      +'<div class="cp-row">'
+        +'<input id="cp-first" placeholder="First name" autocomplete="given-name">'
+        +'<input id="cp-last" placeholder="Last name" autocomplete="family-name">'
+      +'</div>'
+      +'<input id="cp-email" type="email" placeholder="Email address" autocomplete="email">'
+      +'<input id="cp-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">'
+      +'<textarea id="cp-msg" rows="7" placeholder="Your message"></textarea>'
+      +'<div class="cp-foot"><span class="cp-count" id="cp-count">0 / 200 words</span>'
+      +'<button class="cf-send" id="cp-send" type="button">Send</button></div>'
+    +'</div>'
+    +'<div class="cp-thanks" id="cp-thanks"><div class="cf-tick">✓</div>'
+    +'<h3>Thank you for your message.</h3></div>';
+  var msg=document.getElementById('cp-msg'), cnt=document.getElementById('cp-count'),
+      btn=document.getElementById('cp-send');
+  var words=function(t){ t=(t||'').trim(); return t?t.split(/\s+/).length:0; };
+  var tally=function(){
+    var n=words(msg.value);
+    cnt.textContent=n+' / 200 words';
+    cnt.className='cp-count'+(n>200?' over':'');
+    return n;
+  };
+  msg.addEventListener('input',tally);
+  btn.addEventListener('click',function(){
+    var g=function(id){ return (document.getElementById(id).value||'').trim(); };
+    var n=tally();
+    if(!g('cp-msg')){ msg.focus(); return; }
+    if(n>200){ msg.focus(); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g('cp-email'))){
+      var e=document.getElementById('cp-email'); e.focus(); e.style.borderColor='#e0564f'; return;
+    }
+    btn.disabled=true; btn.textContent='Sending…';
+    var body=new URLSearchParams({name:(g('cp-first')+' '+g('cp-last')).trim(),email:g('cp-email'),
+      message:g('cp-msg'),website:g('cp-website'),source:'marcusjball.com contact page'});
+    fetch('https://central-2-mcp-production.up.railway.app/public/contact',
+      {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()})
+      .then(function(r){return r.json();}).then(function(){
+        document.getElementById('cp-form').style.display='none';
+        document.getElementById('cp-thanks').style.display='block';
+      }).catch(function(){
+        btn.disabled=false; btn.textContent='Send';
+        alert('Could not send right now — please try again in a moment.');
+      });
+  });
 }
 function fallbackCopy(text){
   var t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';

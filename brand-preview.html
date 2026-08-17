@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Marcus J Ball — brand direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ground */
+  --black:#050608;        /* true ground, deeper than today's #0b0c0f */
+  --coal:#0c0e12;         /* raised surfaces */
+  --slate:#151920;        /* cards, inputs */
+  --line:rgba(255,255,255,.10);
+  /* ink */
+  --white:#F4F5F7;
+  --mid:rgba(244,245,247,.66);
+  --faint:rgba(244,245,247,.38);
+  /* one accent, used sparingly */
+  --brass:#C6A15B;
+  --brass-dim:rgba(198,161,91,.30);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--black);color:var(--white);
+  font-family:Archivo,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+@media(max-width:720px){.wrap{padding:0 20px}}
+
+/* ---------------------------------------------------------------- type system */
+.eyebrow{
+  font-size:11.5px;font-weight:600;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--brass);margin:0 0 18px;display:flex;align-items:center;gap:14px;
+}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--brass-dim)}
+h1,h2,h3{font-weight:600;letter-spacing:-.02em;line-height:1.06;margin:0}
+h1{font-size:clamp(40px,7vw,86px);text-transform:uppercase;letter-spacing:-.01em}
+h2{font-size:clamp(26px,3.4vw,42px)}
+h3{font-size:19px;font-weight:500;letter-spacing:0}
+p{margin:0 0 18px;color:var(--mid);font-size:16.5px;max-width:62ch}
+.lead{font-size:19px;color:rgba(244,245,247,.82)}
+
+/* ---------------------------------------------------------------- cinematic frame */
+.frame{position:relative;min-height:88vh;display:flex;align-items:flex-end;overflow:hidden}
+.frame img.bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 28%;
+  /* the grade: crushed blacks, low saturation, a touch of warmth */
+  filter:grayscale(.22) contrast(1.16) brightness(.82) saturate(.86);
+}
+.frame::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to top,var(--black) 4%,rgba(5,6,8,.72) 34%,rgba(5,6,8,.18) 62%,rgba(5,6,8,.45) 100%),
+    radial-gradient(120% 90% at 78% 30%,rgba(5,6,8,0) 30%,rgba(5,6,8,.75) 100%);
+}
+.frame .inner{position:relative;z-index:2;width:100%;padding:0 0 76px}
+.frame h1 span{display:block}
+.frame h1 span:last-child{color:var(--brass)}
+.kicker{margin:22px 0 0;max-width:54ch;font-size:17px;color:rgba(244,245,247,.78)}
+.rule{height:1px;background:var(--line);margin:34px 0}
+
+/* grain: the one texture that makes flat black read as film */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.6'/></svg>");
+}
+
+/* ---------------------------------------------------------------- controls */
+.btn{
+  display:inline-flex;align-items:center;gap:12px;border:0;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  padding:16px 26px;border-radius:2px;transition:transform .2s ease,background .2s ease,color .2s ease;
+}
+.btn-primary{background:var(--brass);color:#100C05}
+.btn-primary:hover{transform:translateY(-2px);background:#D8B570}
+.btn-ghost{background:transparent;color:var(--white);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1px var(--brass);color:var(--brass)}
+.btn .arw{font-size:15px;line-height:1}
+.field{
+  width:100%;background:var(--slate);border:1px solid var(--line);border-radius:2px;
+  color:var(--white);font-family:inherit;font-size:15px;font-weight:300;padding:15px 16px;
+  outline:none;transition:border-color .18s ease;margin-bottom:12px;
+}
+.field:focus{border-color:var(--brass)}
+.field::placeholder{color:var(--faint)}
+
+/* ---------------------------------------------------------------- sections */
+section{padding:96px 0}
+section.tight{padding:62px 0}
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:start}
+@media(max-width:860px){.split{grid-template-columns:1fr;gap:38px}}
+.stat{display:flex;gap:56px;flex-wrap:wrap;margin-top:8px}
+.stat b{display:block;font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.stat span{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.sw{border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--coal)}
+.sw i{display:block;height:76px}
+.sw p{margin:0;padding:12px 14px;font-size:12px;letter-spacing:.06em;color:var(--mid)}
+.sw p b{display:block;color:var(--white);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:11px;margin-bottom:3px}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.shots{grid-template-columns:repeat(2,1fr)}}
+.shot{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--coal)}
+.shot img{width:100%;height:100%;object-fit:cover;filter:grayscale(.22) contrast(1.16) brightness(.8) saturate(.86);transition:transform .5s ease,filter .5s ease}
+.shot:hover img{transform:scale(1.03);filter:grayscale(.05) contrast(1.1) brightness(.92) saturate(1)}
+.shot::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,6,8,.72),rgba(5,6,8,0) 55%)}
+.shot b{position:absolute;left:14px;bottom:12px;z-index:2;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--white)}
+.card{background:var(--coal);border:1px solid var(--line);border-radius:2px;padding:26px}
+.note{font-size:13.5px;color:var(--faint);letter-spacing:.02em;max-width:70ch}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);border:1px solid var(--brass-dim);padding:5px 10px;border-radius:2px;margin:0 0 26px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.two{grid-template-columns:1fr}}
+.mono{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+footer{padding:60px 0 90px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- ================================================= 1. the frame -->
+<div class="frame">
+  <img class="bg" src="mjb-hero.png" alt="Marcus J Ball">
+  <div class="wrap inner">
+    <span class="tag">Brand direction — preview only</span>
+    <h1><span>Marcus</span><span>J Ball</span></h1>
+    <p class="kicker">Private prosecutor. Campaigner. Documentary producer. Ten years spent trying to make lying in politics a criminal offence.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:34px">
+      <a class="btn btn-primary" href="#">Fund the work <span class="arw">→</span></a>
+      <a class="btn btn-ghost" href="#">The story</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================= 2. the idea -->
+<section class="wrap">
+  <div class="split">
+    <div>
+      <p class="eyebrow">The direction</p>
+      <h2>Dark, quiet, and photographic. The pictures carry it; the interface gets out of the way.</h2>
+      <p class="lead" style="margin-top:26px">Everything sits on near-black. Photographs run full width and full bleed, graded the same way every time: crushed blacks, low saturation, warm skin, a scrim underneath so text is always legible. One accent colour, brass, used for perhaps three things on a page. No gradients on buttons, no rounded pills, no shadows pretending to be depth.</p>
+      <p>Type is one family in two roles. Headlines set tight and uppercase, the way a title card is set. Body copy stays light and generously spaced so long reading is comfortable. Labels are small, wide-tracked and brass, which is the single strongest cue that a site has been designed rather than assembled.</p>
+      <div class="stat">
+        <div><b class="mono">19,085</b><span>Financial backers</span></div>
+        <div><b class="mono">53,000+</b><span>Followers</span></div>
+        <div><b class="mono">2016</b><span>Since</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:14px">Rules</p>
+      <p style="font-size:15px">One accent. Brass, never gold-plated.</p>
+      <div class="rule" style="margin:14px 0"></div>
+      <p style="font-size:15px">Corners at 2px. Nothing rounder.</p>
+      <div class="rule" style="margin:14px 0"></div>
+      <p style="font-size:15px">Motion is a fade, 200 to 400ms. Nothing bounces.</p>
+      <div class="rule" style="margin:14px 0"></div>
+      <p style="font-size:15px">Every photograph graded identically.</p>
+      <div class="rule" style="margin:14px 0"></div>
+      <p style="font-size:15px;margin:0">Black is the page. White is the ink. Brass is the pointer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= 3. palette -->
+<section class="wrap tight">
+  <p class="eyebrow">Palette</p>
+  <div class="swatches">
+    <div class="sw"><i style="background:#050608"></i><p><b>Ground</b>#050608</p></div>
+    <div class="sw"><i style="background:#0c0e12"></i><p><b>Surface</b>#0C0E12</p></div>
+    <div class="sw"><i style="background:#151920"></i><p><b>Field</b>#151920</p></div>
+    <div class="sw"><i style="background:#C6A15B"></i><p><b>Brass</b>#C6A15B</p></div>
+    <div class="sw"><i style="background:#F4F5F7"></i><p><b>Ink</b>#F4F5F7</p></div>
+  </div>
+  <p class="note" style="margin-top:18px">Today's site uses #0b0c0f and a lighter gold, #c8a24a. The change is small on paper and large on screen: a deeper ground makes photographs look lit rather than printed, and a slightly duller brass stops the accent reading as decoration.</p>
+</section>
+
+<!-- ================================================= 4. type -->
+<section class="wrap tight">
+  <p class="eyebrow">Type</p>
+  <div class="split">
+    <div>
+      <h1 style="font-size:clamp(34px,5vw,64px)">Marcus J Ball</h1>
+      <h2 style="margin-top:22px">Ten years, one question: can you prosecute a politician for lying?</h2>
+      <p style="margin-top:22px">Body copy sits at 16.5px, weight 300, line height 1.65, capped at about 62 characters a line. It is quiet on purpose. The work is heavy enough without the typography shouting along with it.</p>
+      <p class="eyebrow" style="margin-top:30px">Work covered by</p>
+    </div>
+    <div class="card">
+      <p style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:16px">Archivo</p>
+      <p style="font-size:38px;line-height:1.1;color:var(--white);margin:0 0 6px;font-weight:600;letter-spacing:-.02em">Aa Bb Cc</p>
+      <p style="font-size:15px;margin:0 0 18px">One family, four weights: 300 for reading, 500 and 600 for headings, 600 wide-tracked for labels.</p>
+      <div class="rule"></div>
+      <p style="font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0">Label / 600 / .34em</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= 5. photography -->
+<section class="wrap tight">
+  <p class="eyebrow">Photography</p>
+  <div class="shots">
+    <div class="shot"><img src="photos/p01.jpg" alt=""><b>Portrait</b></div>
+    <div class="shot"><img src="photos/p12.jpg" alt=""><b>Working</b></div>
+    <div class="shot"><img src="photos/p27.jpg" alt=""><b>Court</b></div>
+  </div>
+  <p class="note" style="margin-top:18px">These are your existing files with the grade applied in the browser, so you can see the intent. Done properly the grade belongs in the photographs themselves: export at 2400px on the long edge, sRGB, with blacks crushed, saturation pulled back, skin kept warm and a light grain. Hover one to see it come up out of the dark, which is the only motion on the page.</p>
+</section>
+
+<!-- ================================================= 6. controls -->
+<section class="wrap tight">
+  <p class="eyebrow">Controls</p>
+  <div class="two">
+    <div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px">
+        <button class="btn btn-primary">Fund the work <span class="arw">→</span></button>
+        <button class="btn btn-ghost">Read the story</button>
+      </div>
+      <p class="note">Primary is solid brass and appears once per screen. Everything else is a hairline. Both are square to 2px, because rounded buttons read as software and this is not software.</p>
+    </div>
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:16px">Contact</p>
+      <div style="display:flex;gap:12px"><input class="field" placeholder="First name"><input class="field" placeholder="Last name"></div>
+      <input class="field" placeholder="Email address">
+      <textarea class="field" rows="4" placeholder="Your message"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <span style="font-size:13px;color:var(--faint)">0 / 200 words</span>
+        <button class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  Preview page. Not linked from the site. Nothing here is live yet.
+</footer>
+</body>
+</html>

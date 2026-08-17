@@ -188,19 +188,6 @@ nav a.nav-cta{background:var(--gold);color:var(--ink);padding:7px 15px;border-ra
 nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 20px rgba(200,162,74,.45)}
 </style>
 <style>
-#mjb-ball{position:fixed;top:0;left:0;z-index:2;pointer-events:none;will-change:transform;filter:drop-shadow(0 5px 13px rgba(0,0,0,.45))}
-#mjb-ball svg{width:100%;height:100%;display:block}
-.mjb-blast{position:fixed;width:0;height:0;z-index:11;pointer-events:none}
-.mjb-flash{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#c8a24a 42%,rgba(200,162,74,0) 70%);animation:mjbFlash .45s ease-out forwards}
-.mjb-ring{position:absolute;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;border:2.5px solid #c8a24a;animation:mjbRing .62s ease-out forwards}
-.mjb-ring2{border-color:#fff;animation-delay:.09s}
-.mjb-spark{position:absolute;left:-1.5px;top:-2px;width:3px;height:15px;border-radius:2px;background:linear-gradient(#fff,#c8a24a);transform-origin:50% 0;animation:mjbSpark .55s ease-out forwards}
-@keyframes mjbFlash{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.7);opacity:0}}
-@keyframes mjbRing{0%{transform:scale(.3);opacity:.95}100%{transform:scale(3.1);opacity:0}}
-@keyframes mjbSpark{0%{transform:rotate(var(--a)) translateY(2px) scaleY(1);opacity:1}100%{transform:rotate(var(--a)) translateY(30px) scaleY(.35);opacity:0}}
-@media(prefers-reduced-motion:reduce){#mjb-ball,.mjb-blast{display:none}}
-</style>
-<style>
 /* photo Expand lightbox */
 .tile img{cursor:zoom-in}
 .tile-acts{display:flex;border-top:1px solid rgba(255,255,255,.1)}
@@ -217,7 +204,81 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
 @media(prefers-reduced-motion:reduce){.hero .herobg2{transition:none}}
 </style>
 <style>
-.mjb-trail{position:fixed;top:0;left:0;height:16px;z-index:1;pointer-events:none;background:linear-gradient(to left,rgba(255,255,255,.5),rgba(255,255,255,0));transform-origin:100% 50%;will-change:transform,width,opacity}
+/* ============================================================
+   MOBILE PASS (17 Aug 2026)
+   Phones get a menu button instead of a squashed three-row nav, tap targets at the
+   44px minimum Apple and the WCAG target-size guidance both ask for, 16px form fields
+   so iOS stops zooming when you tap one, and no body text under 12px.
+   ============================================================ */
+.navtoggle{display:none}
+@media(max-width:760px){
+  header{padding:12px 16px;flex-wrap:nowrap;gap:0;align-items:center;justify-content:flex-start}
+  .navtoggle{display:flex;flex-direction:column;justify-content:center;gap:5px;order:2;
+    margin-left:auto;width:46px;height:46px;padding:0 11px;background:none;border:0;
+    cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .navtoggle span{display:block;height:2px;width:100%;background:#f2f2f2;border-radius:2px;
+    transition:transform .22s ease,opacity .18s ease}
+  body.navopen .navtoggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  body.navopen .navtoggle span:nth-child(2){opacity:0}
+  body.navopen .navtoggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .brand{order:1;font-size:15px;letter-spacing:.2em;gap:9px;min-height:46px;align-items:center}
+  header nav{position:fixed;left:0;right:0;top:70px;z-index:70;display:none;
+    flex-direction:column;align-items:stretch;gap:0;width:auto;margin:0;
+    padding:8px 0 14px;background:rgba(11,12,15,.98);
+    border-top:1px solid rgba(255,255,255,.10);border-bottom:1px solid rgba(200,162,74,.35);
+    box-shadow:0 18px 40px rgba(0,0,0,.55);max-height:calc(100vh - 70px);overflow-y:auto}
+  body.navopen header nav{display:flex}
+  header nav a,header nav button{display:flex;align-items:center;width:100%;
+    min-height:52px;padding:0 20px;margin:0;font-size:15px;letter-spacing:.10em;
+    text-align:left;border-bottom:1px solid rgba(255,255,255,.07);border-radius:0;
+    background:none;color:#f2f2f2;opacity:1}
+  header nav a:last-child{border-bottom:0}
+  header nav a.nav-cta{margin:12px 20px 2px;width:auto;justify-content:center;min-height:52px;
+    font-size:14px;letter-spacing:.10em;border-radius:999px;background:var(--gold);color:var(--ink)}
+  /* the hero starts below the single-row header now */
+  .covered{padding-top:calc(58vh + 14px)}
+
+  /* thumb-sized: panel controls, gallery actions, press logos, subscribe */
+  .pp-back,.pp-x,.tact,.sub-row button,.sub-row input,.covered .cta,.mjb-x{min-height:46px}
+  .pp-back{display:inline-flex;align-items:center;padding:0 4px}
+  .tact{padding:14px 11px;font-size:14px}
+  .pi{display:flex;align-items:center;justify-content:center;min-height:46px;padding:6px 4px}
+
+  /* 16px on every field, or iOS zooms the page in when you tap it */
+  input,textarea,select,.sub-row input{font-size:16px !important}
+  .sub-row button{font-size:15px}
+
+  /* nothing smaller than 12px, and give small caps a little air */
+  .metrics .lab,.metrics span,.pcountry,.pdate,.copy{font-size:12px !important;line-height:1.5}
+  .bio{font-size:16px;line-height:1.72}
+  .metrics{gap:26px}
+  /* inner scrollers behave like the page, not like a trap */
+  .pp-body,#leftpanel .pp-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  /* the spam honeypot must stay invisible: it is not a real field */
+  .cf-hp{min-height:0 !important;height:0 !important;font-size:0 !important;padding:0 !important;border:0 !important}
+  #copy-email{min-height:44px;padding:0 16px}
+  /* social icons: 27px was a thumb-miss, give them a 44px target without redrawing them */
+  .socials-left{gap:6px}
+  .socials-left a{display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:8px;box-sizing:border-box}
+  .socials-left a svg{width:100%;height:100%}
+}
+/* Tablets keep the desktop poster layout, but a finger still needs something to hit. */
+@media(min-width:761px) and (max-width:900px){
+  nav a,nav button{padding:10px 0;line-height:1.2}
+  nav{gap:6px 16px}
+  .pi{display:inline-flex;align-items:center;min-height:42px}
+  .tact{min-height:44px}
+  .socials-left{gap:6px}
+  .socials-left a{display:inline-flex;align-items:center;justify-content:center;
+    width:42px;height:42px;padding:7px;box-sizing:border-box}
+  .socials-left a svg{width:100%;height:100%}
+}
+@media(max-width:420px){
+  .brand{font-size:13.5px;letter-spacing:.16em}
+  .metrics{gap:18px}
+  header nav a,header nav button{font-size:14.5px}
+}
 </style>
 </head>
 <body>
@@ -225,8 +286,10 @@ nav a.nav-cta:hover{color:var(--ink);opacity:1;transform:translateY(-1px);filter
   <div class="herobg"></div><div class="herobg2"></div>
   <div class="grad"></div><div class="vig"></div>
   <header>
+    <button class="navtoggle" type="button" aria-label="Menu" aria-expanded="false"
+      aria-controls="mainnav" onclick="mjbToggleNav()"><span></span><span></span><span></span></button>
     <a class="brand" href="index.html"><svg class="brandmark" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="hm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#hm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>MARCUS J BALL</a>
-    <nav>
+    <nav id="mainnav">
       <button onclick="openLeft('bio')">Biography</button>
       <button onclick="openLeft('testimonials')">Testimonials</button>
       <button onclick="openLeft('press')">Press</button>
@@ -511,48 +574,40 @@ function renderPress(box){
 })();
 </script>
 <script>
-/* MJB ball -- home only; rocket-powered: constant speed, straight lines, reflects off all four
-   walls, never loses energy (no gravity), with a subtle white jet out the back. Docks to the logo
-   on inner pages; frame-rate independent. */
+/* Mobile menu: open and shut, close on choosing something, on Escape, and if the
+   window grows back to desktop width. */
+function mjbToggleNav(force){
+  var open = (typeof force==='boolean') ? force : !document.body.classList.contains('navopen');
+  document.body.classList.toggle('navopen', open);
+  var b=document.querySelector('.navtoggle');
+  if(b) b.setAttribute('aria-expanded', open?'true':'false');
+}
 (function(){
-  try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
-  var ball=document.createElement('div'); ball.id='mjb-ball'; ball.setAttribute('aria-hidden','true'); ball.style.display='none';
-  ball.innerHTML='<svg viewBox="0 0 100 100"><defs><radialGradient id="bbm" cx="36%" cy="30%" r="75%"><stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#d7deea"/><stop offset="100%" stop-color="#8b94a6"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bbm)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/><ellipse cx="38" cy="36" rx="15" ry="10" fill="#ffffff" opacity="0.6"/></svg>';
-  var trail=document.createElement('div'); trail.className='mjb-trail'; trail.setAttribute('aria-hidden','true'); trail.style.display='none';
-  var bm=null, SIZE=26, R=13, TH=16, sx=72, sy=48, x=72, y=48, running=false, last=0, launchT=null;
-  var SPEED=4.8, ANG=33*Math.PI/180, vx=SPEED*Math.cos(ANG), vy=SPEED*Math.sin(ANG);
-  function place(){ ball.style.transform='translate('+(x-R)+'px,'+(y-R)+'px)'; }
-  function drawJet(){ var len=SPEED*6, ang=Math.atan2(vy,vx)*180/Math.PI; trail.style.width=len+'px'; trail.style.opacity='0.2'; trail.style.transform='translate('+(x-len)+'px,'+(y-TH/2)+'px) rotate('+ang+'deg)'; }
-  function measure(){ bm=document.querySelector('.brandmark'); if(bm){ var r=bm.getBoundingClientRect(); if(r.width){ SIZE=Math.round(r.width); R=SIZE/2; sx=r.left+r.width/2; sy=r.top+r.height/2; ball.style.width=SIZE+'px'; ball.style.height=SIZE+'px'; } } TH=Math.max(10,Math.round(SIZE*0.6)); trail.style.height=TH+'px'; trail.style.borderRadius=(TH/2)+'px'; }
-  function isDrawer(){ var lp=document.getElementById('leftpanel'); return !!(lp && lp.classList.contains('open')); }
-  function blast(cx,cy){ var d=document.createElement('div'); d.className='mjb-blast'; d.style.left=cx+'px'; d.style.top=cy+'px'; var html='<span class="mjb-flash"></span><span class="mjb-ring"></span><span class="mjb-ring mjb-ring2"></span>'; for(var i=0;i<360;i+=45){ html+='<i class="mjb-spark" style="--a:'+i+'deg"></i>'; } d.innerHTML=html; document.body.appendChild(d); setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 850); }
-  function frame(t){
-    requestAnimationFrame(frame);
-    if(!running) return;
-    if(!last){ last=t; return; }
-    var dt=(t-last)/16.6667; last=t; if(dt>3.2) dt=3.2;
-    var W=window.innerWidth, H=window.innerHeight;
-    x+=vx*dt; y+=vy*dt;
-    if(x+R>W){ x=W-R; vx=-Math.abs(vx); } else if(x-R<0){ x=R; vx=Math.abs(vx); }
-    if(y+R>H){ y=H-R; vy=-Math.abs(vy); } else if(y-R<0){ y=R; vy=Math.abs(vy); }
-    place(); drawJet();
+  var nav=document.getElementById('mainnav');
+  if(nav) nav.addEventListener('click', function(e){
+    if(e.target.closest('a,button')) mjbToggleNav(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') mjbToggleNav(false);
+  });
+  window.addEventListener('resize', function(){
+    if(window.innerWidth>760) mjbToggleNav(false);
+  });
+})();
+</script>
+<script>
+/* The ball no longer flies: it sits beside the wordmark in the header and stays there.
+   All that survives here is the hero photo swap when a panel opens or closes. */
+(function(){
+  function wire(){
+    if(typeof window.openLeft==='function'){ var _o=window.openLeft;
+      window.openLeft=function(kind){ if(window.setHeroBg) window.setHeroBg(kind);
+        return _o.apply(this,arguments); }; }
+    if(typeof window.closeLeft==='function'){ var _c=window.closeLeft;
+      window.closeLeft=function(){ var r=_c.apply(this,arguments);
+        if(window.setHeroBg) window.setHeroBg('home'); return r; }; }
   }
-  function dock(){ clearTimeout(launchT); running=false; ball.style.display='none'; trail.style.display='none'; if(bm) bm.style.visibility=''; }
-  function launch(delay){
-    if(isDrawer() || running) return;
-    clearTimeout(launchT); measure();
-    x=sx; y=sy; vx=SPEED*Math.cos(ANG); vy=SPEED*Math.sin(ANG); last=0; place();
-    ball.style.display=''; if(bm) bm.style.visibility='';
-    launchT=setTimeout(function(){ if(isDrawer()){ dock(); return; } if(bm) bm.style.visibility='hidden'; blast(sx,sy); trail.style.display=''; last=0; running=true; }, delay);
-  }
-  function start(){
-    document.body.appendChild(trail); document.body.appendChild(ball); measure(); place();
-    if(typeof window.openLeft==='function'){ var _o=window.openLeft; window.openLeft=function(kind){ dock(); if(window.setHeroBg) window.setHeroBg(kind); return _o.apply(this,arguments); }; }
-    if(typeof window.closeLeft==='function'){ var _c=window.closeLeft; window.closeLeft=function(){ var r=_c.apply(this,arguments); launch(700); if(window.setHeroBg) window.setHeroBg('home'); return r; }; }
-    requestAnimationFrame(frame);
-    if(isDrawer()) dock(); else launch(3000);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wire); else wire();
 })();
 </script>
 <script>

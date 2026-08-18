@@ -541,6 +541,7 @@ function fallbackCopy(text){
 /* -- URL routing: each panel gets a real, shareable path -- */
 var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs', press:'/press', contact:'/contact' };
 var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photographs':'photos', '/press':'press', '/contact':'contact' };
+window.PATH_TO_KIND=PATH_TO_KIND;
 function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
   try{ document.body.classList.add('lp-open');
@@ -700,7 +701,7 @@ function mjbToggleNav(force){
   A.style.opacity='1'; B.style.opacity='0';
   window.setHeroBg=function(kind){ var sl=BG[kind]; if(!sl){ kind='home'; sl=BG.home; } if(kind===curKind) return; curKind=kind; var inc=layers[1-active]; apply(inc,sl); inc.style.opacity='1'; layers[active].style.opacity='0'; active=1-active; };
   var lp=document.getElementById('leftpanel');
-  if(lp && lp.classList.contains('open')){ var pth=(location.pathname||'').replace(/\/+$/,''); var map={'/biography':'bio','/photographs':'photos','/press':'press','/contact':'contact'}; if(map[pth]) window.setHeroBg(map[pth]); }
+  if(lp && lp.classList.contains('open')){ var pth=(location.pathname||'').replace(/\/+$/,''); var map=window.PATH_TO_KIND||{'/biography':'bio','/testimonials':'testimonials','/photographs':'photos','/press':'press','/contact':'contact'}; if(map[pth]) window.setHeroBg(map[pth]); }
 })();
 </script>
 </body>

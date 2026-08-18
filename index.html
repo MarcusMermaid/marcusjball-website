@@ -55,6 +55,20 @@
   .phead{display:block;font-size:14.5px;color:#fff;line-height:1.5}
   .prow:hover .phead{color:var(--gold)}
   @media(max-width:720px){.presspanel{left:22px;right:22px;width:auto;max-width:none}}
+  /* testimonials: the panel is short now, so pin it back to the height the title used to sit at */
+  @media(min-width:901px){body.lp-k-testimonials .presspanel{top:8vh;bottom:auto;transform:none;
+    max-height:none}}
+  /* let the faces come through: a much lighter scrim on the pages whose picture is the point */
+  @media(min-width:901px){
+    body.lp-k-testimonials .hero .grad{background:linear-gradient(95deg,rgba(5,7,12,.86) 0%,
+      rgba(5,7,12,.60) 22%,rgba(5,7,12,.26) 40%,rgba(5,7,12,.06) 58%,rgba(5,7,12,0) 76%)}
+    body.lp-k-testimonials .hero .vig{background:
+      radial-gradient(120% 110% at 60% 40%,rgba(0,0,0,0) 40%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.52) 100%),
+      linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.06) 12%,rgba(0,0,0,0) 26%),
+      linear-gradient(0deg,#05070C 0%,rgba(5,7,12,.68) 14%,rgba(5,7,12,0) 32%)}
+    body.lp-k-contact .hero .grad{background:linear-gradient(95deg,rgba(5,7,12,.72) 0%,
+      rgba(5,7,12,.46) 20%,rgba(5,7,12,.20) 38%,rgba(5,7,12,.05) 56%,rgba(5,7,12,0) 74%)}
+  }
   /* contact: drop the box to the foot of the page so the interview photograph is not covered */
   @media(min-width:901px){body.lp-contact .presspanel{top:auto;bottom:54px;transform:none;width:54%;max-width:720px;max-height:none}}
   .photo-note{position:absolute;right:16px;bottom:14px;z-index:5;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32)}
@@ -224,13 +238,13 @@
 @media(max-width:600px){.mjb-sq{gap:0}.mjb-sqcol:nth-child(2){display:none}.mjb-sqcol{max-width:none}}
 @media(prefers-reduced-motion:reduce){.mjb-sqcolinner{animation:none}}
   /* wide screens: the quotes run along the bottom shadow instead of stacking up the page */
-  #tq-strip{position:fixed;left:0;right:0;bottom:56px;height:150px;z-index:8;overflow:hidden;display:flex;align-items:flex-end;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
+  #tq-strip{position:fixed;left:0;right:0;bottom:48px;height:178px;z-index:8;overflow:hidden;display:flex;align-items:flex-end;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
   #tq-strip .tq-row{display:flex;gap:14px;will-change:transform;animation:tqRun linear infinite;pointer-events:auto}
   #tq-strip:hover .tq-row{animation-play-state:paused}
   @keyframes tqRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  .tq-card{flex:0 0 300px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:2px;padding:12px 14px;transition:background .25s ease,border-color .25s ease}
+  .tq-card{flex:0 0 330px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:2px;padding:16px 18px;transition:background .25s ease,border-color .25s ease}
   .tq-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
-  .tq-card p{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.85);margin:0 0 6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .tq-card p{font-size:14.5px;line-height:1.62;color:rgba(255,255,255,.9);margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .tq-name{font-size:11.5px;letter-spacing:.05em;color:var(--gold)}
   @media(max-width:900px){#tq-strip{display:none}}
 nav a.nav-cta{background:#fff;color:#05070C;padding:10px 20px;border-radius:2px;font-weight:600;opacity:1;letter-spacing:.16em;box-shadow:none;transition:transform .2s ease,background .2s ease}
@@ -346,7 +360,7 @@ nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);backgroun
       <a href="https://www.execprosec.com" target="_blank" rel="noopener">ExecProsec</a>
       <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
       <button onclick="openLeft('contact')">Contact</button>
-      <a class="nav-cta" href="https://www.execprosec.com/story/1" target="_blank" rel="noopener">Fund Marcus&rsquo;s work</a>
+      <a class="nav-cta" href="https://www.execprosec.com" target="_blank" rel="noopener">Fund Marcus&rsquo;s work</a>
     </nav>
   </header>
 
@@ -558,6 +572,8 @@ function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
   try{ tqStripKill(); }catch(e){}
   try{ document.body.classList.add('lp-open');
+       document.body.className=document.body.className.replace(/(^|\s)lp-k-\S+/g,' ').trim();
+       document.body.classList.add('lp-k-'+kind);
        document.body.classList.toggle('lp-contact', kind==='contact'); }catch(e){}
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
   document.getElementById('leftTitle').textContent=cfg.title;
@@ -568,7 +584,8 @@ function openLeft(kind, fromRoute){
 }
 function closeLeft(fromRoute){
   try{ tqStripKill(); }catch(e){}
-  try{ document.body.classList.remove('lp-open'); document.body.classList.remove('lp-contact'); }catch(e){}
+  try{ document.body.classList.remove('lp-open'); document.body.classList.remove('lp-contact');
+       document.body.className=document.body.className.replace(/(^|\s)lp-k-\S+/g,' ').trim(); }catch(e){}
   document.getElementById('leftpanel').classList.remove('open');
   document.querySelector('.covered').style.display='';
   if(!fromRoute){ try{ history.pushState({}, '', '/'); }catch(e){} }
@@ -723,7 +740,7 @@ function mjbToggleNav(force){
   var BG={
     home:{img:'mjb-home.jpg',size:'cover',pos:'50% 32%',mpos:'50% 30%'},
     bio:{img:'photos/lectern-portrait.jpg',size:'cover',pos:'76% 30%',mpos:'72% 26%'},
-    testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 50%',mpos:'62% 50%'},
+    testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 42%',mpos:'62% 46%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},
     contact:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
     photos:{img:'photos/room-from-the-back.jpg',size:'cover',pos:'50% 46%',mpos:'54% 44%'}

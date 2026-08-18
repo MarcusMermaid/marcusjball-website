@@ -58,7 +58,8 @@
   .photo-note{position:absolute;right:16px;bottom:14px;z-index:5;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32)}
   /* header */
   header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px 56px;pointer-events:none;background:rgba(3,4,7,.94);border-bottom:1px solid rgba(255,255,255,.07)}
-  header .brand,header nav a,header nav button{pointer-events:auto}
+  header .brand,header nav a,header nav button,header .navtoggle{pointer-events:auto}
+  .hero .herobg,.hero .grad,.hero .vig{pointer-events:none}
   .brand{display:inline-flex;align-items:center;gap:14px;font-size:19px;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:#fff;text-decoration:none;cursor:pointer}
   .brandmark{width:25px;height:25px;flex:none}
   .bio{font-size:16.5px;line-height:1.74;color:rgba(255,255,255,.82);max-width:660px;margin:0 auto 26px;font-weight:300}
@@ -688,11 +689,11 @@ function mjbToggleNav(force){
   var A=document.querySelector('.hero .herobg'), B=document.querySelector('.hero .herobg2'); if(!A||!B) return;
   var BG={
     home:{img:'mjb-home.jpg',size:'cover',pos:'50% 32%',mpos:'50% 30%'},
-    bio:{img:'photos/studio-portrait-bw.jpg',size:'cover',pos:'63% 48%',mpos:'63% 44%'},
-    testimonials:{img:'photos/event-audience-1.jpg',size:'cover',pos:'58% 42%',mpos:'62% 40%'},
+    bio:{img:'photos/lectern-portrait.jpg',size:'cover',pos:'76% 30%',mpos:'72% 26%'},
+    testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 50%',mpos:'62% 50%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},
     contact:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
-    photos:{img:'photos/event-room-wide.jpg',size:'cover',pos:'44% 50%',mpos:'36% 50%'}
+    photos:{img:'photos/room-from-the-back.jpg',size:'cover',pos:'50% 30%',mpos:'54% 28%'}
   };
   function apply(el,sl){ var mob=window.innerWidth<=900; el.style.backgroundColor='#05070C'; el.style.backgroundImage="url('"+sl.img+"')"; el.style.backgroundRepeat='no-repeat'; el.style.backgroundSize=mob?'cover':sl.size; el.style.backgroundPosition=mob?sl.mpos:sl.pos; }
   var layers=[A,B], active=0, curKind='home';

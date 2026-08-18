@@ -55,6 +55,8 @@
   .phead{display:block;font-size:14.5px;color:#fff;line-height:1.5}
   .prow:hover .phead{color:var(--gold)}
   @media(max-width:720px){.presspanel{left:22px;right:22px;width:auto;max-width:none}}
+  /* contact: drop the box to the foot of the page so the interview photograph is not covered */
+  @media(min-width:901px){body.lp-contact .presspanel{top:auto;bottom:54px;transform:none;width:54%;max-width:720px;max-height:none}}
   .photo-note{position:absolute;right:16px;bottom:14px;z-index:5;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32)}
   /* header */
   header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px 56px;pointer-events:none;background:rgba(3,4,7,.94);border-bottom:1px solid rgba(255,255,255,.07)}
@@ -221,6 +223,16 @@
 @media(max-width:900px){.mjb-sqcol:nth-child(3){display:none}}
 @media(max-width:600px){.mjb-sq{gap:0}.mjb-sqcol:nth-child(2){display:none}.mjb-sqcol{max-width:none}}
 @media(prefers-reduced-motion:reduce){.mjb-sqcolinner{animation:none}}
+  /* wide screens: the quotes run along the bottom shadow instead of stacking up the page */
+  #tq-strip{position:fixed;left:0;right:0;bottom:56px;height:150px;z-index:8;overflow:hidden;display:flex;align-items:flex-end;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
+  #tq-strip .tq-row{display:flex;gap:14px;will-change:transform;animation:tqRun linear infinite;pointer-events:auto}
+  #tq-strip:hover .tq-row{animation-play-state:paused}
+  @keyframes tqRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .tq-card{flex:0 0 300px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:2px;padding:12px 14px;transition:background .25s ease,border-color .25s ease}
+  .tq-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
+  .tq-card p{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.85);margin:0 0 6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .tq-name{font-size:11.5px;letter-spacing:.05em;color:var(--gold)}
+  @media(max-width:900px){#tq-strip{display:none}}
 nav a.nav-cta{background:#fff;color:#05070C;padding:10px 20px;border-radius:2px;font-weight:600;opacity:1;letter-spacing:.16em;box-shadow:none;transition:transform .2s ease,background .2s ease}
 nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);background:rgba(255,255,255,.86)}
 </style>
@@ -544,6 +556,7 @@ var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photogr
 window.PATH_TO_KIND=PATH_TO_KIND;
 function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
+  try{ tqStripKill(); }catch(e){}
   try{ document.body.classList.add('lp-open');
        document.body.classList.toggle('lp-contact', kind==='contact'); }catch(e){}
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
@@ -554,6 +567,7 @@ function openLeft(kind, fromRoute){
   if(!fromRoute){ try{ history.pushState({kind:kind}, '', PATHS[kind]||'/'); }catch(e){} }
 }
 function closeLeft(fromRoute){
+  try{ tqStripKill(); }catch(e){}
   try{ document.body.classList.remove('lp-open'); document.body.classList.remove('lp-contact'); }catch(e){}
   document.getElementById('leftpanel').classList.remove('open');
   document.querySelector('.covered').style.display='';
@@ -568,6 +582,23 @@ document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('clic
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeM();closeLeft();}});
 routeFromPath();
 
+function tqStripKill(){ var el=document.getElementById('tq-strip'); if(el) el.remove(); }
+function tqStripBuild(Q,esc2){
+  tqStripKill();
+  var pick=[],i;
+  for(i=0;i<Q.length && pick.length<60;i+=4) pick.push(Q[i]);
+  var cards='';
+  for(i=0;i<pick.length;i++)
+    cards+='<div class="tq-card"><p>'+esc2(pick[i].q)+'</p>'
+          +'<div class="tq-name">— '+esc2(pick[i].n)+'</div></div>';
+  var el=document.createElement('div');
+  el.id='tq-strip';
+  el.innerHTML='<div class="tq-row">'+cards+cards+'</div>';
+  document.body.appendChild(el);
+  /* match the pace of the vertical wall it replaces: about 36 pixels a second */
+  var row=el.firstChild, w=row.scrollWidth/2;
+  row.style.animationDuration=Math.max(60,Math.round(w/36.5))+'s';
+}
 function renderTestimonials(box){
   var Q=window.SUPPORTER_QUOTES||[];
   if(!Q.length){box.innerHTML='<p class="bio-p">Testimonials unavailable.</p>';return;}
@@ -576,6 +607,7 @@ function renderTestimonials(box){
   intro.textContent='19,085 people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce && window.innerWidth>900){ tqStripBuild(Q,esc2); return; }
   var NCOL=3,cols=[],c;for(c=0;c<NCOL;c++)cols.push('');
   for(var i=0;i<Q.length;i++){cols[i%NCOL]+='<div class="mjb-sqcard"><p>'+esc2(Q[i].q)+'</p><div class="mjb-sqname">\u2014 '+esc2(Q[i].n)+'</div></div>';}
   var wrap=document.createElement('div');
@@ -694,7 +726,7 @@ function mjbToggleNav(force){
     testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 50%',mpos:'62% 50%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},
     contact:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
-    photos:{img:'photos/room-from-the-back.jpg',size:'cover',pos:'50% 30%',mpos:'54% 28%'}
+    photos:{img:'photos/room-from-the-back.jpg',size:'cover',pos:'50% 46%',mpos:'54% 44%'}
   };
   function apply(el,sl){ var mob=window.innerWidth<=900; el.style.backgroundColor='#05070C'; el.style.backgroundImage="url('"+sl.img+"')"; el.style.backgroundRepeat='no-repeat'; el.style.backgroundSize=mob?'cover':sl.size; el.style.backgroundPosition=mob?sl.mpos:sl.pos; }
   var layers=[A,B], active=0, curKind='home';

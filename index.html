@@ -13,9 +13,9 @@
        The background locks onto these coordinates so, no matter what else changes
        on the site, his face stays consistently and pleasingly placed. If the hero
        image (mjb-bg.jpg) is ever replaced, update ONLY these three values. */
-    --hero-zoom:118%;  /* how far to zoom in on the face (background-size height) */
-    --hero-x:50%;      /* face horizontal focal position */
-    --hero-y:32%}       /* vertical focal: top of head sits just under the titles (clear gap), only the tops of the audience peek in at the bottom */
+    --hero-zoom:100%;  /* how far to zoom in on the face (background-size height) */
+    --hero-x:62%;      /* face horizontal focal position */
+    --hero-y:34%}       /* vertical focal: top of head sits just under the titles (clear gap), only the tops of the audience peek in at the bottom */
   @font-face{font-family:'Inter';src:url('fonts/inter-latin.woff2') format('woff2');font-weight:300 700;font-style:normal;font-display:swap}
   @font-face{font-family:'Instrument Serif';src:url('fonts/instrument-serif-latin.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
   html,body{height:100%}
@@ -68,6 +68,8 @@
   .socials-left a:hover{opacity:1;transform:translateY(-2px)}
   .socials-left svg{width:27px;height:27px;display:block;fill:#fff}
   /* newsletter signup — the site's call to action */
+  body.lp-open .subscribe{display:none}
+  body.lp-open.lp-contact .subscribe{display:block}
   .subscribe{position:absolute;z-index:9;right:46px;bottom:54px;width:330px;max-width:34vw;background:rgba(8,10,14,.58);border:1px solid rgba(255,255,255,.18);border-radius:2px;padding:20px;text-align:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
   .subscribe .lab{margin:0 0 14px;font-size:14.5px;font-weight:600;color:#fff;letter-spacing:.01em;text-transform:none;line-height:1.35}
   .sub-note{font-size:13px;color:var(--soft);max-width:430px;margin:14px auto 16px;line-height:1.55}
@@ -540,6 +542,8 @@ var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs
 var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photographs':'photos', '/press':'press', '/contact':'contact' };
 function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
+  try{ document.body.classList.add('lp-open');
+       document.body.classList.toggle('lp-contact', kind==='contact'); }catch(e){}
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
   document.getElementById('leftTitle').textContent=cfg.title;
   body.innerHTML=''; body.scrollTop=0;
@@ -548,6 +552,7 @@ function openLeft(kind, fromRoute){
   if(!fromRoute){ try{ history.pushState({kind:kind}, '', PATHS[kind]||'/'); }catch(e){} }
 }
 function closeLeft(fromRoute){
+  try{ document.body.classList.remove('lp-open'); document.body.classList.remove('lp-contact'); }catch(e){}
   document.getElementById('leftpanel').classList.remove('open');
   document.querySelector('.covered').style.display='';
   if(!fromRoute){ try{ history.pushState({}, '', '/'); }catch(e){} }
@@ -684,7 +689,7 @@ function mjbToggleNav(force){
   var BG={
     home:{img:'mjb-home.jpg',size:'cover',pos:'50% 32%',mpos:'50% 30%'},
     bio:{img:'photos/studio-portrait-bw.jpg',size:'cover',pos:'63% 48%',mpos:'63% 44%'},
-    testimonials:{img:'photos/event-audience-2.jpg',size:'cover',pos:'40% 50%',mpos:'34% 50%'},
+    testimonials:{img:'photos/event-audience-1.jpg',size:'cover',pos:'58% 42%',mpos:'62% 40%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},
     contact:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
     photos:{img:'photos/event-room-wide.jpg',size:'cover',pos:'44% 50%',mpos:'36% 50%'}

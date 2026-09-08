@@ -199,12 +199,19 @@
   .bio-p{font-size:17px;line-height:1.7;color:rgba(255,255,255,.86);margin:0 0 16px}
   .pp-note{font-size:12.5px;color:var(--soft);margin:0 0 14px}
   .pp-gal{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  /* the page photograph, phones only: under the title, above the first paragraph */
+  .pp-photo{display:none}
+  @media(max-width:760px){
+    .pp-photo{display:block;height:clamp(190px,34vh,290px);margin:0 -18px 20px;background:#05070C 50% 50%/cover no-repeat}
+    .pp-photo[hidden]{display:none}
+  }
   /* ── MOBILE: turn the fixed desktop poster into a scrolling page ── */
   @media(max-width:760px){
     html,body{height:auto;overflow-y:auto;overflow-x:hidden}
     .hero{height:auto;min-height:auto;overflow:visible}
     .hero .herobg,.hero .grad,.hero .vig{bottom:auto;height:58vh}
-    .hero .herobg{background-size:cover;background-position:var(--hero-x) var(--hero-y)}
+    /* phones crop hard: frame on the lectern, not the middle of the room */
+    .hero .herobg{background-size:cover;background-position:100% 30%}
     .hero .grad{background:linear-gradient(180deg,rgba(5,7,12,.72) 0%,rgba(5,7,12,.06) 24%,rgba(5,7,12,.62) 70%,#05070C 100%)}
     header{padding:15px 18px;flex-wrap:wrap;gap:4px 10px}
     .brand{font-size:15px;letter-spacing:.22em;gap:9px}.brandmark{width:18px;height:18px}
@@ -428,6 +435,7 @@ nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);backgroun
       <h2 id="leftTitle">Biography</h2>
       <button class="pp-back" onclick="closeLeft()">← Back</button>
     </div>
+    <div class="pp-photo" id="leftPhoto" hidden></div>
     <div class="pp-body" id="leftBody"></div>
   </div>
 
@@ -578,14 +586,28 @@ function openLeft(kind, fromRoute){
   var panel=document.getElementById('leftpanel'), cov=document.querySelector('.covered'), body=document.getElementById('leftBody');
   document.getElementById('leftTitle').textContent=cfg.title;
   body.innerHTML=''; body.scrollTop=0;
+  setPanelPhoto(kind);
   cfg.render(body);
   cov.style.display='none'; panel.classList.add('open');
   if(!fromRoute){ try{ history.pushState({kind:kind}, '', PATHS[kind]||'/'); }catch(e){} }
+}
+/* the page photograph on phones. Pre-cut strips framed on Marcus, because the full-size
+   pictures crop to the wrong part of the frame at this shape. */
+var PANEL_PHOTO={bio:'photos/m/bio.jpg',testimonials:'photos/m/testimonials.jpg',press:'photos/m/press.jpg',photos:'photos/m/photos.jpg',contact:'photos/m/contact.jpg'};
+function setPanelPhoto(kind){
+  var el=document.getElementById('leftPhoto'); if(!el) return;
+  var f=PANEL_PHOTO[kind];
+  if(!f){ el.hidden=true; el.style.backgroundImage=''; return; }
+  el.style.backgroundImage="url('"+f+"')";
+  el.setAttribute('role','img');
+  el.setAttribute('aria-label','Marcus J Ball');
+  el.hidden=false;
 }
 function closeLeft(fromRoute){
   try{ tqStripKill(); }catch(e){}
   try{ document.body.classList.remove('lp-open'); document.body.classList.remove('lp-contact');
        document.body.className=document.body.className.replace(/(^|\s)lp-k-\S+/g,' ').trim(); }catch(e){}
+  setPanelPhoto(null);
   document.getElementById('leftpanel').classList.remove('open');
   document.querySelector('.covered').style.display='';
   if(!fromRoute){ try{ history.pushState({}, '', '/'); }catch(e){} }
@@ -738,7 +760,7 @@ function mjbToggleNav(force){
 (function(){
   var A=document.querySelector('.hero .herobg'), B=document.querySelector('.hero .herobg2'); if(!A||!B) return;
   var BG={
-    home:{img:'mjb-home.jpg',size:'cover',pos:'50% 32%',mpos:'50% 30%'},
+    home:{img:'mjb-home.jpg',size:'cover',pos:'50% 32%',mpos:'100% 30%'},
     bio:{img:'photos/lectern-portrait.jpg',size:'cover',pos:'76% 30%',mpos:'72% 26%'},
     testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 42%',mpos:'62% 46%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},

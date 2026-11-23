@@ -374,8 +374,8 @@ nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);backgroun
   <div class="covered">
     <p class="bio">Marcus J Ball has been campaigning to criminalise lying in politics since June 2016. He is the private prosecutor who prosecuted Boris Johnson for alleged Misconduct in Public Office, in an attempt to set a precedent that lying in politics was a criminal offence. He is the producer and presenter of an upcoming documentary film about lying in politics and the fight to make it illegal. The UK government is now criminalising lying by the Prime Minister, ministers and nearly all public officials with the new “Misleading the Public” offence in the Public Office (Accountability) Bill. He is campaigning to strengthen it using his experience prosecuting Johnson and extend it to all lawmakers and judges.</p>
     <div class="metrics">
-      <div class="metric"><b id="m-backers">19,085</b><span>Financial Backers</span></div>
-      <div class="metric"><b id="m-followers">53,000+</b><span>Followers across platforms</span></div>
+      <div class="metric"><b id="m-backers">20,369</b><span>Financial Backers</span></div>
+      <div class="metric"><b id="m-followers">130,421</b><span>Followers across platforms</span></div>
     </div>
     <div class="lab">Work covered by</div>
     <div class="grid">
@@ -565,12 +565,34 @@ function fallbackCopy(text){
   try{document.execCommand('copy');}catch(e){}
   document.body.removeChild(t);
 }
-/* live supporter count from Central (refreshes daily at 05:00 UK) */
+/* The two numbers under the biography come from Central and are never written by hand.
+
+   Backers: people who have actually given money and whose payment went through, counted once
+   each by email address across the audited Master Backer Database and Stripe. The same figure
+   execprosec.org shows, from the same address, so the two sites cannot disagree.
+
+   Followers: the total across Instagram, Facebook, X, Threads and YouTube, from Central's
+   reading of each account. Central reads the free platforms every quarter of an hour and X every
+   six hours, because X charges for every read, and serves the total from a two-minute cache.
+
+   Both are read again every 60 seconds while the page is open, so they climb as they really
+   climb. The figures in the HTML above are the last real reading, in case Central cannot be
+   reached: nothing here is ever an estimate or a counter made to tick up on its own. */
 (function(){
-  fetch('https://central-2-mcp-production.up.railway.app/public/backers')
-    .then(function(r){return r.json();})
-    .then(function(d){ if(d && typeof d.backers==='number' && d.backers>0){ var el=document.getElementById('m-backers'); if(el) el.textContent=d.backers.toLocaleString('en-GB'); } })
-    .catch(function(){});
+  var API='https://central-2-mcp-production.up.railway.app/public/';
+  function show(id, n){
+    var el=document.getElementById(id);
+    if(el && typeof n==='number' && n>0) el.textContent=n.toLocaleString('en-GB');
+  }
+  function read(){
+    fetch(API+'backers').then(function(r){return r.json();})
+      .then(function(d){ if(d) show('m-backers', d.backers); }).catch(function(){});
+    fetch(API+'social/summary').then(function(r){return r.json();})
+      .then(function(d){ if(d && d.followers) show('m-followers', d.followers.now); }).catch(function(){});
+  }
+  read();
+  setInterval(function(){ if(!document.hidden) read(); }, 60000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) read(); });
 })();
 /* -- URL routing: each panel gets a real, shareable path -- */
 var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs', press:'/press', contact:'/contact' };

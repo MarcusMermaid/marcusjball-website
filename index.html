@@ -106,15 +106,6 @@
   nav{display:flex;gap:30px;align-items:center}
   @media(min-width:721px) and (max-width:1400px){nav{gap:22px}nav a,nav button{font-size:12.5px;letter-spacing:.14em}}
   @media(min-width:721px) and (max-width:1180px){nav{gap:16px}nav a,nav button{font-size:11.5px;letter-spacing:.10em}}
-  /* Between the phone menu and a wide laptop the bar ran off the right edge and took "Fund Marcus's
-     work" with it, which was already happening before Book a meeting was added to it. Tighter here
-     so the whole bar, the funding button included, stays on the screen down to 721px. */
-  @media(min-width:721px) and (max-width:1250px){
-    header{padding-left:34px;padding-right:34px}
-    nav{gap:10px}
-    nav a,nav button{font-size:11px;letter-spacing:.05em}
-    .nav-cta{padding:9px 10px}
-  }
   nav a,nav button{display:inline-flex;align-items:center;line-height:1;background:none;border:none;cursor:pointer;color:#fff;font-family:inherit;font-size:11.5px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;opacity:.82;text-decoration:none;transition:opacity .15s,color .15s}
   nav a:hover,nav button:hover{opacity:1;color:var(--gold)}
   /* left panel: work covered by */
@@ -294,6 +285,16 @@
   @media(max-width:900px){#tq-strip{display:none}}
 nav a.nav-cta{background:#fff;color:#05070C;padding:10px 20px;border-radius:2px;font-weight:600;opacity:1;letter-spacing:.16em;box-shadow:none;transition:transform .2s ease,background .2s ease}
 nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);background:rgba(255,255,255,.86)}
+/* Between the phone menu and a wide laptop the bar ran off the right edge and took "Fund Marcus's
+   work" with it, which was already happening before Book a meeting was added to it. It must sit
+   after the plain nav rules above: a media query carries no extra weight, so the plain rules win on
+   source order, which is why the two shrink rules higher up the file never shrank anything. */
+@media(min-width:721px) and (max-width:1250px){
+  header{padding-left:34px;padding-right:34px}
+  nav{gap:10px}
+  nav a,nav button{font-size:11px;letter-spacing:.05em}
+  nav a.nav-cta{padding:9px 10px;letter-spacing:.08em}
+}
 </style>
 <style>
 /* photo Expand lightbox */

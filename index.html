@@ -183,6 +183,35 @@
   .cp-thanks{display:none;text-align:center;padding:22px 0}
   .cp-thanks h3{font-size:21px;font-weight:500;margin:14px 0 0;color:#fff}
   @media(max-width:720px){.cp-row{flex-direction:column;gap:0}.cp-form input,.cp-form textarea{font-size:16px}.cp-foot .cf-send{width:100%;min-height:48px}}
+  /* Book a meeting */
+  .mt-lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.78);margin:0 0 18px}
+  .mt-load{font-size:14px;color:rgba(255,255,255,.5);padding:8px 0}
+  .mt-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none;-ms-overflow-style:none}
+  .mt-days::-webkit-scrollbar{display:none}
+  .mt-day{flex:0 0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:#fff;
+    font-family:inherit;font-size:13.5px;letter-spacing:.02em;padding:9px 14px;border-radius:2px;cursor:pointer;white-space:nowrap}
+  .mt-day:hover{border-color:rgba(255,255,255,.4)}
+  .mt-day.on{background:#fff;color:#05070C;border-color:#fff;font-weight:600}
+  .mt-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-bottom:4px}
+  .mt-slot{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:#fff;font-family:inherit;
+    font-size:14.5px;padding:12px 6px;border-radius:2px;cursor:pointer;text-align:center}
+  .mt-slot:hover{border-color:var(--gold)}
+  .mt-slot.on{background:var(--gold,#9fb4d4);color:#05070C;border-color:var(--gold,#9fb4d4);font-weight:700}
+  .mt-none{font-size:14.5px;color:rgba(255,255,255,.6);padding:10px 0 2px}
+  .mt-form{margin-top:22px;border-top:1px solid rgba(255,255,255,.12);padding-top:20px}
+  .mt-form input,.mt-form textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);
+    border-radius:2px;color:#fff;font-family:inherit;font-size:15px;padding:12px 14px;margin-bottom:12px;outline:none;
+    transition:border-color .15s;box-sizing:border-box}
+  .mt-form input:focus,.mt-form textarea:focus{border-color:var(--gold)}
+  .mt-form textarea{resize:vertical;min-height:96px;line-height:1.55}
+  .mt-chosen{font-size:15.5px;color:#fff;margin:0 0 16px;font-weight:600}
+  .mt-chosen span{display:block;font-weight:400;font-size:13.5px;color:rgba(255,255,255,.55);margin-top:3px}
+  .mt-err{display:none;font-size:14px;color:#e0564f;margin:0 0 10px}
+  @media(max-width:720px){
+    .mt-form input,.mt-form textarea{font-size:16px}
+    .mt-slots{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
+    .cf-send{min-height:48px}
+  }
   .cf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
   .cf-send{width:100%;margin-top:14px;border:none;border-radius:2px;background:#fff;color:#05070C;font-weight:700;font-size:15px;padding:14px;cursor:pointer;font-family:inherit}
   .cf-send:hover{filter:brightness(1.06)}.cf-send:disabled{opacity:.5;cursor:default}
@@ -367,6 +396,7 @@ nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);backgroun
       <a href="https://www.execprosec.com" target="_blank" rel="noopener">ExecProsec</a>
       <a href="https://radiatorproductions.com" target="_blank" rel="noopener">Radiator</a>
       <button onclick="openLeft('contact')">Contact</button>
+      <button onclick="openLeft('meet')">Book a meeting</button>
       <a class="nav-cta" href="https://www.execprosec.com" target="_blank" rel="noopener">Fund Marcus&rsquo;s work</a>
     </nav>
   </header>
@@ -510,8 +540,118 @@ var LEFT={
   testimonials:{title:'Testimonials', render:renderTestimonials},
   photos:{title:'Photographs', render:renderPhotos},
   press:{title:'Press coverage', render:renderPress},
-  contact:{title:'Contact', render:renderContact}
+  contact:{title:'Contact', render:renderContact},
+  meet:{title:'Book a meeting', render:renderMeet}
 };
+function renderMeet(box){
+  box.innerHTML=''
+    +'<p class="mt-lead">Half an hour with Marcus, one to one. Choose a time, say what it is about, and you will get '
+      +'an email confirming it. All times are UK time.</p>'
+    +'<div class="mt-load" id="mt-load">Reading the diary\u2026</div>'
+    +'<div id="mt-wrap" style="display:none">'
+      +'<div class="mt-days" id="mt-days"></div>'
+      +'<div class="mt-slots" id="mt-slots"></div>'
+      +'<div class="mt-form" id="mt-form" style="display:none">'
+        +'<div class="mt-chosen" id="mt-chosen"></div>'
+        +'<div class="cp-row"><input id="mt-name" placeholder="Your name" autocomplete="name">'
+          +'<input id="mt-email" type="email" placeholder="Email address" autocomplete="email"></div>'
+        +'<input id="mt-phone" type="tel" placeholder="Phone number" autocomplete="tel">'
+        +'<input id="mt-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">'
+        +'<textarea id="mt-reason" placeholder="What is the meeting about? A line or two is plenty."></textarea>'
+        +'<div class="mt-err" id="mt-err"></div>'
+        +'<button class="cf-send" id="mt-send" type="button">Book this half hour</button>'
+      +'</div>'
+    +'</div>'
+    +'<div class="cp-thanks" id="mt-done"><div class="cf-tick">\u2713</div><h3 id="mt-done-h"></h3>'
+      +'<p class="mt-lead" id="mt-done-p" style="margin-top:12px"></p></div>';
+  var API='https://central-2-mcp-production.up.railway.app/public/meeting/';
+  var el=function(id){ return document.getElementById(id); };
+  var days=[], dayIdx=0, slot=null, slotLabel='';
+  function fail(msg){
+    el('mt-load').textContent=msg;
+    el('mt-load').style.display='';
+    el('mt-wrap').style.display='none';
+  }
+  function drawDays(){
+    el('mt-days').innerHTML=days.map(function(d,i){
+      var bits=d.day.split(' ');
+      return '<button type="button" class="mt-day'+(i===dayIdx?' on':'')+'" data-i="'+i+'">'
+        +esc(bits[0].slice(0,3))+' '+esc(bits.slice(1).join(' '))+'</button>';
+    }).join('');
+    Array.prototype.forEach.call(el('mt-days').querySelectorAll('.mt-day'),function(b){
+      b.addEventListener('click',function(){ dayIdx=parseInt(b.getAttribute('data-i'),10)||0; slot=null;
+        drawDays(); drawSlots(); el('mt-form').style.display='none'; });
+    });
+  }
+  function drawSlots(){
+    var d=days[dayIdx]; if(!d) return;
+    el('mt-slots').innerHTML=d.slots.map(function(s){
+      return '<button type="button" class="mt-slot'+(slot===s.at?' on':'')+'" data-at="'+esc(s.at)
+        +'" data-label="'+esc(d.day+' at '+s.time)+'">'+esc(s.time)+'</button>';
+    }).join('');
+    Array.prototype.forEach.call(el('mt-slots').querySelectorAll('.mt-slot'),function(b){
+      b.addEventListener('click',function(){
+        slot=b.getAttribute('data-at'); slotLabel=b.getAttribute('data-label');
+        drawSlots();
+        el('mt-chosen').innerHTML=esc(slotLabel)+'<span>Half an hour, UK time</span>';
+        el('mt-form').style.display='';
+        el('mt-err').style.display='none';
+        try{ el('mt-name').focus({preventScroll:true}); }catch(e){}
+      });
+    });
+  }
+  function book(){
+    var g=function(id){ return (el(id).value||'').trim(); };
+    var say=function(msg,id){ var e=el('mt-err'); e.textContent=msg; e.style.display='';
+      if(id){ var f=el(id); f.style.borderColor='#e0564f'; try{ f.focus(); }catch(x){} } };
+    el('mt-err').style.display='none';
+    if(!slot){ say('Choose a time first.'); return; }
+    if(g('mt-name').length<2){ say('Please give your name.','mt-name'); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g('mt-email'))){ say('Please give an email address that works.','mt-email'); return; }
+    if(g('mt-phone').replace(/\D/g,'').length<7){ say('Please give a phone number.','mt-phone'); return; }
+    if(g('mt-reason').length<10){ say('Please say in a line or two what it is about.','mt-reason'); return; }
+    var btn=el('mt-send'); btn.disabled=true; btn.textContent='Booking\u2026';
+    fetch(API+'book',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({
+      slot:slot,name:g('mt-name'),email:g('mt-email'),phone:g('mt-phone'),reason:g('mt-reason'),
+      website:g('mt-website'),ref:'marcusjball.com'})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d||!d.ok){
+          btn.disabled=false; btn.textContent='Book this half hour';
+          say((d&&d.reason)||'That did not go through. Please try again.', d&&d.field==='slot'?null:('mt-'+(d&&d.field||'name')));
+          if(d&&d.field==='slot'){ load(); }
+          return;
+        }
+        el('mt-done-h').textContent='Booked: '+(d.when||slotLabel);
+        el('mt-done-p').textContent='A confirmation is on its way to '+g('mt-email')
+          +'. Marcus has your number and what you want to talk about. If you cannot make it, the email has a link to cancel.';
+        el('mt-wrap').style.display='none';
+        el('mt-load').style.display='none';
+        el('mt-done').style.display='block';
+      })
+      .catch(function(){
+        btn.disabled=false; btn.textContent='Book this half hour';
+        say('Could not reach us just now. Please try again in a moment.');
+      });
+  }
+  function load(){
+    fetch(API+'slots').then(function(r){ return r.json(); }).then(function(d){
+      if(!d||!d.ok||!d.days||!d.days.length){
+        fail('There are no free times on the diary at the moment. Please use the contact page and Marcus will come back to you.');
+        return;
+      }
+      days=d.days; dayIdx=0; slot=null;
+      el('mt-load').style.display='none';
+      el('mt-wrap').style.display='';
+      el('mt-form').style.display='none';
+      drawDays(); drawSlots();
+    }).catch(function(){
+      fail('Could not read the diary just now. Please try again in a moment, or use the contact page.');
+    });
+  }
+  el('mt-send').addEventListener('click',book);
+  load();
+}
 function renderContact(box){
   box.innerHTML=''
     +'<div class="cp-form" id="cp-form">'
@@ -602,8 +742,8 @@ function fallbackCopy(text){
   document.addEventListener('visibilitychange', function(){ if(!document.hidden) read(); });
 })();
 /* -- URL routing: each panel gets a real, shareable path -- */
-var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs', press:'/press', contact:'/contact' };
-var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photographs':'photos', '/press':'press', '/contact':'contact' };
+var PATHS={ bio:'/biography', testimonials:'/testimonials', photos:'/photographs', press:'/press', contact:'/contact', meet:'/meet' };
+var PATH_TO_KIND={ '/biography':'bio', '/testimonials':'testimonials', '/photographs':'photos', '/press':'press', '/contact':'contact', '/meet':'meet' };
 window.PATH_TO_KIND=PATH_TO_KIND;
 function openLeft(kind, fromRoute){
   var cfg=LEFT[kind]; if(!cfg) return;
@@ -622,7 +762,7 @@ function openLeft(kind, fromRoute){
 }
 /* the page photograph on phones. Pre-cut strips framed on Marcus, because the full-size
    pictures crop to the wrong part of the frame at this shape. */
-var PANEL_PHOTO={bio:'photos/m/bio.jpg',testimonials:'photos/m/testimonials.jpg',press:'photos/m/press.jpg',photos:'photos/m/photos.jpg',contact:'photos/m/contact.jpg'};
+var PANEL_PHOTO={bio:'photos/m/bio.jpg',testimonials:'photos/m/testimonials.jpg',press:'photos/m/press.jpg',photos:'photos/m/photos.jpg',contact:'photos/m/contact.jpg',meet:'photos/m/contact.jpg'};
 function setPanelPhoto(kind){
   var el=document.getElementById('leftPhoto'); if(!el) return;
   var f=PANEL_PHOTO[kind];
@@ -796,6 +936,7 @@ function mjbToggleNav(force){
     testimonials:{img:'photos/audience-laugh.jpg',size:'cover',pos:'50% 42%',mpos:'62% 46%'},
     press:{img:'photos/court-interview.jpg',size:'cover',pos:'36% 44%',mpos:'38% 40%'},
     contact:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
+    meet:{img:'photos/channel4-interview.jpg',size:'cover',pos:'78% 35%',mpos:'80% 30%'},
     photos:{img:'photos/room-from-the-back.jpg',size:'cover',pos:'50% 46%',mpos:'54% 44%'}
   };
   function apply(el,sl){ var mob=window.innerWidth<=900; el.style.backgroundColor='#05070C'; el.style.backgroundImage="url('"+sl.img+"')"; el.style.backgroundRepeat='no-repeat'; el.style.backgroundSize=mob?'cover':sl.size; el.style.backgroundPosition=mob?sl.mpos:sl.pos; }
@@ -803,7 +944,7 @@ function mjbToggleNav(force){
   A.style.opacity='1'; B.style.opacity='0';
   window.setHeroBg=function(kind){ var sl=BG[kind]; if(!sl){ kind='home'; sl=BG.home; } if(kind===curKind) return; curKind=kind; var inc=layers[1-active]; apply(inc,sl); inc.style.opacity='1'; layers[active].style.opacity='0'; active=1-active; };
   var lp=document.getElementById('leftpanel');
-  if(lp && lp.classList.contains('open')){ var pth=(location.pathname||'').replace(/\/+$/,''); var map=window.PATH_TO_KIND||{'/biography':'bio','/testimonials':'testimonials','/photographs':'photos','/press':'press','/contact':'contact'}; if(map[pth]) window.setHeroBg(map[pth]); }
+  if(lp && lp.classList.contains('open')){ var pth=(location.pathname||'').replace(/\/+$/,''); var map=window.PATH_TO_KIND||{'/biography':'bio','/testimonials':'testimonials','/photographs':'photos','/press':'press','/contact':'contact','/meet':'meet'}; if(map[pth]) window.setHeroBg(map[pth]); }
 })();
 </script>
 </body>

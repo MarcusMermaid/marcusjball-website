@@ -186,6 +186,8 @@
   /* Book a meeting */
   .mt-lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.78);margin:0 0 18px}
   .mt-load{font-size:14px;color:rgba(255,255,255,.5);padding:8px 0}
+  .mt-gone{display:none;background:rgba(224,86,79,.12);border:1px solid rgba(224,86,79,.45);color:#ffb7b2;
+    font-size:14.5px;line-height:1.55;padding:12px 14px;border-radius:2px;margin:0 0 16px}
   .mt-daybar{display:flex;align-items:stretch;gap:8px;margin-bottom:14px}
   /* position:relative so a day button's offsetLeft is measured from the strip. Without it the
      browser measures from the panel instead and the arrows scroll to the wrong place. */
@@ -569,6 +571,7 @@ function renderMeet(box){
       +'Marcus agrees to each one himself, so you will get an email as soon as he has. All times are UK time.</p>'
     +'<div class="mt-load" id="mt-load">Reading the diary\u2026</div>'
     +'<div id="mt-wrap" style="display:none">'
+      +'<div class="mt-gone" id="mt-gone" role="alert"></div>'
       +'<div class="mt-daybar">'
         +'<button class="mt-arrow" id="mt-prev" type="button" aria-label="Earlier days">\u2039</button>'
         +'<div class="mt-days" id="mt-days"></div>'
@@ -601,6 +604,16 @@ function renderMeet(box){
     el('mt-load').textContent=msg;
     el('mt-load').style.display='';
     el('mt-wrap').style.display='none';
+  }
+  /* somebody else got that half hour first: say so above the days, read the diary again so the
+     taken time disappears from it, and keep every word they have typed. */
+  function gone(msg){
+    var g=el('mt-gone');
+    g.textContent=msg;
+    g.style.display='';
+    el('mt-err').style.display='none';
+    load();
+    try{ g.scrollIntoView({block:'nearest'}); }catch(e){}
   }
   function showDay(){
     var strip=el('mt-days'), b=strip.children[dayIdx];
@@ -636,6 +649,7 @@ function renderMeet(box){
       b.addEventListener('click',function(){
         slot=b.getAttribute('data-at'); slotLabel=b.getAttribute('data-label');
         drawSlots();
+        el('mt-gone').style.display='none';
         el('mt-chosen').innerHTML=esc(slotLabel)+'<span>Half an hour, UK time, once Marcus agrees</span>';
         el('mt-form').style.display='';
         el('mt-err').style.display='none';
@@ -648,6 +662,7 @@ function renderMeet(box){
     var say=function(msg,id){ var e=el('mt-err'); e.textContent=msg; e.style.display='';
       if(id){ var f=el(id); f.style.borderColor='#e0564f'; try{ f.focus(); }catch(x){} } };
     el('mt-err').style.display='none';
+    window.mjbTrack&&window.mjbTrack('meet_request_try',{});
     if(!slot){ say('Choose a time first.'); return; }
     if(g('mt-name').length<2){ say('Please give your name.','mt-name'); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g('mt-email'))){ say('Please give an email address that works.','mt-email'); return; }
@@ -661,8 +676,12 @@ function renderMeet(box){
       .then(function(d){
         if(!d||!d.ok){
           btn.disabled=false; btn.textContent='Ask for this half hour';
-          say((d&&d.reason)||'That did not go through. Please try again.', d&&d.field==='slot'?null:('mt-'+(d&&d.field||'name')));
-          if(d&&d.field==='slot'){ load(); }
+          window.mjbTrack&&window.mjbTrack('meet_request_refused',{label:String((d&&d.reason)||'refused').slice(0,140)});
+          if(d&&d.field==='slot'){
+            gone(d.reason||'Somebody else took that half hour while you were filling this in. Please pick another time below.');
+            return;
+          }
+          say((d&&d.reason)||'That did not go through. Please try again.', 'mt-'+(d&&d.field||'name'));
           return;
         }
         el('mt-done-h').textContent='Asked for: '+(d.when||slotLabel);
@@ -672,15 +691,18 @@ function renderMeet(box){
         el('mt-wrap').style.display='none';
         el('mt-load').style.display='none';
         el('mt-done').style.display='block';
+        window.mjbTrack&&window.mjbTrack('meet_request_sent',{label:(d.when||slotLabel).slice(0,140)});
       })
       .catch(function(){
         btn.disabled=false; btn.textContent='Ask for this half hour';
+        window.mjbTrack&&window.mjbTrack('meet_request_failed',{label:'network'});
         say('Could not reach us just now. Please try again in a moment.');
       });
   }
   function load(){
     fetch(API+'slots').then(function(r){ return r.json(); }).then(function(d){
       if(!d||!d.ok||!d.days||!d.days.length){
+        window.mjbTrack&&window.mjbTrack('meet_no_slots',{});
         fail('There are no free times on the diary at the moment. Please use the contact page and Marcus will come back to you.');
         return;
       }
@@ -693,6 +715,7 @@ function renderMeet(box){
       fail('Could not read the diary just now. Please try again in a moment, or use the contact page.');
     });
   }
+  ['mt-name','mt-email','mt-phone','mt-reason'].forEach(function(id){ var f=el(id); if(f) f.addEventListener('input',function h(){ f.removeEventListener('input',h); window.mjbTrack&&window.mjbTrack('meet_field',{label:id.slice(3)}); }); });
   el('mt-send').addEventListener('click',book);
   el('mt-prev').addEventListener('click',function(){ step(-1); });
   el('mt-next').addEventListener('click',function(){ step(1); });
@@ -920,7 +943,11 @@ function renderPress(box){
   var EP='https://central-2-mcp-production.up.railway.app/public/analytics';
   var sid;
   try{ sid=localStorage.getItem('mjb_sid'); if(!sid){ sid='s_'+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('mjb_sid',sid);} }catch(e){ sid=''; }
-  function send(ev,d){ try{ var b=JSON.stringify(Object.assign({site:SITE,event:ev,page:(location.pathname+location.hash).slice(0,300),session_id:sid,referrer:(document.referrer||'').slice(0,300)},d||{}));
+  /* the #r= code a peer's email link carries, kept for the whole visit so every event stays theirs */
+  var RC=(location.hash.match(/[#&]r=([0-9a-f]{8})/)||[])[1]||'';
+  try{ if(RC){ sessionStorage.setItem('mjb_rc',RC); } else { RC=sessionStorage.getItem('mjb_rc')||''; } }catch(e){}
+  function pg(){ var h=location.hash||''; if(RC && h.indexOf('r='+RC)<0){ h=(h?h+'&':'#')+'r='+RC; } return (location.pathname+h).slice(0,300); }
+  function send(ev,d){ try{ var b=JSON.stringify(Object.assign({site:SITE,event:ev,page:pg(),session_id:sid,referrer:(document.referrer||'').slice(0,300)},d||{}));
     if(navigator.sendBeacon){ navigator.sendBeacon(EP,new Blob([b],{type:'text/plain'})); } else { fetch(EP,{method:'POST',headers:{'Content-Type':'text/plain'},body:b,keepalive:true}); } }catch(e){} }
   send('pageview',{});
   window.addEventListener('hashchange',function(){ send('pageview',{}); });
@@ -933,6 +960,20 @@ function renderPress(box){
     v.addEventListener('play',function(){ send('video_play',{label:(v.getAttribute('src')||v.currentSrc||'video').slice(0,140)}); });
     v.addEventListener('ended',function(){ send('video_complete',{label:(v.getAttribute('src')||v.currentSrc||'video').slice(0,140)}); }); })(vs[i]); } }
   vids(); document.addEventListener('DOMContentLoaded',vids);
+  window.mjbTrack=send;
+  /* Book a meeting: time on the page, how far down it they got, read_30s and read_2min,
+     and one summary when they leave (meta s = seconds, sc = furthest scroll %), as on the briefing pages */
+  var mOn=0, mSince=0, mFar=0, mDone={}, mLast='';
+  function onMeet(){ return document.body && document.body.classList.contains('lp-k-meet') && document.visibilityState==='visible'; }
+  function mSecs(){ return Math.round((mOn+(mSince?Date.now()-mSince:0))/1000); }
+  function mMeasure(){ var b=document.getElementById('leftBody'); if(!b||!document.body.classList.contains('lp-k-meet')) return;
+    var p=Math.min(100,Math.round(100*(b.scrollTop+b.clientHeight)/Math.max(b.scrollHeight,1))); if(p>mFar) mFar=p; }
+  function mTick(){ var on=onMeet(); if(on&&!mSince) mSince=Date.now(); if(!on&&mSince){ mOn+=Date.now()-mSince; mSince=0; } mMeasure();
+    if(mSecs()>=30&&!mDone.a){ mDone.a=1; send('read_30s',{label:'meet'}); } if(mSecs()>=120&&!mDone.b){ mDone.b=1; send('read_2min',{label:'meet'}); } }
+  setInterval(mTick,3000); document.addEventListener('scroll',function(){ mMeasure(); },{capture:true,passive:true});
+  function mSummary(){ mTick(); if(!mSecs()) return; var m=JSON.stringify({s:mSecs(),sc:mFar,p:'meet'}); if(m===mLast) return; mLast=m; send('engagement',{meta:m}); }
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') mSummary(); });
+  window.addEventListener('pagehide',mSummary);
   try{ new MutationObserver(vids).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
 </script>

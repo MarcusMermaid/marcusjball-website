@@ -187,7 +187,9 @@
   .mt-lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.78);margin:0 0 18px}
   .mt-load{font-size:14px;color:rgba(255,255,255,.5);padding:8px 0}
   .mt-daybar{display:flex;align-items:stretch;gap:8px;margin-bottom:14px}
-  .mt-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0;flex:1 1 auto;min-width:0;
+  /* position:relative so a day button's offsetLeft is measured from the strip. Without it the
+     browser measures from the panel instead and the arrows scroll to the wrong place. */
+  .mt-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0;flex:1 1 auto;min-width:0;position:relative;
     scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none}
   .mt-days::-webkit-scrollbar{display:none}
   /* the strip swipes on a touchscreen; these are for everybody else */

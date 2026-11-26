@@ -576,6 +576,12 @@ function renderMeet(box){
       +'<p class="mt-lead" id="mt-done-p" style="margin-top:12px"></p></div>';
   var API='https://central-2-mcp-production.up.railway.app/public/meeting/';
   var el=function(id){ return document.getElementById(id); };
+  /* who this link was sent to: ?ref=jones, or the #r=jones his peer emails already carry */
+  var REF=(function(){
+    var m=(location.search.match(/[?&]ref=([A-Za-z0-9_.\-]{1,40})/)||[])[1]
+        ||(location.hash.match(/[#&]r=([A-Za-z0-9_.\-]{1,40})/)||[])[1];
+    return m||'marcusjball.com';
+  })();
   var days=[], dayIdx=0, slot=null, slotLabel='';
   function fail(msg){
     el('mt-load').textContent=msg;
@@ -623,7 +629,7 @@ function renderMeet(box){
     var btn=el('mt-send'); btn.disabled=true; btn.textContent='Sending\u2026';
     fetch(API+'book',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({
       slot:slot,name:g('mt-name'),email:g('mt-email'),phone:g('mt-phone'),reason:g('mt-reason'),
-      website:g('mt-website'),ref:'marcusjball.com'})})
+      website:g('mt-website'),ref:REF})})
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(!d||!d.ok){

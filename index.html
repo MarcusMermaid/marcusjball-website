@@ -555,8 +555,8 @@ var LEFT={
 };
 function renderMeet(box){
   box.innerHTML=''
-    +'<p class="mt-lead">Half an hour with Marcus, one to one. Choose a time, say what it is about, and you will get '
-      +'an email confirming it. All times are UK time.</p>'
+    +'<p class="mt-lead">Half an hour with Marcus, one to one. Choose a time and say what it is about. '
+      +'Marcus agrees to each one himself, so you will get an email as soon as he has. All times are UK time.</p>'
     +'<div class="mt-load" id="mt-load">Reading the diary\u2026</div>'
     +'<div id="mt-wrap" style="display:none">'
       +'<div class="mt-days" id="mt-days"></div>'
@@ -569,7 +569,7 @@ function renderMeet(box){
         +'<input id="mt-website" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">'
         +'<textarea id="mt-reason" placeholder="What is the meeting about? A line or two is plenty."></textarea>'
         +'<div class="mt-err" id="mt-err"></div>'
-        +'<button class="cf-send" id="mt-send" type="button">Book this half hour</button>'
+        +'<button class="cf-send" id="mt-send" type="button">Ask for this half hour</button>'
       +'</div>'
     +'</div>'
     +'<div class="cp-thanks" id="mt-done"><div class="cf-tick">\u2713</div><h3 id="mt-done-h"></h3>'
@@ -603,7 +603,7 @@ function renderMeet(box){
       b.addEventListener('click',function(){
         slot=b.getAttribute('data-at'); slotLabel=b.getAttribute('data-label');
         drawSlots();
-        el('mt-chosen').innerHTML=esc(slotLabel)+'<span>Half an hour, UK time</span>';
+        el('mt-chosen').innerHTML=esc(slotLabel)+'<span>Half an hour, UK time, once Marcus agrees</span>';
         el('mt-form').style.display='';
         el('mt-err').style.display='none';
         try{ el('mt-name').focus({preventScroll:true}); }catch(e){}
@@ -620,27 +620,28 @@ function renderMeet(box){
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g('mt-email'))){ say('Please give an email address that works.','mt-email'); return; }
     if(g('mt-phone').replace(/\D/g,'').length<7){ say('Please give a phone number.','mt-phone'); return; }
     if(g('mt-reason').length<10){ say('Please say in a line or two what it is about.','mt-reason'); return; }
-    var btn=el('mt-send'); btn.disabled=true; btn.textContent='Booking\u2026';
+    var btn=el('mt-send'); btn.disabled=true; btn.textContent='Sending\u2026';
     fetch(API+'book',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({
       slot:slot,name:g('mt-name'),email:g('mt-email'),phone:g('mt-phone'),reason:g('mt-reason'),
       website:g('mt-website'),ref:'marcusjball.com'})})
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(!d||!d.ok){
-          btn.disabled=false; btn.textContent='Book this half hour';
+          btn.disabled=false; btn.textContent='Ask for this half hour';
           say((d&&d.reason)||'That did not go through. Please try again.', d&&d.field==='slot'?null:('mt-'+(d&&d.field||'name')));
           if(d&&d.field==='slot'){ load(); }
           return;
         }
-        el('mt-done-h').textContent='Booked: '+(d.when||slotLabel);
-        el('mt-done-p').textContent='A confirmation is on its way to '+g('mt-email')
-          +'. Marcus has your number and what you want to talk about. If you cannot make it, the email has a link to cancel.';
+        el('mt-done-h').textContent='Asked for: '+(d.when||slotLabel);
+        el('mt-done-p').textContent='Marcus has your request, with your number and what you want to talk about. '
+          +'He agrees to each one himself, so you will get an email at '+g('mt-email')
+          +' as soon as he has. The half hour is held for you until then.';
         el('mt-wrap').style.display='none';
         el('mt-load').style.display='none';
         el('mt-done').style.display='block';
       })
       .catch(function(){
-        btn.disabled=false; btn.textContent='Book this half hour';
+        btn.disabled=false; btn.textContent='Ask for this half hour';
         say('Could not reach us just now. Please try again in a moment.');
       });
   }

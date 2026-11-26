@@ -610,7 +610,7 @@ function renderMeet(box){
   function gone(msg){
     var g=el('mt-gone');
     g.textContent=msg;
-    g.style.display='';
+    g.style.display='block';   /* not '': the stylesheet hides it, so it needs a real value */
     el('mt-err').style.display='none';
     load();
     try{ g.scrollIntoView({block:'nearest'}); }catch(e){}
@@ -659,7 +659,7 @@ function renderMeet(box){
   }
   function book(){
     var g=function(id){ return (el(id).value||'').trim(); };
-    var say=function(msg,id){ var e=el('mt-err'); e.textContent=msg; e.style.display='';
+    var say=function(msg,id){ var e=el('mt-err'); e.textContent=msg; e.style.display='block';
       if(id){ var f=el(id); f.style.borderColor='#e0564f'; try{ f.focus(); }catch(x){} } };
     el('mt-err').style.display='none';
     window.mjbTrack&&window.mjbTrack('meet_request_try',{});

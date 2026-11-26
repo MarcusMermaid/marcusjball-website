@@ -186,8 +186,15 @@
   /* Book a meeting */
   .mt-lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.78);margin:0 0 18px}
   .mt-load{font-size:14px;color:rgba(255,255,255,.5);padding:8px 0}
-  .mt-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none;-ms-overflow-style:none}
+  .mt-daybar{display:flex;align-items:stretch;gap:8px;margin-bottom:14px}
+  .mt-days{display:flex;gap:8px;overflow-x:auto;padding:2px 0;flex:1 1 auto;min-width:0;
+    scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none}
   .mt-days::-webkit-scrollbar{display:none}
+  /* the strip swipes on a touchscreen; these are for everybody else */
+  .mt-arrow{flex:0 0 auto;width:38px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);
+    color:#fff;font-family:inherit;font-size:18px;line-height:1;border-radius:2px;cursor:pointer;padding:0}
+  .mt-arrow:hover:not(:disabled){border-color:var(--gold)}
+  .mt-arrow:disabled{opacity:.28;cursor:default}
   .mt-day{flex:0 0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:#fff;
     font-family:inherit;font-size:13.5px;letter-spacing:.02em;padding:9px 14px;border-radius:2px;cursor:pointer;white-space:nowrap}
   .mt-day:hover{border-color:rgba(255,255,255,.4)}
@@ -210,6 +217,7 @@
   @media(max-width:720px){
     .mt-form input,.mt-form textarea{font-size:16px}
     .mt-slots{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
+    .mt-arrow{width:44px}
     .cf-send{min-height:48px}
   }
   .cf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
@@ -559,7 +567,11 @@ function renderMeet(box){
       +'Marcus agrees to each one himself, so you will get an email as soon as he has. All times are UK time.</p>'
     +'<div class="mt-load" id="mt-load">Reading the diary\u2026</div>'
     +'<div id="mt-wrap" style="display:none">'
-      +'<div class="mt-days" id="mt-days"></div>'
+      +'<div class="mt-daybar">'
+        +'<button class="mt-arrow" id="mt-prev" type="button" aria-label="Earlier days">\u2039</button>'
+        +'<div class="mt-days" id="mt-days"></div>'
+        +'<button class="mt-arrow" id="mt-next" type="button" aria-label="Later days">\u203a</button>'
+      +'</div>'
       +'<div class="mt-slots" id="mt-slots"></div>'
       +'<div class="mt-form" id="mt-form" style="display:none">'
         +'<div class="mt-chosen" id="mt-chosen"></div>'
@@ -588,6 +600,19 @@ function renderMeet(box){
     el('mt-load').style.display='';
     el('mt-wrap').style.display='none';
   }
+  function showDay(){
+    var strip=el('mt-days'), b=strip.children[dayIdx];
+    if(b){ strip.scrollLeft=Math.max(0, b.offsetLeft-(strip.clientWidth-b.offsetWidth)/2); }
+    el('mt-prev').disabled = dayIdx<=0;
+    el('mt-next').disabled = dayIdx>=days.length-1;
+  }
+  function step(by){
+    var n=dayIdx+by;
+    if(n<0 || n>=days.length) return;
+    dayIdx=n; slot=null;
+    drawDays(); drawSlots(); showDay();
+    el('mt-form').style.display='none';
+  }
   function drawDays(){
     el('mt-days').innerHTML=days.map(function(d,i){
       var bits=d.day.split(' ');
@@ -596,7 +621,7 @@ function renderMeet(box){
     }).join('');
     Array.prototype.forEach.call(el('mt-days').querySelectorAll('.mt-day'),function(b){
       b.addEventListener('click',function(){ dayIdx=parseInt(b.getAttribute('data-i'),10)||0; slot=null;
-        drawDays(); drawSlots(); el('mt-form').style.display='none'; });
+        drawDays(); drawSlots(); showDay(); el('mt-form').style.display='none'; });
     });
   }
   function drawSlots(){
@@ -661,12 +686,14 @@ function renderMeet(box){
       el('mt-load').style.display='none';
       el('mt-wrap').style.display='';
       el('mt-form').style.display='none';
-      drawDays(); drawSlots();
+      drawDays(); drawSlots(); showDay();
     }).catch(function(){
       fail('Could not read the diary just now. Please try again in a moment, or use the contact page.');
     });
   }
   el('mt-send').addEventListener('click',book);
+  el('mt-prev').addEventListener('click',function(){ step(-1); });
+  el('mt-next').addEventListener('click',function(){ step(1); });
   load();
 }
 function renderContact(box){

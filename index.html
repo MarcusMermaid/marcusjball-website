@@ -807,7 +807,7 @@ function fallbackCopy(text){
     keep('backers', n);
     show('m-backers', n);
     var t=document.getElementById('t-backers');        /* the testimonials panel, when it is open */
-    if(t) t.textContent=n.toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
+    if(t) t.textContent=n.toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016, and backers and petition signers have written over 21,000 messages of support.';
   }
   function followers(n){
     if(typeof n!=='number' || n<=0) return;
@@ -899,7 +899,7 @@ function renderTestimonials(box){
   var intro=document.createElement('p'); intro.className='bio-p';
   /* the same live count as the figure under the biography, so the page never says two numbers */
   intro.id='t-backers';
-  intro.textContent=(window.__mjbBackers||20818).toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
+  intro.textContent=(window.__mjbBackers||20818).toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016, and backers and petition signers have written over 21,000 messages of support.';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(!reduce && window.innerWidth>900){ tqStripBuild(Q,esc2); return; }

@@ -426,8 +426,8 @@ nav a.nav-cta:hover{color:#05070C;opacity:1;transform:translateY(-2px);backgroun
   <div class="covered">
     <p class="bio">Marcus J Ball has been campaigning to criminalise lying in politics since June 2016. He is the private prosecutor who prosecuted Boris Johnson for alleged Misconduct in Public Office, in an attempt to set a precedent that lying in politics was a criminal offence. He is the producer and presenter of an upcoming documentary film about lying in politics and the fight to make it illegal. The UK government is now criminalising lying by the Prime Minister, ministers and nearly all public officials with the new “Misleading the Public” offence in the Public Office (Accountability) Bill. He is campaigning to strengthen it using his experience prosecuting Johnson and extend it to all lawmakers and judges.</p>
     <div class="metrics">
-      <div class="metric"><b id="m-backers">20,369</b><span>Financial Backers</span></div>
-      <div class="metric"><b id="m-followers">130,421</b><span>Followers across platforms</span></div>
+      <div class="metric"><b id="m-backers">20,818</b><span>Financial Backers</span></div>
+      <div class="metric"><b id="m-followers">148,658</b><span>Followers across platforms</span></div>
     </div>
     <div class="lab">Work covered by</div>
     <div class="grid">
@@ -789,6 +789,14 @@ function fallbackCopy(text){
    reached: nothing here is ever an estimate or a counter made to tick up on its own. */
 (function(){
   var API='https://central-2-mcp-production.up.railway.app/public/';
+  /* The figure written into the page goes out of date between deploys, so the first thing a
+     returning visitor saw was a number days old, which then jumped. Each real reading is kept in
+     this browser and painted before the fetch, so what they see first is the last true number
+     they were shown rather than the one that was true when the page was last built. */
+  function keep(key, n){ try{ localStorage.setItem('mjb_'+key, String(n)); }catch(e){} }
+  function last(key){
+    try{ var n=parseInt(localStorage.getItem('mjb_'+key)||'', 10); return n>0 ? n : 0; }catch(e){ return 0; }
+  }
   function show(id, n){
     var el=document.getElementById(id);
     if(el && typeof n==='number' && n>0) el.textContent=n.toLocaleString('en-GB');
@@ -796,16 +804,24 @@ function fallbackCopy(text){
   function backers(n){
     if(typeof n!=='number' || n<=0) return;
     window.__mjbBackers=n;
+    keep('backers', n);
     show('m-backers', n);
     var t=document.getElementById('t-backers');        /* the testimonials panel, when it is open */
     if(t) t.textContent=n.toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
+  }
+  function followers(n){
+    if(typeof n!=='number' || n<=0) return;
+    keep('followers', n);
+    show('m-followers', n);
   }
   function read(){
     fetch(API+'backers').then(function(r){return r.json();})
       .then(function(d){ if(d) backers(d.backers); }).catch(function(){});
     fetch(API+'social/summary').then(function(r){return r.json();})
-      .then(function(d){ if(d && d.followers) show('m-followers', d.followers.now); }).catch(function(){});
+      .then(function(d){ if(d && d.followers) followers(d.followers.now); }).catch(function(){});
   }
+  backers(last('backers'));               /* what they were shown last, before Central answers */
+  show('m-followers', last('followers'));
   read();
   setInterval(function(){ if(!document.hidden) read(); }, 60000);
   document.addEventListener('visibilitychange', function(){ if(!document.hidden) read(); });
@@ -883,7 +899,7 @@ function renderTestimonials(box){
   var intro=document.createElement('p'); intro.className='bio-p';
   /* the same live count as the figure under the biography, so the page never says two numbers */
   intro.id='t-backers';
-  intro.textContent=(window.__mjbBackers||20369).toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
+  intro.textContent=(window.__mjbBackers||20818).toLocaleString('en-GB')+' people have funded Marcus\'s work since 2016 and they wrote over 5,000 messages of support.';
   box.appendChild(intro);
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(!reduce && window.innerWidth>900){ tqStripBuild(Q,esc2); return; }
